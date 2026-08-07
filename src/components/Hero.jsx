@@ -127,7 +127,7 @@ export default function Hero({ openContactModal }) {
               style={enter("330ms")}
             >
               <img
-                src="/BISWANATH.jpeg"
+                src={`${import.meta.env.BASE_URL}BISWANATH.jpeg`}
                 alt="Mr. Biswanath Adhikari, Founder & Director of Avaya Udyog"
                 className="h-9 w-9 rounded-full object-cover object-top ring-1 ring-white/30"
                 loading="eager"
@@ -145,7 +145,10 @@ export default function Hero({ openContactModal }) {
             </div>
 
             {/* Stats */}
-            <div className={`mt-12 max-w-lg ${enterClass}`} style={enter("400ms")}>
+            <div
+              className={`mt-12 max-w-lg ${enterClass}`}
+              style={enter("400ms")}
+            >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-light/70 to-transparent" />
               <dl className="grid grid-cols-3 gap-4 pt-7">
                 {STATS.map((stat) => (
@@ -169,7 +172,10 @@ export default function Hero({ openContactModal }) {
         {/* ---------- Bottom ribbon: what's on screen, and how to skip it ---------- */}
         <div className="flex flex-col gap-6 pb-8 md:pb-10">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div key={slide.id} style={{ animation: "fade-in-soft 600ms ease-smooth both" }}>
+            <div
+              key={slide.id}
+              style={{ animation: "fade-in-soft 600ms ease-smooth both" }}
+            >
               <p className="text-[0.58rem] font-bold uppercase tracking-label text-gold-light">
                 {slide.eyebrow}
               </p>

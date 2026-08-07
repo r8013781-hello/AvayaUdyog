@@ -61,7 +61,7 @@ export default function AboutCompany({ openContactModal }) {
 
             <figure className="relative overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift">
               <img
-                src="/BISWANATH.jpeg"
+                src={`${import.meta.env.BASE_URL}BISWANATH.jpeg`}
                 alt="Mr. Biswanath Adhikari, Founder & Director of Avaya Udyog"
                 className="h-[30rem] w-full object-cover object-top sm:h-[34rem]"
                 loading="lazy"
