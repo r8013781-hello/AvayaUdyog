@@ -10,6 +10,7 @@ import {
   Building,
   Check,
 } from "lucide-react";
+import { captureWebsiteEnquiry } from "../lib/crmIntake";
 
 const emptyForm = {
   name: "",
@@ -53,7 +54,7 @@ export default function Footer() {
       return;
     }
 
-    console.log("Query Submitted:", formData);
+    captureWebsiteEnquiry(formData, "Consultation request");
     setSubmitted(true);
     setFormData(emptyForm);
     setErrors({});

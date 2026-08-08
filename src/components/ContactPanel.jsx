@@ -11,6 +11,7 @@ import {
   MessageCircle,
   Check,
 } from "lucide-react";
+import { captureWebsiteEnquiry } from "../lib/crmIntake";
 
 const emptyForm = {
   name: "",
@@ -81,7 +82,7 @@ export default function ContactPanel({ isOpen, onClose }) {
       return;
     }
 
-    console.log("Query Submitted:", formData);
+    captureWebsiteEnquiry(formData, "Website enquiry");
     setSent(true);
   };
 
