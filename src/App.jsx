@@ -10,16 +10,25 @@ import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import ContactPanel from "./components/ContactPanel";
 import WhatsappButton from "./components/WhatsappButton";
+import EmployeeLogin from "./components/EmployeeLogin";
 
 function App() {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [showEmployeeLogin, setShowEmployeeLogin] = useState(false);
 
   const openContactModal = () => setIsContactOpen(true);
   const closeContactModal = () => setIsContactOpen(false);
 
+  if (showEmployeeLogin) {
+    return <EmployeeLogin onBackToSite={() => setShowEmployeeLogin(false)} />;
+  }
+
   return (
     <div className="min-h-screen bg-canvas text-ink antialiased">
-      <Navbar openContactModal={openContactModal} />
+      <Navbar
+        openContactModal={openContactModal}
+        onLoginClick={() => setShowEmployeeLogin(true)}
+      />
       <main>
         <Hero openContactModal={openContactModal} />
         <Marquee />

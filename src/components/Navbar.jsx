@@ -12,15 +12,19 @@ const NAV_LINKS = [
 /** The diamond monogram — a sage tile with a gold hairline inlay. */
 function Monogram({ className = "h-11 w-11" }) {
   return (
-    <span className={`relative inline-flex items-center justify-center ${className}`}>
+    <span
+      className={`relative inline-flex items-center justify-center ${className}`}
+    >
       <span className="absolute inset-0 rotate-45 rounded-[30%] bg-sage-800 shadow-[0_4px_14px_rgba(0,0,0,0.25)] transition-transform duration-700 ease-smooth group-hover:rotate-[135deg]" />
       <span className="absolute inset-[3px] rotate-45 rounded-[28%] border border-gold/50" />
-      <span className="relative font-display text-lg font-semibold text-white">A</span>
+      <span className="relative font-display text-lg font-semibold text-white">
+        A
+      </span>
     </span>
   );
 }
 
-export default function Navbar({ openContactModal }) {
+export default function Navbar({ openContactModal, onLoginClick }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState("hero");
@@ -37,7 +41,8 @@ export default function Navbar({ openContactModal }) {
     const sections = NAV_LINKS.map((link) =>
       document.getElementById(link.id),
     ).filter(Boolean);
-    if (!sections.length || !("IntersectionObserver" in window)) return undefined;
+    if (!sections.length || !("IntersectionObserver" in window))
+      return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -97,7 +102,9 @@ export default function Navbar({ openContactModal }) {
                   }`}
                 >
                   Avaya{" "}
-                  <span className={scrolled ? "text-sage-600" : "text-gold-light"}>
+                  <span
+                    className={scrolled ? "text-sage-600" : "text-gold-light"}
+                  >
                     Udyog
                   </span>
                 </span>
@@ -133,7 +140,9 @@ export default function Navbar({ openContactModal }) {
                     {link.label}
                     <span
                       className={`absolute inset-x-3.5 bottom-0.5 h-px origin-left bg-gold-hair transition-transform duration-500 ease-smooth ${
-                        isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        isActive
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100"
                       }`}
                     />
                   </button>
@@ -141,7 +150,7 @@ export default function Navbar({ openContactModal }) {
               })}
             </nav>
 
-            <div className="hidden items-center gap-5 lg:flex">
+            <div className="hidden items-center gap-3 lg:flex">
               <a
                 href="tel:+919830478820"
                 className={`group flex items-center gap-2.5 transition-colors ${
@@ -164,8 +173,12 @@ export default function Navbar({ openContactModal }) {
                 </span>
               </a>
 
-              <button onClick={openContactModal} className="btn-primary group">
-                Book Consultation
+              <button
+                type="button"
+                onClick={onLoginClick}
+                className="btn-primary group !px-6 !py-3"
+              >
+                Login
                 <ArrowUpRight
                   size={14}
                   className="transition-transform duration-300 group-hover:translate-x-0.5"
@@ -234,6 +247,14 @@ export default function Navbar({ openContactModal }) {
             <span className="text-sm font-semibold">+91 98304 78820</span>
           </a>
         </div>
+
+        <button
+          type="button"
+          onClick={onLoginClick}
+          className="mt-5 w-full rounded-full border border-line-strong bg-sage-50 px-4 py-3 text-[0.7rem] font-bold uppercase tracking-[0.12em] text-sage-800 transition-colors hover:border-sage-400 hover:bg-sage-100"
+        >
+          Login
+        </button>
 
         <button onClick={closeAndContact} className="btn-primary mt-5 w-full">
           Book a Consultation

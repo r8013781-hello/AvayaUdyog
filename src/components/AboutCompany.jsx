@@ -69,7 +69,7 @@ export default function AboutCompany({ openContactModal }) {
               <div className="absolute inset-0 bg-gradient-to-t from-sage-950/85 via-sage-950/15 to-transparent" />
               <figcaption className="absolute inset-x-0 bottom-0 p-6">
                 <p className="font-display text-[1.6rem] font-semibold leading-tight text-white">
-                  Shri Biswanath Adhikari
+                  Mr. Biswanath Adhikari
                 </p>
                 <div className="mt-2.5 h-px w-12 bg-gold-hair" />
                 <p className="mt-2.5 text-[0.58rem] font-bold uppercase tracking-label text-gold-light">
