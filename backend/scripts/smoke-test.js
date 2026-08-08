@@ -65,7 +65,7 @@ async function testHealth() {
 async function testAuth() {
   console.log("\n── Authentication ──────────────────────────────────────────");
   const { status, json } = await req("POST", "/auth/login", {
-    employeeCode: EMPLOYEE_CODE,
+    employeeId: EMPLOYEE_CODE,
     password: EMPLOYEE_PASS,
   });
   if (!assert("POST /auth/login → 200", status === 200, `got ${status} — ${JSON.stringify(json)}`)) {
@@ -102,7 +102,7 @@ async function testCustomers() {
   const post = await req("POST", "/customers", {
     name: `Smoke Customer ${RUN_ID}`,
     phone: `91${String(RUN_ID).slice(-8)}`,  // unique per run
-    email: `smoke+${RUN_ID}@avayaudyog.test`,
+    email: `smoke${RUN_ID}@example.com`,
     city: "Kolkata",
     companyName: "",
     address: "123 Smoke Street",
@@ -249,7 +249,7 @@ async function main() {
     );
     process.exit(1);
   } else {
-    console.log("\n All tests passed — Node → Tedious → Azure SQL is confirmed working.");
+    console.log("\n All tests passed — Node → pg → Supabase PostgreSQL is confirmed working.");
     process.exit(0);
   }
 }

@@ -1,14 +1,15 @@
+"use strict";
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const Joi = require("joi");
+const bcrypt  = require("bcryptjs");
+const jwt     = require("jsonwebtoken");
+const Joi     = require("joi");
 const { query } = require("../lib/db");
 
 const router = express.Router();
 
 const loginSchema = Joi.object({
   employeeId: Joi.string().trim().max(20).required(),
-  password: Joi.string().max(200).required(),
+  password:   Joi.string().max(200).required(),
 });
 
 router.post("/login", async (req, res, next) => {
@@ -18,11 +19,11 @@ router.post("/login", async (req, res, next) => {
 
     const employeeCode = value.employeeId.toUpperCase();
     const result = await query(
-      "SELECT id, employee_code, name, role, password_hash FROM employees WHERE employee_code = @employeeCode",
-      { employeeCode },
+      "SELECT id, employee_code, name, role, password_hash FROM employees WHERE employee_code = $1",
+      [employeeCode],
     );
 
-    const employee = result.recordset[0];
+    const employee     = result.rows[0];
     const genericError = "The employee ID or password is incorrect.";
     if (!employee) return res.status(401).json({ error: genericError });
 
@@ -47,17 +48,19 @@ router.post("/login", async (req, res, next) => {
 router.get("/me", async (req, res, next) => {
   try {
     const header = req.headers.authorization || "";
-    const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+    const token  = header.startsWith("Bearer ") ? header.slice(7) : null;
     if (!token) return res.status(401).json({ error: "Authentication required." });
+
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    const result = await query(
-      "SELECT id, employee_code AS employeeCode, name, role FROM employees WHERE id = @id",
-      { id: payload.id },
+    const result  = await query(
+      "SELECT id, employee_code AS \"employeeCode\", name, role FROM employees WHERE id = $1",
+      [payload.id],
     );
-    if (!result.recordset.length) return res.status(401).json({ error: "Session is no longer valid." });
-    res.json(result.recordset[0]);
+    if (!result.rows.length) return res.status(401).json({ error: "Session is no longer valid." });
+    res.json(result.rows[0]);
   } catch (err) {
-    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") return res.status(401).json({ error: "Session expired." });
+    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError")
+      return res.status(401).json({ error: "Session expired." });
     next(err);
   }
 });

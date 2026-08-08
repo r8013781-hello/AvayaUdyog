@@ -1,33 +1,70 @@
-const sql = require("mssql/msnodesqlv8");
+"use strict";
 
-function buildConnectionString(database) {
-  const driver = process.env.DB_ODBC_DRIVER || "ODBC Driver 17 for SQL Server";
-  const server = process.env.DB_SERVER || "localhost";
-  const db = database || process.env.DB_NAME;
+const { Pool } = require("pg");
 
-  if ((process.env.DB_AUTH || "windows") === "windows") {
-    return `Driver={${driver}};Server=${server};Database=${db};Trusted_Connection=Yes;`;
-  }
+/**
+ * PostgreSQL connection pool for Supabase.
+ *
+ * Required environment variable:
+ *   DATABASE_URL
+ *
+ * Supabase provides this connection string from:
+ * Project Settings → Database → Connection string
+ */
 
-  return `Driver={${driver}};Server=${server};Database=${db};UID=${process.env.DB_USER};PWD=${process.env.DB_PASSWORD};`;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+
+  // Supabase requires SSL for external database connections.
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : process.env.DB_SSL === "false"
+        ? false
+        : { rejectUnauthorized: false },
+
+  max: Number.parseInt(process.env.DB_POOL_MAX || "10", 10),
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 30000,
+});
+
+/**
+ * Execute a parameterized PostgreSQL query.
+ *
+ * params is an array:
+ *   query("SELECT * FROM employees WHERE id = $1", [id])
+ *
+ * Returns a result object compatible with the parts of the
+ * existing application that use result.rows.
+ */
+async function query(text, params = []) {
+  return pool.query(text, params);
 }
 
-let poolPromise;
-
+/**
+ * Get the shared PostgreSQL pool.
+ */
 function getPool() {
-  if (!poolPromise) {
-    poolPromise = new sql.ConnectionPool({ connectionString: buildConnectionString() }).connect();
-  }
-  return poolPromise;
+  return pool;
 }
 
-async function query(text, params = {}) {
-  const pool = await getPool();
-  const request = pool.request();
-  for (const [name, value] of Object.entries(params)) {
-    request.input(name, value);
+/**
+ * Test the database connection.
+ */
+async function testConnection() {
+  const client = await pool.connect();
+
+  try {
+    await client.query("SELECT 1");
+    return true;
+  } finally {
+    client.release();
   }
-  return request.query(text);
 }
 
-module.exports = { sql, getPool, query, buildConnectionString };
+module.exports = {
+  pool,
+  getPool,
+  query,
+  testConnection,
+};

@@ -42,7 +42,7 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3001;
 if (require.main === module) {
-  app.listen(port, () => console.log(`Avaya Udyog CRM API listening on port ${port}`));
+  app.listen(port, "0.0.0.0", () => console.log(`Avaya Udyog CRM API listening on port ${port}`));
 }
 
 module.exports = app;
