@@ -11,9 +11,11 @@ import Footer from "./components/Footer";
 import ContactPanel from "./components/ContactPanel";
 import WhatsappButton from "./components/WhatsappButton";
 import EmployeeLogin from "./components/EmployeeLogin";
+import CrmLoginModal from "./components/CrmLoginModal";
 
 function App() {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const crmPath = `${import.meta.env.BASE_URL}crm`;
   const [showEmployeeLogin, setShowEmployeeLogin] = useState(() =>
     window.location.pathname.endsWith("/crm"),
@@ -22,7 +24,7 @@ function App() {
   const openContactModal = () => setIsContactOpen(true);
   const closeContactModal = () => setIsContactOpen(false);
   const openCrm = () => {
-    window.history.pushState({}, "", crmPath);
+    window.history.pushState({}, "", `${crmPath}?view=overview`);
     setShowEmployeeLogin(true);
   };
   const closeCrm = () => {
@@ -44,7 +46,7 @@ function App() {
     <div className="min-h-screen bg-canvas text-ink antialiased">
       <Navbar
         openContactModal={openContactModal}
-        onLoginClick={openCrm}
+        onLoginClick={() => setIsLoginOpen(true)}
       />
       <main>
         <Hero openContactModal={openContactModal} />
@@ -58,6 +60,7 @@ function App() {
       <Footer />
       <ContactPanel isOpen={isContactOpen} onClose={closeContactModal} />
       <WhatsappButton />
+      {isLoginOpen && <CrmLoginModal onClose={() => setIsLoginOpen(false)} onAuthenticated={openCrm} />}
     </div>
   );
 }

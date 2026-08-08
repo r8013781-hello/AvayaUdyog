@@ -1,0 +1,11 @@
+CREATE TABLE customers (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL,
+    project NVARCHAR(150) NOT NULL,
+    phase NVARCHAR(50) NOT NULL,
+    value DECIMAL(14, 2) NULL,
+    owner_id INT NULL REFERENCES employees(id),
+    lead_id INT NULL REFERENCES leads(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    updated_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);

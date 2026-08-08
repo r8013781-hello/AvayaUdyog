@@ -1,0 +1,10 @@
+CREATE TABLE followups (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    contact NVARCHAR(100) NOT NULL,
+    type NVARCHAR(50) NOT NULL,
+    due_date DATE NOT NULL,
+    due_time NVARCHAR(20) NULL,
+    note NVARCHAR(MAX) NULL,
+    done BIT NOT NULL DEFAULT 0,
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);

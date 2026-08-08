@@ -12,6 +12,7 @@ import {
   Check,
 } from "lucide-react";
 import { captureWebsiteEnquiry } from "../lib/crmIntake";
+import { api } from "../lib/api";
 
 const emptyForm = {
   name: "",
@@ -70,7 +71,7 @@ export default function ContactPanel({ isOpen, onClose }) {
     setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {};
     Object.keys(emptyForm).forEach((key) => {
@@ -82,7 +83,13 @@ export default function ContactPanel({ isOpen, onClose }) {
       return;
     }
 
-    captureWebsiteEnquiry(formData, "Website enquiry");
+    try {
+      await api.submitEnquiry(formData);
+    } catch {
+      /* Backend unreachable — keep the enquiry locally so the visitor's
+         submission isn't lost; an admin can re-enter it manually. */
+      captureWebsiteEnquiry(formData, "Website enquiry");
+    }
     setSent(true);
   };
 

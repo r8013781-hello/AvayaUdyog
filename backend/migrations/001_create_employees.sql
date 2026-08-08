@@ -1,0 +1,8 @@
+CREATE TABLE employees (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    employee_code NVARCHAR(20) NOT NULL UNIQUE,
+    name NVARCHAR(100) NOT NULL,
+    password_hash NVARCHAR(255) NOT NULL,
+    role NVARCHAR(100) NOT NULL DEFAULT 'CRM Administrator',
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);

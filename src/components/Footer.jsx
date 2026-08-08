@@ -11,6 +11,7 @@ import {
   Check,
 } from "lucide-react";
 import { captureWebsiteEnquiry } from "../lib/crmIntake";
+import { api } from "../lib/api";
 
 const emptyForm = {
   name: "",
@@ -42,7 +43,7 @@ export default function Footer() {
     setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {};
     Object.keys(emptyForm).forEach((key) => {
@@ -54,7 +55,11 @@ export default function Footer() {
       return;
     }
 
-    captureWebsiteEnquiry(formData, "Consultation request");
+    try {
+      await api.submitEnquiry(formData);
+    } catch {
+      captureWebsiteEnquiry(formData, "Consultation request");
+    }
     setSubmitted(true);
     setFormData(emptyForm);
     setErrors({});
