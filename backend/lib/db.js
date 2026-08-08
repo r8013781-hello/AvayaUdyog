@@ -1,33 +1,63 @@
-const sql = require("mssql/msnodesqlv8");
+"use strict";
 
-function buildConnectionString(database) {
-  const driver = process.env.DB_ODBC_DRIVER || "ODBC Driver 17 for SQL Server";
-  const server = process.env.DB_SERVER || "localhost";
-  const db = database || process.env.DB_NAME;
+/**
+ * backend/lib/db.js
+ *
+ * PostgreSQL connection pool using the `pg` package and Supabase DATABASE_URL.
+ *
+ * Required environment variable:
+ *   DATABASE_URL  — Supabase connection string
+ *                   e.g. postgresql://postgres:[password]@db.[ref].supabase.co:5432/postgres
+ *
+ * Optional environment variable:
+ *   DB_SSL=false  — disable SSL (local PostgreSQL only; Supabase always needs SSL)
+ */
 
-  if ((process.env.DB_AUTH || "windows") === "windows") {
-    return `Driver={${driver}};Server=${server};Database=${db};Trusted_Connection=Yes;`;
-  }
+const { Pool } = require("pg");
 
-  return `Driver={${driver}};Server=${server};Database=${db};UID=${process.env.DB_USER};PWD=${process.env.DB_PASSWORD};`;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+
+  // Supabase requires SSL. Allow DB_SSL=false only for local dev instances.
+  ssl:
+    process.env.DB_SSL === "false"
+      ? false
+      : { rejectUnauthorized: false },
+});
+
+/**
+ * Execute a parameterised PostgreSQL query.
+ *
+ * @param {string} text   SQL string with $1, $2, … positional placeholders
+ * @param {Array}  params Array of values matching the placeholders
+ * @returns {Promise<import('pg').QueryResult>}
+ *
+ * Usage:
+ *   const result = await query("SELECT * FROM employees WHERE id = $1", [id]);
+ *   result.rows  // array of row objects
+ */
+async function query(text, params = []) {
+  return pool.query(text, params);
 }
 
-let poolPromise;
-
+/**
+ * Return the shared pg Pool instance.
+ * Use this when you need a dedicated client for a transaction:
+ *
+ *   const client = await getPool().connect();
+ *   try {
+ *     await client.query("BEGIN");
+ *     …
+ *     await client.query("COMMIT");
+ *   } catch (err) {
+ *     await client.query("ROLLBACK");
+ *     throw err;
+ *   } finally {
+ *     client.release();
+ *   }
+ */
 function getPool() {
-  if (!poolPromise) {
-    poolPromise = new sql.ConnectionPool({ connectionString: buildConnectionString() }).connect();
-  }
-  return poolPromise;
+  return pool;
 }
 
-async function query(text, params = {}) {
-  const pool = await getPool();
-  const request = pool.request();
-  for (const [name, value] of Object.entries(params)) {
-    request.input(name, value);
-  }
-  return request.query(text);
-}
-
-module.exports = { sql, getPool, query, buildConnectionString };
+module.exports = { pool, getPool, query };
