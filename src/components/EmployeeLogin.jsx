@@ -7,6 +7,7 @@ import {
   CircleUserRound,
   ClipboardList,
   FileText,
+  FolderOpen,
   LayoutDashboard,
   Lightbulb,
   Inbox,
@@ -53,11 +54,14 @@ export default function EmployeeLogin({ onBackToSite }) {
   const [view, setView] = useState(() => new URLSearchParams(window.location.search).get("view") || "overview");
   const [leads, setLeads] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [followups, setFollowups] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
   const [dataError, setDataError] = useState("");
   const [query, setQuery] = useState("");
   const [showLeadForm, setShowLeadForm] = useState(false);
+  const [showCustomerForm, setShowCustomerForm] = useState(false);
+  const [showProjectForm, setShowProjectForm] = useState(false);
   const [showFollowupForm, setShowFollowupForm] = useState(false);
 
   useEffect(() => {
@@ -107,12 +111,13 @@ export default function EmployeeLogin({ onBackToSite }) {
     let cancelled = false;
     setLoadingData(true);
     setDataError("");
-    Promise.all([api.getLeads(), api.getCustomers(), api.getFollowups()])
-      .then(([leadRows, customerRows, followupRows]) => {
+    Promise.all([api.getLeads(), api.getCustomers(), api.getFollowups(), api.getProjects()])
+      .then(([leadRows, customerRows, followupRows, projectRows]) => {
         if (cancelled) return;
         setLeads(leadRows);
         setCustomers(customerRows);
         setFollowups(followupRows);
+        setProjects(projectRows);
       })
       .catch((err) => {
         if (!cancelled) setDataError(err.message || "Could not load CRM data.");
@@ -146,7 +151,50 @@ export default function EmployeeLogin({ onBackToSite }) {
     </div>
   );
 
-  const navigation = [["overview", "Overview", LayoutDashboard], ["leads", "Leads", UsersRound], ["customers", "Customers", CircleUserRound], ["quotations", "Quotations", FileText], ["followups", "Follow-ups", CalendarClock], ["inbox", "Website inbox", Inbox]];
+  const navigation = [["overview", "Overview", LayoutDashboard], ["leads", "Leads", UsersRound], ["customers", "Customers", CircleUserRound], ["projects", "Projects", FolderOpen], ["quotations", "Quotations", FileText], ["followups", "Follow-ups", CalendarClock], ["inbox", "Website inbox", Inbox]];
+
+  const addCustomer = async (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    try {
+      const created = await api.createCustomer({
+        name: form.get("name"),
+        phone: form.get("phone"),
+        email: form.get("email") || "",
+        address: form.get("address") || "",
+        city: form.get("city") || "",
+        companyName: form.get("companyName") || "",
+        gstin: form.get("gstin") || "",
+      });
+      setCustomers((prev) => [created, ...prev]);
+      setShowCustomerForm(false);
+    } catch (err) {
+      setDataError(err.message || "Could not create the customer.");
+    }
+  };
+
+  const addProject = async (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    try {
+      const created = await api.createProject({
+        customerId: Number(form.get("customerId")),
+        name: form.get("name"),
+        projectType: form.get("projectType"),
+        siteAddress: form.get("siteAddress"),
+        city: form.get("city") || "",
+        areaSqft: Number(form.get("areaSqft")) || null,
+        budget: Number(form.get("budget")) || null,
+        startDate: form.get("startDate") || null,
+        targetDate: form.get("targetDate") || null,
+        scope: form.get("scope") || "",
+      });
+      setProjects((prev) => [created, ...prev]);
+      setShowProjectForm(false);
+    } catch (err) {
+      setDataError(err.message || "Could not create the project.");
+    }
+  };
 
   const addLead = async (event) => {
     event.preventDefault();
@@ -202,14 +250,17 @@ export default function EmployeeLogin({ onBackToSite }) {
         {loadingData ? <p className="text-sm text-ink-muted">Loading CRM data…</p> : <>
         {view === "overview" && <><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><Stat label="Open pipeline" value={money.format(openValue)} hint={`${leads.length} active opportunities`} icon={ClipboardList} /><Stat label="New leads" value={leads.filter((l) => l.stage === "New").length} hint="Require first contact" icon={UsersRound} /><Stat label="Today’s tasks" value={dueTasks.length} hint="Follow-ups not completed" icon={CalendarClock} /><Stat label="Active customers" value={customers.length} hint="Across design and execution" icon={CircleUserRound} /></div><div className="mt-7 grid gap-6 xl:grid-cols-[1.3fr_.7fr]"><section className="rounded-2xl border border-line bg-white p-5 shadow-hair"><div className="flex items-center justify-between"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">Pipeline</p><h2 className="mt-1 font-display text-xl">Priority opportunities</h2></div><button onClick={() => setView("leads")} className="text-xs font-bold text-sage-700">View all</button></div><div className="mt-4 divide-y divide-line">{leads.slice(0, 4).map((lead) => <div key={lead.id} className="flex items-center justify-between gap-3 py-3"><div><p className="font-semibold text-sm">{lead.name}</p><p className="mt-1 text-xs text-ink-muted">{lead.project || "—"} · Next: {lead.nextActionDate ? lead.nextActionDate.slice(0, 10) : "—"}</p></div><div className="text-right"><Badge type={lead.stage}>{lead.stage}</Badge><p className="mt-1 text-xs font-semibold">{money.format(lead.value || 0)}</p></div></div>)}{!leads.length && <p className="py-6 text-center text-sm text-ink-muted">No leads yet.</p>}</div></section><section className="rounded-2xl border border-gold/30 bg-gold-soft p-5"><div className="flex items-center gap-2 text-sage-800"><Lightbulb size={18} /><p className="text-[.62rem] font-bold uppercase tracking-label">Smart focus</p></div><h2 className="mt-3 font-display text-xl">Protect today’s momentum.</h2><p className="mt-3 text-sm leading-6 text-ink-soft">{dueTasks.length} conversations need attention.{topPriorityTask ? ` Start with ${topPriorityTask.contact}'s ${topPriorityTask.type.toLowerCase()}.` : ""}</p><button onClick={() => setView("followups")} className="mt-5 text-xs font-bold text-sage-800">Open follow-up queue <ChevronRight className="inline" size={14} /></button></section></div></>}
         {view === "leads" && <><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"><div><h2 className="font-display text-3xl">Leads</h2><p className="mt-1 text-sm text-ink-muted">Track every enquiry from first contact to conversion.</p></div><button onClick={() => setShowLeadForm(true)} className="btn-primary"><Plus size={16} /> Add lead</button></div><div className="mt-6 rounded-2xl border border-line bg-white shadow-hair"><div className="flex items-center gap-3 border-b border-line p-4"><Search size={17} className="text-ink-muted" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by person, project or stage" className="w-full text-sm outline-none" /></div><div className="overflow-x-auto"><table className="min-w-full text-left text-sm"><thead className="bg-sage-50 text-[.62rem] uppercase tracking-label text-ink-muted"><tr>{["Lead", "Project", "Stage", "Value", "Next action"].map((x) => <th key={x} className="px-5 py-3.5 font-bold">{x}</th>)}</tr></thead><tbody>{filteredLeads.map((lead) => <tr key={lead.id} className="border-t border-line"><td className="px-5 py-4"><p className="font-semibold">{lead.name}</p><p className="mt-1 text-xs text-ink-muted">{lead.source} · {lead.phone}</p></td><td className="px-5 py-4 text-ink-soft">{lead.project || "—"}</td><td className="px-5 py-4"><Badge type={lead.stage}>{lead.stage}</Badge></td><td className="px-5 py-4 font-semibold">{money.format(lead.value || 0)}</td><td className="px-5 py-4 text-ink-soft">{lead.nextActionDate ? lead.nextActionDate.slice(0, 10) : "—"}</td></tr>)}</tbody></table>{!filteredLeads.length && <p className="p-6 text-center text-sm text-ink-muted">No leads match.</p>}</div></div></>}
-        {view === "customers" && <><h2 className="font-display text-3xl">Customers</h2><p className="mt-1 text-sm text-ink-muted">A live view of every current Avaya Udyog project.</p><div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">{customers.map((customer) => <article key={customer.id} className="rounded-2xl border border-line bg-white p-5 shadow-hair"><div className="flex items-start justify-between"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-100 font-display text-lg text-sage-700">{customer.name[0]}</span><Badge type={customer.phase}>{customer.phase}</Badge></div><h3 className="mt-5 font-display text-xl">{customer.name}</h3><p className="mt-1 text-sm text-ink-muted">{customer.project}</p><div className="mt-5 flex justify-between border-t border-line pt-4 text-xs"><span className="text-ink-muted">{customer.owner || "Unassigned"}</span><span className="font-bold text-sage-700">{money.format(customer.value || 0)}</span></div></article>)}{!customers.length && <p className="text-sm text-ink-muted">No customers yet.</p>}</div></>}
+        {view === "customers" && <><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"><div><h2 className="font-display text-3xl">Customers</h2><p className="mt-1 text-sm text-ink-muted">A live view of every current Avaya Udyog customer.</p></div><button onClick={() => setShowCustomerForm(true)} className="btn-primary"><Plus size={16} /> Add customer</button></div><div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">{customers.map((customer) => <article key={customer.id} className="rounded-2xl border border-line bg-white p-5 shadow-hair"><div className="flex items-start justify-between"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-100 font-display text-lg text-sage-700">{customer.name[0]}</span><Badge type={customer.phase}>{customer.phase}</Badge></div><h3 className="mt-5 font-display text-xl">{customer.name}</h3><p className="mt-1 text-sm text-ink-muted">{customer.project}</p><div className="mt-5 flex justify-between border-t border-line pt-4 text-xs"><span className="text-ink-muted">{customer.owner || "Unassigned"}</span><span className="font-bold text-sage-700">{money.format(customer.value || 0)}</span></div></article>)}{!customers.length && <p className="text-sm text-ink-muted">No customers yet.</p>}</div></>}
         {view === "followups" && <><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"><div><h2 className="font-display text-3xl">Follow-ups</h2><p className="mt-1 text-sm text-ink-muted">Keep promises visible and make every client feel remembered.</p></div><button onClick={() => setShowFollowupForm(true)} className="btn-primary"><Plus size={16} /> Schedule follow-up</button></div><div className="mt-6 space-y-3">{[...followups].sort((a, b) => a.done - b.done).map((item) => <article key={item.id} className={`flex items-start gap-4 rounded-2xl border p-5 ${item.done ? "border-line bg-sage-50/50 opacity-65" : "border-line bg-white shadow-hair"}`}><button onClick={() => complete(item)} aria-label="Mark follow-up complete" className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${item.done ? "border-sage-600 bg-sage-600 text-white" : "border-sage-300 text-transparent"}`}><Check size={14} /></button><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><h3 className={`font-semibold ${item.done ? "line-through" : ""}`}>{item.contact}</h3><Badge type="Qualified">{item.type}</Badge></div><p className="mt-2 text-sm text-ink-muted">{item.note}</p></div><div className="shrink-0 text-right text-xs"><p className="font-bold text-sage-700">{item.dueDate ? item.dueDate.slice(0, 10) : "—"}</p><p className="mt-1 text-ink-muted">{item.dueTime}</p></div></article>)}{!followups.length && <p className="text-sm text-ink-muted">No follow-ups scheduled.</p>}</div></>}
         {view === "inbox" && <WebsiteInbox leads={leads} reviews={WEBSITE_REVIEWS} onOpenLeads={() => setView("leads")} />}
-        {view === "quotations" && <QuotationWorkspace customers={customers} />}
+        {view === "projects" && <><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"><div><h2 className="font-display text-3xl">Projects</h2><p className="mt-1 text-sm text-ink-muted">Track all ongoing and completed projects.</p></div><button onClick={() => setShowProjectForm(true)} className="btn-primary"><Plus size={16} /> Add project</button></div><div className="mt-6 overflow-x-auto rounded-2xl border border-line bg-white shadow-hair"><table className="min-w-full text-left text-sm"><thead className="bg-sage-50 text-[.62rem] uppercase tracking-label text-ink-muted"><tr>{["Code", "Project", "Client", "Status", "Budget"].map((x) => <th key={x} className="px-5 py-3.5 font-bold">{x}</th>)}</tr></thead><tbody>{projects.map((proj) => <tr key={proj.id} className="border-t border-line"><td className="px-5 py-4 font-semibold text-sage-700">{proj.projectCode}</td><td className="px-5 py-4"><p className="font-semibold">{proj.name}</p><p className="mt-1 text-xs text-ink-muted">{proj.projectType} · {proj.siteAddress}</p></td><td className="px-5 py-4"><p className="font-semibold">{proj.customerName}</p></td><td className="px-5 py-4"><Badge type={proj.stage || "Execution"}>{proj.stage || "Execution"}</Badge></td><td className="px-5 py-4 font-semibold">{money.format(proj.budget || 0)}</td></tr>)}</tbody></table>{!projects.length && <p className="p-6 text-center text-sm text-ink-muted">No projects found.</p>}</div></>}
+        {view === "quotations" && <QuotationWorkspace customers={customers} projects={projects} />}
         </>}
       </div>
     </main></div>
     {(showLeadForm || showFollowupForm) && <div className="fixed inset-0 z-[70] flex items-center justify-center bg-sage-950/45 p-4 backdrop-blur-sm"><form onSubmit={showLeadForm ? addLead : addFollowup} className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-float"><div className="flex items-center justify-between"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">CRM record</p><h2 className="mt-1 font-display text-2xl">{showLeadForm ? "Add new lead" : "Schedule follow-up"}</h2></div><button type="button" onClick={() => { setShowLeadForm(false); setShowFollowupForm(false); }} className="rounded-full p-2 text-ink-muted hover:bg-sage-50"><X size={18} /></button></div>{showLeadForm ? <div className="mt-6 grid gap-4 sm:grid-cols-2"><Field label="Client name" name="name" required /><Field label="Phone" name="phone" required /><Field label="Project" name="project" required /><Select label="Source" name="source" options={["Website", "Instagram", "Referral", "Walk-in"]} /><Field label="Estimated value" name="value" type="number" required /><Field label="Next follow-up" name="next" type="date" required /></div> : <div className="mt-6 grid gap-4 sm:grid-cols-2"><Field label="Contact" name="contact" required /><Select label="Type" name="type" options={["Call", "Site update", "Consultation", "Proposal review"]} /><Field label="Due date" name="due" type="date" required /><Field label="Time" name="time" type="time" required /><label className="sm:col-span-2 text-sm font-semibold">Note<textarea name="note" required rows="3" className="mt-2 w-full rounded-xl border border-line-strong p-3 text-sm outline-none focus:border-sage-500" /></label></div>}<button className="btn-primary mt-6 w-full">{showLeadForm ? "Create lead" : "Add to follow-up queue"}</button></form></div>}
+    {showCustomerForm && <div className="fixed inset-0 z-[70] flex items-center justify-center bg-sage-950/45 p-4 backdrop-blur-sm"><form onSubmit={addCustomer} className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-float"><div className="flex items-center justify-between"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">CRM record</p><h2 className="mt-1 font-display text-2xl">New Customer</h2></div><button type="button" onClick={() => setShowCustomerForm(false)} className="rounded-full p-2 text-ink-muted hover:bg-sage-50"><X size={18} /></button></div><div className="mt-6 grid gap-4 sm:grid-cols-2"><Field label="Name" name="name" required /><Field label="Phone" name="phone" required /><Field label="Email" name="email" type="email" /><Field label="Company Name" name="companyName" /><Field label="Address" name="address" /><Field label="City" name="city" /><Field label="GSTIN" name="gstin" /></div><button className="btn-primary mt-6 w-full">Register Customer</button></form></div>}
+    {showProjectForm && <div className="fixed inset-0 z-[70] flex items-center justify-center bg-sage-950/45 p-4 backdrop-blur-sm"><form onSubmit={addProject} className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-float"><div className="flex items-center justify-between"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">CRM record</p><h2 className="mt-1 font-display text-2xl">New Project</h2></div><button type="button" onClick={() => setShowProjectForm(false)} className="rounded-full p-2 text-ink-muted hover:bg-sage-50"><X size={18} /></button></div><div className="mt-6 grid gap-4 sm:grid-cols-2"><label className="text-sm font-semibold">Customer<select name="customerId" required className="mt-2 w-full rounded-xl border border-line-strong bg-white px-3 py-2.5 text-sm font-normal outline-none focus:border-sage-500"><option value="">Select a customer</option>{customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label><Field label="Project Name" name="name" required /><Select label="Project Type" name="projectType" options={["Residential", "Commercial", "Office", "Retail", "Other"]} /><Field label="Site Address" name="siteAddress" required /><Field label="City" name="city" /><Field label="Area (Sq.ft)" name="areaSqft" type="number" /><Field label="Budget" name="budget" type="number" /><Field label="Target Date" name="targetDate" type="date" /></div><button className="btn-primary mt-6 w-full">Create Project</button></form></div>}
   </div>;
 }
 
