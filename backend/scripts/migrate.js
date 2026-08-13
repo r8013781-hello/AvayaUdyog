@@ -1,44 +1,25 @@
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
-const { sql, buildConnectionString } = require("../lib/db");
+const { getPool } = require("../lib/db");
 
 const MIGRATIONS_DIR = path.join(__dirname, "..", "migrations");
 
-function connect(database) {
-  return new sql.ConnectionPool({ connectionString: buildConnectionString(database) }).connect();
-}
-
-async function ensureDatabaseExists() {
-  const pool = await connect("master");
-
-  const dbName = process.env.DB_NAME;
-  await pool
-    .request()
-    .query(`IF DB_ID('${dbName}') IS NULL CREATE DATABASE [${dbName}]`);
-  await pool.close();
-}
-
 async function run() {
-  if (!process.env.DB_SERVER || !process.env.DB_NAME) {
-    throw new Error("DB_SERVER and DB_NAME must be set (see backend/.env.example)");
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL must be set (see backend/.env.example)");
   }
 
-  await ensureDatabaseExists();
+  const pool = getPool();
 
-  const pool = await connect(process.env.DB_NAME);
-
-  await pool.request().query(`
-    IF OBJECT_ID('__migrations', 'U') IS NULL
-    CREATE TABLE __migrations (
-      name NVARCHAR(255) PRIMARY KEY,
-      applied_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS __migrations (
+      name VARCHAR(255) PRIMARY KEY,
+      applied_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   `);
 
-  const applied = new Set(
-    (await pool.request().query("SELECT name FROM __migrations")).recordset.map((r) => r.name),
-  );
+  const applied = new Set((await pool.query("SELECT name FROM __migrations")).rows.map((r) => r.name));
 
   const files = fs.readdirSync(MIGRATIONS_DIR).filter((f) => f.endsWith(".sql")).sort();
 
@@ -49,11 +30,21 @@ async function run() {
     }
     const text = fs.readFileSync(path.join(MIGRATIONS_DIR, file), "utf8");
     console.log(`apply ${file}`);
-    await pool.request().query(text);
-    await pool.request().input("name", sql.NVarChar, file).query("INSERT INTO __migrations (name) VALUES (@name)");
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      await client.query(text);
+      await client.query("INSERT INTO __migrations (name) VALUES ($1)", [file]);
+      await client.query("COMMIT");
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
   }
 
-  await pool.close();
+  await pool.end();
   console.log("Migrations complete.");
 }
 

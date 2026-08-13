@@ -25,7 +25,7 @@ describe("POST /api/enquiries", () => {
 
   it("creates a lead with source Website for a valid submission", async () => {
     query.mockResolvedValueOnce({
-      recordset: [{ id: 1, name: "Priya", createdAt: "2026-08-08T00:00:00.000Z" }],
+      rows: [{ id: 1, name: "Priya", createdAt: "2026-08-08T00:00:00.000Z" }],
     });
 
     const res = await request(app).post("/api/enquiries").send({
@@ -54,7 +54,11 @@ describe("GET /api/leads", () => {
   });
 
   it("returns leads for an authenticated request", async () => {
-    query.mockResolvedValueOnce({ recordset: [{ id: 1, name: "Priya", stage: "New" }] });
+    query
+      .mockResolvedValueOnce({
+        rows: [{ id: 1, employee_code: "RAHUL", name: "Rahul", role: "CRM Administrator", is_super_admin: true, permissions: {}, status: "Active" }],
+      })
+      .mockResolvedValueOnce({ rows: [{ id: 1, name: "Priya", stage: "New" }] });
 
     const res = await request(app).get("/api/leads").set("Authorization", authHeader());
 

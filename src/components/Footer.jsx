@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Mail,
   Phone,
@@ -9,6 +9,7 @@ import {
   MessageSquare,
   Building,
   Check,
+  AlertTriangle,
 } from "lucide-react";
 import { captureWebsiteEnquiry } from "../lib/crmIntake";
 import { api } from "../lib/api";
@@ -19,7 +20,7 @@ const emptyForm = {
   email: "",
   city: "",
   address: "",
-  query: "",
+  message: "",
 };
 
 const FIELD_LABELS = {
@@ -28,13 +29,20 @@ const FIELD_LABELS = {
   email: "Email address",
   city: "City",
   address: "Address / locality",
-  query: "Project description",
+  message: "Project description",
 };
+
+const REQUIRED_FIELDS = ["name", "phone", "message"];
 
 export default function Footer() {
   const [formData, setFormData] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const revertTimer = useRef(null);
+
+  useEffect(() => () => clearTimeout(revertTimer.current), []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -46,7 +54,7 @@ export default function Footer() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {};
-    Object.keys(emptyForm).forEach((key) => {
+    REQUIRED_FIELDS.forEach((key) => {
       if (!formData[key].trim()) nextErrors[key] = `${FIELD_LABELS[key]} is required`;
     });
 
@@ -55,14 +63,24 @@ export default function Footer() {
       return;
     }
 
+    setSubmitting(true);
+    setSubmitFailed(false);
     try {
       await api.submitEnquiry(formData);
+      setSubmitted(true);
+      setFormData(emptyForm);
+      setErrors({});
+      /* Briefly confirm, then return to a blank form so a visitor (or the
+         same device) can send another enquiry without feeling stuck. */
+      revertTimer.current = setTimeout(() => setSubmitted(false), 2600);
     } catch {
+      /* Keep it locally as a courtesy backup, but never tell the visitor we
+         succeeded when we didn't — that's how enquiries go missing silently. */
       captureWebsiteEnquiry(formData, "Consultation request");
+      setSubmitFailed(true);
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitted(true);
-    setFormData(emptyForm);
-    setErrors({});
   };
 
   const fieldClass = (name) =>
@@ -194,6 +212,20 @@ export default function Footer() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="mt-9 space-y-3.5">
+                  {submitFailed && (
+                    <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/70 p-4">
+                      <AlertTriangle size={17} className="mt-0.5 shrink-0 text-red-600" />
+                      <div className="text-[0.84rem] leading-6 text-red-800">
+                        <p className="font-semibold">We couldn&apos;t send that just now.</p>
+                        <p className="mt-0.5 text-red-700">
+                          Your details are still filled in below — please try again, or reach us directly on{" "}
+                          <a href="tel:+919830478820" className="font-semibold underline underline-offset-2">call</a>
+                          {" "}or{" "}
+                          <a href="https://wa.me/919830478820" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">WhatsApp</a>.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   <div className="grid gap-3.5 sm:grid-cols-2">
                     <Field
                       icon={User}
@@ -252,20 +284,20 @@ export default function Footer() {
                     <div className="relative">
                       <MessageSquare className="field-icon !top-5 !translate-y-0" />
                       <textarea
-                        name="query"
+                        name="message"
                         placeholder="Describe your project vision..."
                         value={formData.query}
                         onChange={handleInputChange}
                         rows="4"
                         aria-invalid={Boolean(errors.query)}
-                        className={`${fieldClass("query")} resize-none py-4`}
+                        className={`${fieldClass("message")} resize-none py-4`}
                       />
                     </div>
                     {errors.query && <FieldError message={errors.query} />}
                   </div>
 
-                  <button type="submit" className="btn-primary group w-full">
-                    Send Inquiry
+                  <button type="submit" disabled={submitting} className="btn-primary group w-full disabled:opacity-60">
+                    {submitting ? "Sending…" : submitFailed ? "Try again" : "Send Inquiry"}
                     <Send
                       size={15}
                       className="transition-transform duration-300 group-hover:translate-x-0.5"
@@ -304,19 +336,13 @@ export default function Footer() {
               </p>
             </div>
             <div className="flex items-center gap-5">
-              <a
-                href="#"
-                className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700"
-              >
+              <button type="button" className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700">
                 Privacy Policy
-              </a>
+              </button>
               <span className="h-1 w-1 rotate-45 bg-gold/60" aria-hidden="true" />
-              <a
-                href="#"
-                className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700"
-              >
+              <button type="button" className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700">
                 Terms of Service
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -325,11 +351,17 @@ export default function Footer() {
   );
 }
 
+/* Scrolls to an in-page section without ever touching the URL — no more
+   `/#services`-style hashes cluttering the address bar. */
+function scrollToSection(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}
+
 const STUDIO_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Founder", href: "#founder" },
+  { label: "About", id: "about" },
+  { label: "Services", id: "services" },
+  { label: "Gallery", id: "gallery" },
+  { label: "Founder", id: "founder" },
 ];
 
 const SERVICE_LINKS = [
@@ -374,12 +406,13 @@ function FooterNav() {
           <ul className="space-y-3">
             {STUDIO_LINKS.map((link) => (
               <li key={link.label}>
-                <a
-                  href={link.href}
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(link.id)}
                   className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
                 >
                   {link.label}
-                </a>
+                </button>
               </li>
             ))}
           </ul>
@@ -389,12 +422,13 @@ function FooterNav() {
           <ul className="space-y-3">
             {SERVICE_LINKS.map((label) => (
               <li key={label}>
-                <a
-                  href="#services"
+                <button
+                  type="button"
+                  onClick={() => scrollToSection("services")}
                   className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
                 >
                   {label}
-                </a>
+                </button>
               </li>
             ))}
           </ul>
@@ -402,18 +436,27 @@ function FooterNav() {
 
         <FooterColumn heading="Connect">
           <ul className="space-y-3">
-            {CONNECT_LINKS.map((link) => (
-              <li key={link.label}>
-                <a
-                  href={link.href}
-                  target={link.href.startsWith("http") ? "_blank" : undefined}
-                  rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+            {CONNECT_LINKS.map((link) => {
+              const isExternal = link.href.startsWith("http");
+              return (
+                <li key={link.label}>
+                  {isExternal ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <button type="button" className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700">
+                      {link.label}
+                    </button>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </FooterColumn>
 

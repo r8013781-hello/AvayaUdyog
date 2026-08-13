@@ -42,14 +42,31 @@ export const api = {
 
   getCustomers: () => request("/customers", { auth: true }),
   createCustomer: (customer) => request("/customers", { method: "POST", body: customer, auth: true }),
+  deleteCustomer: (id) => request(`/customers/${id}`, { method: "DELETE", auth: true }),
   getProjects: () => request("/projects", { auth: true }),
   createProject: (project) => request("/projects", { method: "POST", body: project, auth: true }),
+  deleteProject: (id) => request(`/projects/${id}`, { method: "DELETE", auth: true }),
+  addProjectPayment: (projectId, paymentData) => request(`/projects/${projectId}/payments`, { method: "POST", body: paymentData, auth: true }),
 
   getFollowups: () => request("/followups", { auth: true }),
   createFollowup: (followup) => request("/followups", { method: "POST", body: followup, auth: true }),
   setFollowupDone: (id, done) =>
     request(`/followups/${id}`, { method: "PATCH", body: { done }, auth: true }),
+  deleteFollowup: (id) => request(`/followups/${id}`, { method: "DELETE", auth: true }),
 
   getQuotations: () => request("/quotations", { auth: true }),
+  getQuotation: (id) => request(`/quotations/${id}`, { auth: true }),
   createQuotation: (quotation) => request("/quotations", { method: "POST", body: quotation, auth: true }),
+  updateQuotation: (id, quotation) => request(`/quotations/${id}`, { method: "PATCH", body: quotation, auth: true }),
+  deleteQuotation: (id) => request(`/quotations/${id}`, { method: "DELETE", auth: true }),
+
+  deleteLead: (id) => request(`/leads/${id}`, { method: "DELETE", auth: true }),
+
+  getEmployees: () => request("/employees", { auth: true }),
+  createEmployee: (employee) => request("/employees", { method: "POST", body: employee, auth: true }),
+  updateEmployee: (id, patch) => request(`/employees/${id}`, { method: "PATCH", body: patch, auth: true }),
+  deleteEmployee: (id) => request(`/employees/${id}`, { method: "DELETE", auth: true }),
 };
+
+export const RESOURCES = ["leads", "customers", "followups", "quotations", "projects"];
+export const ACTIONS = ["create", "read", "update", "delete"];

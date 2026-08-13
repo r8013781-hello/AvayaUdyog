@@ -12,19 +12,22 @@ import ContactPanel from "./components/ContactPanel";
 import WhatsappButton from "./components/WhatsappButton";
 import EmployeeLogin from "./components/EmployeeLogin";
 import CrmLoginModal from "./components/CrmLoginModal";
+import { NotificationsProvider } from "./lib/notifications";
 
 function App() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const crmPath = `${import.meta.env.BASE_URL}crm`;
+  // "portal" rather than "crm" in the URL — a logged-out visitor shouldn't be
+  // able to tell what kind of internal tool this leads to just by the path.
+  const portalPath = `${import.meta.env.BASE_URL}portal`;
   const [showEmployeeLogin, setShowEmployeeLogin] = useState(() =>
-    window.location.pathname.endsWith("/crm"),
+    window.location.pathname.endsWith("/portal"),
   );
 
   const openContactModal = () => setIsContactOpen(true);
   const closeContactModal = () => setIsContactOpen(false);
   const openCrm = () => {
-    window.history.pushState({}, "", `${crmPath}?view=overview`);
+    window.history.pushState({}, "", `${portalPath}?view=overview`);
     setShowEmployeeLogin(true);
   };
   const closeCrm = () => {
@@ -33,35 +36,41 @@ function App() {
   };
 
   useEffect(() => {
-    const syncRoute = () => setShowEmployeeLogin(window.location.pathname.endsWith("/crm"));
+    const syncRoute = () => setShowEmployeeLogin(window.location.pathname.endsWith("/portal"));
     window.addEventListener("popstate", syncRoute);
     return () => window.removeEventListener("popstate", syncRoute);
   }, []);
 
   if (showEmployeeLogin) {
-    return <EmployeeLogin onBackToSite={closeCrm} />;
+    return (
+      <NotificationsProvider>
+        <EmployeeLogin onBackToSite={closeCrm} />
+      </NotificationsProvider>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-canvas text-ink antialiased">
-      <Navbar
-        openContactModal={openContactModal}
-        onLoginClick={() => setIsLoginOpen(true)}
-      />
-      <main>
-        <Hero openContactModal={openContactModal} />
-        <Marquee />
-        <About openContactModal={openContactModal} />
-        <Services openContactModal={openContactModal} />
-        <Gallery />
-        <AboutCompany openContactModal={openContactModal} />
-        <Testimonials />
-      </main>
-      <Footer />
-      <ContactPanel isOpen={isContactOpen} onClose={closeContactModal} />
-      <WhatsappButton />
-      {isLoginOpen && <CrmLoginModal onClose={() => setIsLoginOpen(false)} onAuthenticated={openCrm} />}
-    </div>
+    <NotificationsProvider>
+      <div className="min-h-screen bg-canvas text-ink antialiased">
+        <Navbar
+          openContactModal={openContactModal}
+          onLoginClick={() => setIsLoginOpen(true)}
+        />
+        <main>
+          <Hero openContactModal={openContactModal} />
+          <Marquee />
+          <About openContactModal={openContactModal} />
+          <Services openContactModal={openContactModal} />
+          <Gallery />
+          <AboutCompany openContactModal={openContactModal} />
+          <Testimonials />
+        </main>
+        <Footer />
+        <ContactPanel isOpen={isContactOpen} onClose={closeContactModal} />
+        <WhatsappButton />
+        {isLoginOpen && <CrmLoginModal onClose={() => setIsLoginOpen(false)} onAuthenticated={openCrm} />}
+      </div>
+    </NotificationsProvider>
   );
 }
 

@@ -9,7 +9,7 @@ export function captureWebsiteEnquiry(formData, source) {
     email: formData.email,
     city: formData.city,
     address: formData.address,
-    message: formData.query,
+    message: formData.message,
     receivedAt: new Date().toISOString(),
     status: "New",
   };

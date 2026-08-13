@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import EmployeeLogin from "../EmployeeLogin";
 import { api, getToken } from "../../lib/api";
+import { NotificationsProvider } from "../../lib/notifications";
 
 vi.mock("../../lib/api", () => ({
   api: {
@@ -30,6 +31,8 @@ describe("Employee project pipeline", () => {
       id: 1,
       name: "Ananya Rao",
       role: "Design lead",
+      isSuperAdmin: true,
+      permissions: {},
     });
     api.getLeads.mockResolvedValue([]);
     api.getCustomers.mockResolvedValue([
@@ -57,7 +60,11 @@ describe("Employee project pipeline", () => {
   });
 
   it("shows the projects workspace and lets staff create customer and project records", async () => {
-    render(<EmployeeLogin onBackToSite={() => {}} />);
+    render(
+      <NotificationsProvider>
+        <EmployeeLogin onBackToSite={() => {}} />
+      </NotificationsProvider>,
+    );
 
     await waitFor(() => {
       expect(

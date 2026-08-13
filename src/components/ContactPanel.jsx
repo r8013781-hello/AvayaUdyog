@@ -10,6 +10,7 @@ import {
   Send,
   MessageCircle,
   Check,
+  AlertTriangle,
 } from "lucide-react";
 import { captureWebsiteEnquiry } from "../lib/crmIntake";
 import { api } from "../lib/api";
@@ -20,7 +21,7 @@ const emptyForm = {
   phone: "",
   email: "",
   city: "",
-  query: "",
+  message: "",
 };
 
 const FIELD_LABELS = {
@@ -29,15 +30,22 @@ const FIELD_LABELS = {
   phone: "Phone number",
   email: "Email address",
   city: "City",
-  query: "Project description",
+  message: "Project description",
 };
+
+const REQUIRED_FIELDS = ["name", "phone", "message"];
 
 export default function ContactPanel({ isOpen, onClose }) {
   const [formData, setFormData] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const panelRef = useRef(null);
   const closeRef = useRef(null);
+  const revertTimer = useRef(null);
+
+  useEffect(() => () => clearTimeout(revertTimer.current), []);
 
   /* Lock the page, move focus in, and wire Escape while the drawer is open. */
   useEffect(() => {
@@ -59,6 +67,7 @@ export default function ContactPanel({ isOpen, onClose }) {
     if (isOpen) return undefined;
     const timer = setTimeout(() => {
       setSent(false);
+      setSubmitFailed(false);
       setFormData(emptyForm);
       setErrors({});
     }, 400);
@@ -74,7 +83,7 @@ export default function ContactPanel({ isOpen, onClose }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {};
-    Object.keys(emptyForm).forEach((key) => {
+    REQUIRED_FIELDS.forEach((key) => {
       if (!formData[key].trim()) nextErrors[key] = `${FIELD_LABELS[key]} is required`;
     });
 
@@ -83,14 +92,24 @@ export default function ContactPanel({ isOpen, onClose }) {
       return;
     }
 
+    setSubmitting(true);
+    setSubmitFailed(false);
     try {
       await api.submitEnquiry(formData);
+      setSent(true);
+      setFormData(emptyForm);
+      setErrors({});
+      /* Briefly confirm, then return to a blank form so a visitor can send
+         another enquiry without the panel feeling stuck on the receipt. */
+      revertTimer.current = setTimeout(() => setSent(false), 2600);
     } catch {
-      /* Backend unreachable — keep the enquiry locally so the visitor's
-         submission isn't lost; an admin can re-enter it manually. */
+      /* Keep it locally as a courtesy backup, but never tell the visitor we
+         succeeded when we didn't — that's how enquiries go missing silently. */
       captureWebsiteEnquiry(formData, "Website enquiry");
+      setSubmitFailed(true);
+    } finally {
+      setSubmitting(false);
     }
-    setSent(true);
   };
 
   const fieldClass = (name) =>
@@ -170,6 +189,20 @@ export default function ContactPanel({ isOpen, onClose }) {
                 </h3>
 
                 <form onSubmit={handleSubmit} noValidate className="mt-5 space-y-3.5">
+                  {submitFailed && (
+                    <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/70 p-4">
+                      <AlertTriangle size={17} className="mt-0.5 shrink-0 text-red-600" />
+                      <div className="text-[0.84rem] leading-6 text-red-800">
+                        <p className="font-semibold">We couldn&apos;t send that just now.</p>
+                        <p className="mt-0.5 text-red-700">
+                          Your details are still filled in below — please try again, or reach us directly on{" "}
+                          <a href="tel:+919830478820" className="font-semibold underline underline-offset-2">call</a>
+                          {" "}or{" "}
+                          <a href="https://wa.me/919830478820" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">WhatsApp</a>.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   <Field
                     icon={User}
                     name="name"
@@ -222,20 +255,20 @@ export default function ContactPanel({ isOpen, onClose }) {
                     <div className="relative">
                       <MessageSquare className="field-icon !top-5 !translate-y-0" />
                       <textarea
-                        name="query"
+                        name="message"
                         placeholder="Briefly describe your project..."
                         value={formData.query}
                         onChange={handleInputChange}
                         rows="4"
                         aria-invalid={Boolean(errors.query)}
-                        className={`${fieldClass("query")} resize-none py-3.5`}
+                        className={`${fieldClass("message")} resize-none py-3.5`}
                       />
                     </div>
                     {errors.query && <FieldError message={errors.query} />}
                   </div>
 
-                  <button type="submit" className="btn-primary group w-full">
-                    Send Inquiry
+                  <button type="submit" disabled={submitting} className="btn-primary group w-full disabled:opacity-60">
+                    {submitting ? "Sending…" : submitFailed ? "Try again" : "Send Inquiry"}
                     <Send
                       size={15}
                       className="transition-transform duration-300 group-hover:translate-x-0.5"

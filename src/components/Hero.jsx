@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowUpRight, ArrowDown, Star } from "lucide-react";
+import { ArrowUpRight, ArrowDown } from "lucide-react";
 import HeroSlideshow, { HERO_SLIDES, HERO_SLIDE_MS } from "./HeroSlideshow";
 
 const STATS = [
@@ -118,30 +118,6 @@ export default function Hero({ openContactModal }) {
               >
                 View Portfolio
               </button>
-            </div>
-
-            {/* Founder credibility — inline, not a floating chip, since the
-                photo behind it is already doing the work of a hero image. */}
-            <div
-              className={`mt-9 inline-flex items-center gap-3.5 rounded-full border border-white/20 bg-white/10 py-2 pl-2 pr-5 backdrop-blur-md ${enterClass}`}
-              style={enter("330ms")}
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}BISWANATH.jpeg`}
-                alt="Mr. Biswanath Adhikari, Founder & Director of Avaya Udyog"
-                className="h-9 w-9 rounded-full object-cover object-top ring-1 ring-white/30"
-                loading="eager"
-              />
-              <span className="text-left">
-                <span className="block text-[0.8rem] font-semibold leading-tight text-white">
-                  Biswanath Adhikari
-                </span>
-                <span className="mt-0.5 flex items-center gap-0.5 text-gold-light">
-                  {[0, 1, 2, 3, 4].map((star) => (
-                    <Star key={star} size={9} className="fill-current" />
-                  ))}
-                </span>
-              </span>
             </div>
 
             {/* Stats */}

@@ -1,0 +1,3 @@
+ALTER TABLE quotation_items
+    ADD COLUMN group_name VARCHAR(150) NOT NULL DEFAULT '',
+    ADD COLUMN subgroup_name VARCHAR(150) NOT NULL DEFAULT '';

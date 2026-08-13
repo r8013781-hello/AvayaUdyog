@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const { query } = require("../lib/db");
+const { requireAuth } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post("/login", async (req, res, next) => {
 
     const employeeCode = value.employeeId.toUpperCase();
     const result = await query(
-      "SELECT id, employee_code, name, role, password_hash FROM employees WHERE employee_code = $1",
+      "SELECT id, employee_code, name, role, password_hash, is_super_admin, permissions, status FROM employees WHERE employee_code = $1",
       [employeeCode],
     );
 
@@ -29,6 +30,8 @@ router.post("/login", async (req, res, next) => {
     const valid = await bcrypt.compare(value.password, employee.password_hash);
     if (!valid) return res.status(401).json({ error: genericError });
 
+    if (employee.status !== "Active") return res.status(403).json({ error: "This account has been disabled. Contact your administrator." });
+
     const token = jwt.sign(
       { id: employee.id, employeeCode: employee.employee_code, name: employee.name, role: employee.role },
       process.env.JWT_SECRET,
@@ -37,29 +40,29 @@ router.post("/login", async (req, res, next) => {
 
     res.json({
       token,
-      employee: { id: employee.id, employeeCode: employee.employee_code, name: employee.name, role: employee.role },
+      employee: {
+        id: employee.id,
+        employeeCode: employee.employee_code,
+        name: employee.name,
+        role: employee.role,
+        isSuperAdmin: employee.is_super_admin,
+        permissions: employee.permissions || {},
+      },
     });
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/me", async (req, res, next) => {
-  try {
-    const header = req.headers.authorization || "";
-    const token = header.startsWith("Bearer ") ? header.slice(7) : null;
-    if (!token) return res.status(401).json({ error: "Authentication required." });
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    const result = await query(
-      "SELECT id, employee_code AS \"employeeCode\", name, role FROM employees WHERE id = $1",
-      [payload.id],
-    );
-    if (!result.rows.length) return res.status(401).json({ error: "Session is no longer valid." });
-    res.json(result.rows[0]);
-  } catch (err) {
-    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") return res.status(401).json({ error: "Session expired." });
-    next(err);
-  }
+router.get("/me", requireAuth, async (req, res) => {
+  res.json({
+    id: req.employee.id,
+    employeeCode: req.employee.employeeCode,
+    name: req.employee.name,
+    role: req.employee.role,
+    isSuperAdmin: req.employee.isSuperAdmin,
+    permissions: req.employee.permissions,
+  });
 });
 
 module.exports = router;

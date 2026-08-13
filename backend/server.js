@@ -10,6 +10,7 @@ const customersRoutes = require("./routes/customers");
 const followupsRoutes = require("./routes/followups");
 const quotationsRoutes = require("./routes/quotations");
 const projectsRoutes = require("./routes/projects");
+const employeesRoutes = require("./routes/employees");
 
 const app = express();
 
@@ -31,11 +32,18 @@ app.use("/api/customers", customersRoutes);
 app.use("/api/followups", followupsRoutes);
 app.use("/api/quotations", quotationsRoutes);
 app.use("/api/projects", projectsRoutes);
+app.use("/api/employees", employeesRoutes);
 
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  if (err.code === "23503") {
+    return res.status(409).json({ error: "This record is linked to other data and can't be deleted. Remove or reassign the linked records first." });
+  }
+  if (err.code === "23505") {
+    return res.status(409).json({ error: "That value is already in use." });
+  }
   console.error(err);
   res.status(500).json({ error: "Something went wrong." });
 });
