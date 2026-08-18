@@ -73,19 +73,19 @@ export default function Hero({ openContactModal }) {
                 className="block h-px w-12 bg-gradient-to-r from-gold-light to-transparent"
                 aria-hidden="true"
               />
-              <p className="mt-4 font-display text-[1.15rem] italic font-semibold leading-snug tracking-[0.01em] text-gold-light [text-shadow:0_2px_18px_rgba(0,0,0,0.5)] sm:text-[1.5rem] lg:text-[1.75rem]">
+              <h1 className="mt-4 font-display text-[1.15rem] italic font-semibold leading-snug tracking-[0.01em] text-gold-light [text-shadow:0_2px_18px_rgba(0,0,0,0.5)] sm:text-[1.5rem] lg:text-[1.75rem]">
                 Luxury Interior Design · Kolkata
-              </p>
+              </h1>
             </div>
 
-            <h1
+            <p
               className={`display mt-8 text-[3.2rem] text-white sm:text-[4.4rem] lg:text-[5rem] ${enterClass}`}
               style={enter("90ms")}
             >
               Where every room
               <br />
               <span className="accent text-gold-light">feels like home</span>
-            </h1>
+            </p>
 
             <p
               className={`mt-7 max-w-prose2 text-[1.05rem] leading-[1.85] text-white/75 ${enterClass}`}
