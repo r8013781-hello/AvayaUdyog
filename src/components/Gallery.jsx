@@ -11,68 +11,72 @@ const CATEGORIES = [
   { id: "commercial", label: "Commercial" },
 ];
 
+// Self-hosted under public/gallery/ — previously hotlinked to Unsplash, which
+// broke silently more than once when a photographer removed their photo
+// (404s with zero warning). These are ours now, so that can't happen again.
+const BASE = import.meta.env.BASE_URL;
 const IMAGES = [
   {
     id: "t1",
     title: "Warm Modern Living Room",
     category: "residential",
-    src: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g1-1505693416388.webp`,
     meta: "Curated finishes · warm lighting",
   },
   {
     id: "t2",
     title: "Luxury Lounge Styling",
     category: "residential",
-    src: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g2-1494526585095.webp`,
     meta: "Layered textures · contemporary",
   },
   {
     id: "t3",
     title: "Calm Bedroom Retreat",
     category: "residential",
-    src: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g3-1540518614846.webp`,
     meta: "Soft neutrals · inviting light",
   },
   {
     id: "t4",
     title: "Contemporary Bedroom",
     category: "residential",
-    src: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g4-1484154218962.webp`,
     meta: "Plush textures · warm wood",
   },
   {
     id: "t5",
     title: "Open-Plan Kitchen",
     category: "residential",
-    src: "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g5-1556911220.webp`,
     meta: "Wood island · minimalist",
   },
   {
     id: "t6",
     title: "Signature Office Workspace",
     category: "commercial",
-    src: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g6-1497366754035.webp`,
     meta: "Natural light · premium build",
   },
   {
     id: "t7",
     title: "Retail Showroom Experience",
     category: "commercial",
-    src: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g7-1524758631624.webp`,
     meta: "Elegant display · strong brand",
   },
   {
     id: "t8",
     title: "Refined Dining Room",
     category: "residential",
-    src: "https://images.unsplash.com/photo-1577111695807-31e677c08798?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g8-dining-refined.webp`,
     meta: "Statement lighting · gold accents",
   },
   {
     id: "t9",
     title: "Modern Boutique Hotel Lounge",
     category: "commercial",
-    src: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1100&q=80",
+    src: `${BASE}gallery/g9-1560448204.webp`,
     meta: "Hospitality interiors · bespoke",
   },
 ];

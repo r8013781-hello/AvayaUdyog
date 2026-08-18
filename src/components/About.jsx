@@ -47,7 +47,7 @@ export default function About({ openContactModal }) {
 
               <figure className="relative overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift">
                 <img
-                  src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1100&q=80"
+                  src={`${import.meta.env.BASE_URL}about/living-space.webp`}
                   alt="A refined modern living space designed by Avaya Udyog"
                   loading="lazy"
                   decoding="async"

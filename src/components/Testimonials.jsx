@@ -1,8 +1,9 @@
 import React from "react";
 import { Star, ShieldCheck } from "lucide-react";
 import useReveal from "../hooks/useReveal";
-import { handleImageError } from "../lib/imageFallback";
 
+// No stock photos of "clients" here on purpose — a random Unsplash face next
+// to a name reads as fabricated social proof. Initials only, always.
 const TESTIMONIALS = [
   {
     id: 1,
@@ -10,8 +11,6 @@ const TESTIMONIALS = [
     role: "Homeowner",
     content:
       "Avaya Udyog transformed our apartment into a visionary space. Their meticulous focus and thoughtful design surpassed everything we had hoped for.",
-    image:
-      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=120&h=120&fit=crop&crop=face",
   },
   {
     id: 2,
@@ -19,8 +18,6 @@ const TESTIMONIALS = [
     role: "Business Owner",
     content:
       "The office transformation was executed flawlessly, on schedule and within scope. Our team is energised by the new environment every single day.",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face",
   },
   {
     id: 3,
@@ -28,8 +25,6 @@ const TESTIMONIALS = [
     role: "Interior Designer",
     content:
       "Collaborating with Avaya Udyog is an absolute delight. The artistry, warmth, and design acumen are genuinely extraordinary.",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&crop=face",
   },
 ];
 
@@ -87,18 +82,8 @@ export default function Testimonials() {
               </blockquote>
 
               <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-6">
-                <span className="relative h-12 w-12 shrink-0">
-                  <span className="absolute inset-0 flex items-center justify-center rounded-full bg-sage-100 font-display text-lg text-sage-700 ring-1 ring-line-strong" aria-hidden="true">
-                    {testimonial.name[0]}
-                  </span>
-                  <img
-                    src={testimonial.image}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    onError={handleImageError}
-                    className="absolute inset-0 h-12 w-12 rounded-full object-cover ring-1 ring-line-strong"
-                  />
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sage-100 font-display text-lg text-sage-700 ring-1 ring-line-strong" aria-hidden="true">
+                  {testimonial.name[0]}
                 </span>
                 <div>
                   <p className="font-display text-[1.05rem] font-semibold text-ink">

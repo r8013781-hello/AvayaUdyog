@@ -1,34 +1,39 @@
 import React from "react";
 import { handleImageError } from "../lib/imageFallback";
 
+// Self-hosted under public/hero/ — previously hotlinked to Unsplash, which is
+// an unreliable foundation for a page's most important visual (photographers
+// can delete/replace their photos at any time with no warning).
+const BASE = import.meta.env.BASE_URL;
+
 /* Four distinct spaces, chosen for real light/dark drama rather than a
    uniform bright-and-airy set — a dusk exterior, then three interiors that
    each lean into contrast (gold lamp light, deep navy, dark stone). */
 export const HERO_SLIDES = [
   {
     id: "exterior",
-    src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80",
+    src: `${BASE}hero/exterior.webp`,
     alt: "A signature Avaya Udyog residence at dusk, architecture glowing from within",
     eyebrow: "Signature Residences",
     title: "Where architecture meets atmosphere",
   },
   {
     id: "living",
-    src: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80",
+    src: `${BASE}hero/living.webp`,
     alt: "A warm, considered living room designed by Avaya Udyog",
     eyebrow: "Living Spaces",
     title: "Warm textures, considered light",
   },
   {
     id: "bedroom",
-    src: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&w=1920&q=80",
+    src: `${BASE}hero/bedroom.webp`,
     alt: "A calm, tailored bedroom in deep navy tones designed by Avaya Udyog",
     eyebrow: "Private Quarters",
     title: "Calm palettes, tailored comfort",
   },
   {
     id: "bath",
-    src: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1920&q=80",
+    src: `${BASE}hero/bath.webp`,
     alt: "A bold, dark-material wellness bathroom designed by Avaya Udyog",
     eyebrow: "Wellness Retreats",
     title: "Bold materials, quiet luxury",
