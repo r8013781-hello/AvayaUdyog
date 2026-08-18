@@ -19,6 +19,7 @@ const IMAGES = [
   {
     id: "t1",
     title: "Warm Modern Living Room",
+    alt: "Warm modern living room interior design by Avaya Udyog, Kolkata — curated finishes and layered warm lighting",
     category: "residential",
     src: `${BASE}gallery/g1-1505693416388.webp`,
     meta: "Curated finishes · warm lighting",
@@ -26,6 +27,7 @@ const IMAGES = [
   {
     id: "t2",
     title: "Luxury Lounge Styling",
+    alt: "Luxury lounge interior styling in a Kolkata residence, layered textures with a contemporary design theme",
     category: "residential",
     src: `${BASE}gallery/g2-1494526585095.webp`,
     meta: "Layered textures · contemporary",
@@ -33,6 +35,7 @@ const IMAGES = [
   {
     id: "t3",
     title: "Calm Bedroom Retreat",
+    alt: "Calm bedroom interior with soft neutral tones and inviting natural light, residential interior design Kolkata",
     category: "residential",
     src: `${BASE}gallery/g3-1540518614846.webp`,
     meta: "Soft neutrals · inviting light",
@@ -40,6 +43,7 @@ const IMAGES = [
   {
     id: "t4",
     title: "Contemporary Bedroom",
+    alt: "Contemporary bedroom interior with plush textures and warm wood finishes, Avaya Udyog residential project",
     category: "residential",
     src: `${BASE}gallery/g4-1484154218962.webp`,
     meta: "Plush textures · warm wood",
@@ -47,6 +51,7 @@ const IMAGES = [
   {
     id: "t5",
     title: "Open-Plan Kitchen",
+    alt: "Open-plan modular kitchen design with a wood island and minimalist cabinetry, Kolkata interior design project",
     category: "residential",
     src: `${BASE}gallery/g5-1556911220.webp`,
     meta: "Wood island · minimalist",
@@ -54,6 +59,7 @@ const IMAGES = [
   {
     id: "t6",
     title: "Signature Office Workspace",
+    alt: "Signature commercial office workspace interior design with natural light and premium build finish, Kolkata",
     category: "commercial",
     src: `${BASE}gallery/g6-1497366754035.webp`,
     meta: "Natural light · premium build",
@@ -61,6 +67,7 @@ const IMAGES = [
   {
     id: "t7",
     title: "Retail Showroom Experience",
+    alt: "Retail showroom interior design with an elegant product display and strong brand presence, commercial project",
     category: "commercial",
     src: `${BASE}gallery/g7-1524758631624.webp`,
     meta: "Elegant display · strong brand",
@@ -68,6 +75,7 @@ const IMAGES = [
   {
     id: "t8",
     title: "Refined Dining Room",
+    alt: "Refined dining room interior with statement pendant lighting and gold accents, luxury home interior Kolkata",
     category: "residential",
     src: `${BASE}gallery/g8-dining-refined.webp`,
     meta: "Statement lighting · gold accents",
@@ -75,6 +83,7 @@ const IMAGES = [
   {
     id: "t9",
     title: "Modern Boutique Hotel Lounge",
+    alt: "Modern boutique hotel lounge with bespoke hospitality interior design, commercial interiors by Avaya Udyog",
     category: "commercial",
     src: `${BASE}gallery/g9-1560448204.webp`,
     meta: "Hospitality interiors · bespoke",
@@ -210,7 +219,7 @@ export default function Gallery() {
                 >
                   <img
                     src={img.src}
-                    alt={img.title}
+                    alt={img.alt}
                     loading="lazy"
                     decoding="async"
                     onError={handleImageError}
