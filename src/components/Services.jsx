@@ -1,6 +1,11 @@
 import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
+import { handleImageError } from "../lib/imageFallback";
+
+// Self-hosted under public/services/ — previously hotlinked to Unsplash,
+// which is an unreliable foundation for content images (see Hero/Gallery).
+const BASE = import.meta.env.BASE_URL;
 
 /* Editorial, alternating image/text blocks rather than an icon-grid of
    cards — the photography carries each service instead of a generic glyph. */
@@ -9,29 +14,29 @@ const SERVICES = [
     title: "Residential Interiors",
     tag: "Homes",
     text: "Warm, modern homes shaped around your lifestyle — thoughtful layouts, curated finishes, and elevated details that make every day feel special.",
-    src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
-    alt: "A bright, gallery-walled modern living room designed by Avaya Udyog",
+    src: `${BASE}services/s1-residential.webp`,
+    alt: "Bright, gallery-walled modern living room — residential interior design by Avaya Udyog, Kolkata",
   },
   {
     title: "Commercial Spaces",
     tag: "Workplaces",
     text: "Brand-first offices and retail environments designed to impress clients and keep teams inspired, productive, and proud of where they work.",
-    src: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80",
-    alt: "A glass-walled modern office corridor designed by Avaya Udyog",
+    src: `${BASE}services/s2-commercial.webp`,
+    alt: "Glass-walled modern office corridor — commercial interior design by Avaya Udyog, Kolkata",
   },
   {
     title: "Design Consultation",
     tag: "Guidance",
     text: "Concept development, material guidance, and clear design direction that turn rough ideas into a refined, buildable vision.",
-    src: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=80",
-    alt: "A designer hand-drafting architectural plans at a desk",
+    src: `${BASE}services/s3-consultation.webp`,
+    alt: "Designer hand-drafting architectural interior plans during a consultation",
   },
   {
     title: "Turnkey Execution",
     tag: "End-to-end",
     text: "From first sketch to final styling, we manage every detail so your project feels effortless from start to finish.",
-    src: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1400&q=80",
-    alt: "A construction site being overseen by the Avaya Udyog project team",
+    src: `${BASE}services/s4-execution.webp`,
+    alt: "A turnkey interior project site being overseen by the Avaya Udyog execution team",
   },
 ];
 
@@ -80,6 +85,8 @@ export default function Services({ openContactModal }) {
                     src={src}
                     alt={alt}
                     loading="lazy"
+                    decoding="async"
+                    onError={handleImageError}
                     className="h-[20rem] w-full object-cover transition-transform duration-[1200ms] ease-smooth group-hover:scale-105 sm:h-[24rem] lg:h-[26rem]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-sage-950/20 via-transparent to-transparent" />

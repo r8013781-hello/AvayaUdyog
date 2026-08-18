@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..600&display=swap");
+/* Fraunces + Plus Jakarta Sans are loaded via a <link> in index.html
+   (not @import here) so the browser discovers and fetches them before the
+   CSSOM is built, instead of waiting on this stylesheet to parse. */
 
 @tailwind base;
 @tailwind components;
