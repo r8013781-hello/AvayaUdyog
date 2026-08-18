@@ -14,6 +14,12 @@ const employeesRoutes = require("./routes/employees");
 
 const app = express();
 
+// Render (and most PaaS hosts) sit behind a reverse proxy, so every request
+// arrives with an X-Forwarded-For header. Without this, express-rate-limit
+// can't trust that header and refuses to start, and req.ip would resolve to
+// the proxy's address for every request instead of the real client's.
+app.set("trust proxy", 1);
+
 app.use(helmet());
 app.use(
   cors({

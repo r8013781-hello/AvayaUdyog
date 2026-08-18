@@ -1,4 +1,5 @@
 import React from "react";
+import { handleImageError } from "../lib/imageFallback";
 
 /* Four distinct spaces, chosen for real light/dark drama rather than a
    uniform bright-and-airy set — a dusk exterior, then three interiors that
@@ -55,6 +56,8 @@ export default function HeroSlideshow({ active, className = "" }) {
           alt=""
           loading={index === 0 ? "eager" : "lazy"}
           fetchpriority={index === 0 ? "high" : undefined}
+          decoding="async"
+          onError={handleImageError}
           className={`animate-slow-zoom absolute inset-0 h-full w-full object-cover contrast-125 brightness-95 transition-opacity duration-[1600ms] ease-smooth ${
             index === active ? "opacity-100" : "opacity-0"
           }`}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Heart, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import useReveal from "../hooks/useReveal";
+import { handleImageError } from "../lib/imageFallback";
 
 const FAVORITES_KEY = "gallery-favorites";
 
@@ -207,6 +208,8 @@ export default function Gallery() {
                     src={img.src}
                     alt={img.title}
                     loading="lazy"
+                    decoding="async"
+                    onError={handleImageError}
                     className="h-72 w-full object-cover transition-transform duration-[1100ms] ease-smooth group-hover:scale-[1.06] sm:h-80"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-sage-950/80 via-sage-950/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-95" />
@@ -289,6 +292,8 @@ export default function Gallery() {
               <img
                 src={active.src}
                 alt={active.title}
+                decoding="async"
+                onError={handleImageError}
                 className="max-h-[70vh] w-full object-contain"
               />
               <button

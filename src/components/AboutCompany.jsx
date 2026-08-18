@@ -1,6 +1,7 @@
 import React from "react";
 import { Award, Building2, HeartHandshake, ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
+import { handleImageError } from "../lib/imageFallback";
 
 const STATS = [
   { value: "35+", label: "Years of experience" },
@@ -65,6 +66,8 @@ export default function AboutCompany({ openContactModal }) {
                 alt="Mr. Biswanath Adhikari, Founder & Director of Avaya Udyog"
                 className="h-[30rem] w-full object-cover object-top sm:h-[34rem]"
                 loading="lazy"
+                decoding="async"
+                onError={handleImageError}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-sage-950/85 via-sage-950/15 to-transparent" />
               <figcaption className="absolute inset-x-0 bottom-0 p-6">

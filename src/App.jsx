@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Marquee from "./components/Marquee";
@@ -10,9 +10,13 @@ import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 import ContactPanel from "./components/ContactPanel";
 import WhatsappButton from "./components/WhatsappButton";
-import EmployeeLogin from "./components/EmployeeLogin";
 import CrmLoginModal from "./components/CrmLoginModal";
 import { NotificationsProvider } from "./lib/notifications";
+
+// The employee portal (leads, quotations, PDF export, admin panel…) is a
+// separate, sizeable bundle that a public website visitor never needs —
+// only load it once someone actually opens /portal.
+const EmployeeLogin = lazy(() => import("./components/EmployeeLogin"));
 
 function App() {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -44,7 +48,9 @@ function App() {
   if (showEmployeeLogin) {
     return (
       <NotificationsProvider>
-        <EmployeeLogin onBackToSite={closeCrm} />
+        <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-sage-950 text-sm font-semibold text-sage-100">Loading…</div>}>
+          <EmployeeLogin onBackToSite={closeCrm} />
+        </Suspense>
       </NotificationsProvider>
     );
   }

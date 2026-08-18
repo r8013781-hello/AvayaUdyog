@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Lightbulb,
   Inbox,
+  Menu,
   Plus,
   Search,
   ShieldCheck,
@@ -18,7 +19,7 @@ import {
   UsersRound,
   X,
 } from "lucide-react";
-import { api, getToken, setToken } from "../lib/api";
+import { api, getToken, onUnauthorized, setToken } from "../lib/api";
 import QuotationWorkspace from "./QuotationWorkspace";
 import AdminPanel from "./AdminPanel";
 import ProjectsPanel from "./ProjectsPanel";
@@ -52,10 +53,25 @@ export default function EmployeeLogin({ onBackToSite }) {
   const [showCustomerForm, setShowCustomerForm] = useState(false);
   const [showFollowupForm, setShowFollowupForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     if (!getToken()) { setCheckingSession(false); return; }
     api.me().then(setEmployee).catch(() => setToken(null)).finally(() => setCheckingSession(false));
+  }, []);
+
+  // A token can expire (or be revoked) mid-session — without this, every
+  // subsequent API call would just keep failing silently with the user
+  // stuck looking "logged in" but unable to do anything. Force them back
+  // to a clean sign-in instead.
+  useEffect(() => {
+    return onUnauthorized(() => {
+      if (!getToken()) return;
+      setToken(null);
+      setEmployee(null);
+      toast.warning({ title: "Session expired", message: "Please sign in again to continue." });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = async (event) => {
@@ -88,6 +104,7 @@ export default function EmployeeLogin({ onBackToSite }) {
     url.searchParams.set("view", nextView);
     window.history.pushState({}, "", url);
     setView(nextView);
+    setMobileNavOpen(false);
   };
 
   useEffect(() => {
@@ -117,7 +134,10 @@ export default function EmployeeLogin({ onBackToSite }) {
         setProjects(projectRows);
       })
       .catch((err) => {
-        if (!cancelled) toast.error(err.message || "Could not load CRM data.");
+        // A 401 here already triggers the onUnauthorized handler above (which clears
+        // the token synchronously and shows its own clear "session expired" toast) —
+        // don't pile a second, more generic error toast on top of that one.
+        if (!cancelled && getToken()) toast.error(err.message || "Could not load CRM data.");
       })
       .finally(() => {
         if (!cancelled) setLoadingData(false);
@@ -255,7 +275,7 @@ export default function EmployeeLogin({ onBackToSite }) {
 
   return <div className="min-h-screen bg-canvas text-ink"><div className="flex min-h-screen">
     <aside className="hidden w-64 shrink-0 flex-col bg-sage-950 p-5 text-white lg:flex"><button onClick={() => navigate("overview")} className="text-left font-display text-xl">Avaya <span className="text-gold-light">Udyog</span><span className="mt-1 block font-sans text-[.6rem] font-bold uppercase tracking-label text-sage-300">Internal CRM</span></button><nav className="mt-12 space-y-1">{navigation.map(([id, label, Icon]) => <button key={id} onClick={() => navigate(id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${view === id ? "bg-white/12 text-white" : "text-sage-200/70 hover:bg-white/5 hover:text-white"}`}><Icon size={17} />{label}</button>)}</nav><div className="mt-auto rounded-2xl border border-white/10 bg-white/5 p-4"><p className="font-semibold text-sm">{employee.name}</p><p className="mt-1 text-xs text-sage-300">{employee.role}</p><button onClick={signOut} className="mt-4 text-xs font-bold uppercase tracking-label text-gold-light">Sign out</button></div></aside>
-    <main className="min-w-0 flex-1"><header className="flex items-center justify-between border-b border-line bg-white px-5 py-4 md:px-8"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">{navigation.find(([id]) => id === view)?.[1]}</p><h1 className="mt-1 font-display text-2xl">Good morning, {employee.name.split(" ")[0]}</h1></div><button onClick={signOut} className="rounded-full border border-line px-4 py-2 text-xs font-bold text-ink-muted lg:hidden">Sign out</button></header>
+    <main className="min-w-0 flex-1"><header className="flex items-center justify-between border-b border-line bg-white px-5 py-4 md:px-8"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">{navigation.find(([id]) => id === view)?.[1]}</p><h1 className="mt-1 font-display text-2xl">Good morning, {employee.name.split(" ")[0]}</h1></div><button onClick={() => setMobileNavOpen(true)} aria-label="Open menu" className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink-soft lg:hidden"><Menu size={19} /></button></header>
       <div className="mx-auto max-w-7xl p-5 md:p-8">
         {loadingData ? <p className="text-sm text-ink-muted">Loading CRM data…</p> : <>
         {view === "overview" && <><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><Stat label="Open pipeline" value={money.format(openValue)} hint={`${leads.length} active opportunities`} icon={ClipboardList} /><Stat label="New leads" value={leads.filter((l) => l.stage === "New").length} hint="Require first contact" icon={UsersRound} /><Stat label="Today’s tasks" value={dueTasks.length} hint="Follow-ups not completed" icon={CalendarClock} /><Stat label="Active customers" value={customers.length} hint="Across design and execution" icon={CircleUserRound} /></div><div className="mt-7 grid gap-6 xl:grid-cols-[1.3fr_.7fr]"><section className="rounded-2xl border border-line bg-white p-5 shadow-hair"><div className="flex items-center justify-between"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">Pipeline</p><h2 className="mt-1 font-display text-xl">Priority opportunities</h2></div><button onClick={() => setView("leads")} className="text-xs font-bold text-sage-700">View all</button></div><div className="mt-4 divide-y divide-line">{leads.slice(0, 4).map((lead) => <div key={lead.id} className="flex items-center justify-between gap-3 py-3"><div><p className="font-semibold text-sm">{lead.name}</p><p className="mt-1 text-xs text-ink-muted">{lead.project || "—"} · Next: {lead.nextActionDate ? lead.nextActionDate.slice(0, 10) : "—"}</p></div><div className="text-right"><Badge type={lead.stage}>{lead.stage}</Badge><p className="mt-1 text-xs font-semibold">{money.format(lead.value || 0)}</p></div></div>)}{!leads.length && <p className="py-6 text-center text-sm text-ink-muted">No leads yet.</p>}</div></section><section className="rounded-2xl border border-gold/30 bg-gold-soft p-5"><div className="flex items-center gap-2 text-sage-800"><Lightbulb size={18} /><p className="text-[.62rem] font-bold uppercase tracking-label">Smart focus</p></div><h2 className="mt-3 font-display text-xl">Protect today’s momentum.</h2><p className="mt-3 text-sm leading-6 text-ink-soft">{dueTasks.length} conversations need attention.{topPriorityTask ? ` Start with ${topPriorityTask.contact}'s ${topPriorityTask.type.toLowerCase()}.` : ""}</p><button onClick={() => setView("followups")} className="mt-5 text-xs font-bold text-sage-800">Open follow-up queue <ChevronRight className="inline" size={14} /></button></section></div></>}
@@ -269,6 +289,19 @@ export default function EmployeeLogin({ onBackToSite }) {
         </>}
       </div>
     </main></div>
+    {mobileNavOpen && (
+      <div className="fixed inset-0 z-[90] lg:hidden">
+        <button aria-label="Close menu" className="absolute inset-0 bg-sage-950/50 backdrop-blur-sm" onClick={() => setMobileNavOpen(false)} />
+        <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-sage-950 p-5 text-white shadow-float">
+          <div className="flex items-center justify-between">
+            <span className="text-left font-display text-xl">Avaya <span className="text-gold-light">Udyog</span></span>
+            <button onClick={() => setMobileNavOpen(false)} aria-label="Close menu" className="rounded-full p-2 text-sage-200 hover:bg-white/10"><X size={18} /></button>
+          </div>
+          <nav className="mt-8 space-y-1">{navigation.map(([id, label, Icon]) => <button key={id} onClick={() => navigate(id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${view === id ? "bg-white/12 text-white" : "text-sage-200/70 hover:bg-white/5 hover:text-white"}`}><Icon size={17} />{label}</button>)}</nav>
+          <div className="mt-auto rounded-2xl border border-white/10 bg-white/5 p-4"><p className="font-semibold text-sm">{employee.name}</p><p className="mt-1 text-xs text-sage-300">{employee.role}</p><button onClick={signOut} className="mt-4 text-xs font-bold uppercase tracking-label text-gold-light">Sign out</button></div>
+        </aside>
+      </div>
+    )}
     {(showLeadForm || showFollowupForm) && <div className="fixed inset-0 z-[70] flex items-center justify-center bg-sage-950/45 p-4 backdrop-blur-sm"><form onSubmit={showLeadForm ? addLead : addFollowup} className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-float"><div className="flex items-center justify-between"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">CRM record</p><h2 className="mt-1 font-display text-2xl">{showLeadForm ? "Add new lead" : "Schedule follow-up"}</h2></div><button type="button" onClick={() => { setShowLeadForm(false); setShowFollowupForm(false); }} className="rounded-full p-2 text-ink-muted hover:bg-sage-50"><X size={18} /></button></div>{showLeadForm ? <div className="mt-6 grid gap-4 sm:grid-cols-2"><Field label="Client name" name="name" required /><Field label="Phone" name="phone" required /><Field label="Project" name="project" required /><Select label="Source" name="source" options={["Website", "Instagram", "Referral", "Walk-in"]} /><Field label="Estimated value" name="value" type="number" required /><Field label="Next follow-up" name="next" type="date" required /></div> : <div className="mt-6 grid gap-4 sm:grid-cols-2"><Field label="Contact" name="contact" required /><Select label="Type" name="type" options={["Call", "Site update", "Consultation", "Proposal review"]} /><Field label="Due date" name="due" type="date" required /><Field label="Time" name="time" type="time" required /><label className="sm:col-span-2 text-sm font-semibold">Note<textarea name="note" required rows="3" className="mt-2 w-full rounded-xl border border-line-strong p-3 text-sm outline-none focus:border-sage-500" /></label></div>}<button className="btn-primary mt-6 w-full">{showLeadForm ? "Create lead" : "Add to follow-up queue"}</button></form></div>}
     {showCustomerForm && <div className="fixed inset-0 z-[70] flex items-center justify-center bg-sage-950/45 p-4 backdrop-blur-sm"><form onSubmit={addCustomer} className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-float"><div className="flex items-center justify-between"><div><p className="text-[.62rem] font-bold uppercase tracking-label text-sage-600">CRM record</p><h2 className="mt-1 font-display text-2xl">New Customer</h2></div><button type="button" onClick={() => setShowCustomerForm(false)} className="rounded-full p-2 text-ink-muted hover:bg-sage-50"><X size={18} /></button></div><div className="mt-6 grid gap-4 sm:grid-cols-2"><Field label="Name" name="name" required /><Field label="Phone" name="phone" required /><Field label="Email" name="email" type="email" /><Field label="Company Name" name="companyName" /><Field label="Address" name="address" /><Field label="City" name="city" /><Field label="GSTIN" name="gstin" /></div><button className="btn-primary mt-6 w-full">Register Customer</button></form></div>}
     {selectedLead && <LeadDetailsCard lead={selectedLead} onClose={() => setSelectedLead(null)} canDelete={can("leads", "delete")} onDelete={(lead) => removeRecord("lead", lead.id, lead.name)} />}

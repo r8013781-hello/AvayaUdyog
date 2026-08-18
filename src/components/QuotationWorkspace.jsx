@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Calculator, Download, FilePlus2, FolderPlus, Layers, Pencil, Plus, Trash2 } from "lucide-react";
-import { api } from "../lib/api";
+import { api, getToken } from "../lib/api";
 import { useConfirm, useToast } from "../lib/notifications";
 import { downloadBlob } from "../lib/downloadFile";
 import { groupQuotationItems } from "../lib/quotationGrouping";
@@ -30,7 +30,7 @@ export default function QuotationWorkspace({ customers, projects = [], canCreate
 
   const load = () => {
     setLoading(true);
-    api.getQuotations().then(setQuotes).catch((err) => toast.error(err.message || "Could not load quotations.")).finally(() => setLoading(false));
+    api.getQuotations().then(setQuotes).catch((err) => { if (getToken()) toast.error(err.message || "Could not load quotations."); }).finally(() => setLoading(false));
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(load, []);

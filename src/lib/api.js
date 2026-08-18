@@ -10,6 +10,18 @@ export function setToken(token) {
   else localStorage.removeItem(TOKEN_KEY);
 }
 
+/**
+ * Fires when an authenticated request comes back 401 (expired/invalid token)
+ * — not on a failed login attempt, which is also a 401 but isn't a session
+ * expiry. EmployeeLogin subscribes to force a clean sign-out instead of the
+ * UI silently re-failing every subsequent request forever.
+ */
+const UNAUTHORIZED_EVENT = "avaya:unauthorized";
+export function onUnauthorized(handler) {
+  window.addEventListener(UNAUTHORIZED_EVENT, handler);
+  return () => window.removeEventListener(UNAUTHORIZED_EVENT, handler);
+}
+
 async function request(path, { method = "GET", body, auth = false } = {}) {
   const headers = { "Content-Type": "application/json" };
   if (auth) {
@@ -17,14 +29,22 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
     if (token) headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${BASE_URL}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let response;
+  try {
+    response = await fetch(`${BASE_URL}${path}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new Error("Could not reach the server. Check your connection and try again.");
+  }
 
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.error || "Request failed.");
+  if (!response.ok) {
+    if (auth && response.status === 401) window.dispatchEvent(new CustomEvent(UNAUTHORIZED_EVENT));
+    throw new Error(data.error || "Request failed.");
+  }
   return data;
 }
 

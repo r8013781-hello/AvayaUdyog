@@ -21,6 +21,7 @@ vi.mock("../../lib/api", () => ({
   },
   getToken: vi.fn(() => "demo-token"),
   setToken: vi.fn(),
+  onUnauthorized: vi.fn(() => () => {}),
 }));
 
 describe("Employee project pipeline", () => {

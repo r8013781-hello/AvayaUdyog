@@ -1,6 +1,7 @@
 import React from "react";
 import { PenTool, Home, Sparkles, ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
+import { handleImageError } from "../lib/imageFallback";
 
 const PRINCIPLES = [
   {
@@ -49,6 +50,8 @@ export default function About({ openContactModal }) {
                   src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1100&q=80"
                   alt="A refined modern living space designed by Avaya Udyog"
                   loading="lazy"
+                  decoding="async"
+                  onError={handleImageError}
                   className="h-[30rem] w-full object-cover transition-transform duration-[1200ms] ease-smooth hover:scale-[1.04] lg:h-[34rem]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-sage-950/40 via-transparent to-transparent" />

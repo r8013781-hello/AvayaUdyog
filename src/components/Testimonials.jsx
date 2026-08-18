@@ -1,6 +1,7 @@
 import React from "react";
 import { Star, ShieldCheck } from "lucide-react";
 import useReveal from "../hooks/useReveal";
+import { handleImageError } from "../lib/imageFallback";
 
 const TESTIMONIALS = [
   {
@@ -86,12 +87,19 @@ export default function Testimonials() {
               </blockquote>
 
               <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-6">
-                <img
-                  src={testimonial.image}
-                  alt=""
-                  loading="lazy"
-                  className="h-12 w-12 rounded-full object-cover ring-1 ring-line-strong"
-                />
+                <span className="relative h-12 w-12 shrink-0">
+                  <span className="absolute inset-0 flex items-center justify-center rounded-full bg-sage-100 font-display text-lg text-sage-700 ring-1 ring-line-strong" aria-hidden="true">
+                    {testimonial.name[0]}
+                  </span>
+                  <img
+                    src={testimonial.image}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    onError={handleImageError}
+                    className="absolute inset-0 h-12 w-12 rounded-full object-cover ring-1 ring-line-strong"
+                  />
+                </span>
                 <div>
                   <p className="font-display text-[1.05rem] font-semibold text-ink">
                     {testimonial.name}
