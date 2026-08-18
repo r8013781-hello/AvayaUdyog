@@ -31,7 +31,12 @@ function App() {
   const openContactModal = () => setIsContactOpen(true);
   const closeContactModal = () => setIsContactOpen(false);
   const openCrm = () => {
-    window.history.pushState({}, "", `${portalPath}?view=overview`);
+    // replaceState, not pushState: signing in shouldn't leave the marketing
+    // homepage sitting one Back-press away. Without this, a single Back tap
+    // right after login ejects the user straight out of the CRM with zero
+    // warning — jarring even though the session itself is still perfectly
+    // valid (the JWT isn't touched by browser navigation at all).
+    window.history.replaceState({}, "", `${portalPath}?view=overview`);
     setShowEmployeeLogin(true);
   };
   const closeCrm = () => {
