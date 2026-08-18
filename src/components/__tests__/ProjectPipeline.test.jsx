@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import EmployeeLogin from "../EmployeeLogin";
 import { api, getToken } from "../../lib/api";
@@ -22,12 +22,13 @@ vi.mock("../../lib/api", () => ({
   getToken: vi.fn(() => "demo-token"),
   setToken: vi.fn(),
   onUnauthorized: vi.fn(() => () => {}),
+  onSlowRequest: vi.fn(() => () => {}),
 }));
 
 describe("Employee project pipeline", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    window.history.pushState({}, "", "/crm?view=projects");
+    window.history.pushState({}, "", "/portal?view=projects");
     api.me.mockResolvedValue({
       id: 1,
       name: "Ananya Rao",
@@ -60,7 +61,7 @@ describe("Employee project pipeline", () => {
     api.getFollowups.mockResolvedValue([]);
   });
 
-  it("shows the projects workspace and lets staff create customer and project records", async () => {
+  it("shows the projects workspace with the fetched project and lets staff open the add-project form", async () => {
     render(
       <NotificationsProvider>
         <EmployeeLogin onBackToSite={() => {}} />
@@ -68,14 +69,20 @@ describe("Employee project pipeline", () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: /projects/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/3bhk apartment interior/i)).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/project register/i)).toBeInTheDocument();
-    expect(screen.getByText(/register a customer/i)).toBeInTheDocument();
-    expect(screen.getByText(/3bhk apartment interior/i)).toBeInTheDocument();
+    // The fetched project's own details render, not just its name.
+    expect(screen.getByText(/PRJ-2026-001/i)).toBeInTheDocument();
+    expect(screen.getByText(/vikram shah/i)).toBeInTheDocument();
+    expect(screen.getByText(/andheri east/i)).toBeInTheDocument();
+
+    // A super admin can open the create-project form from this view.
+    const addProjectButton = screen.getByRole("button", { name: /add project/i });
+    expect(addProjectButton).toBeInTheDocument();
+    fireEvent.click(addProjectButton);
+    expect(await screen.findByText(/new project/i)).toBeInTheDocument();
+
     expect(getToken()).toBe("demo-token");
   });
 });

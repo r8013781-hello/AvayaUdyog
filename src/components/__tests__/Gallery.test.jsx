@@ -57,13 +57,18 @@ describe("Gallery Component", () => {
 
   it("favorites toggle button adds and removes favorites in localStorage", async () => {
     render(<Gallery />);
+    // The real aria-label is "Add {title} to favorites" — the image title
+    // sits between "Add" and "to favorites", so it can never match a
+    // literal "Add to favorites" substring.
     const firstFavoriteBtn = await screen.findAllByRole("button", {
-      name: /Add to favorites/i,
+      name: /^Add .+ to favorites$/i,
     });
     expect(firstFavoriteBtn.length).toBeGreaterThan(0);
 
     const firstBtn = firstFavoriteBtn[0];
-    expect(localStorage.getItem("gallery-favorites")).toBeNull();
+    // Gallery syncs its favorites state to localStorage on every render,
+    // including the initial one — so it's "[]", not absent, before any click.
+    expect(JSON.parse(localStorage.getItem("gallery-favorites"))).toEqual([]);
 
     fireEvent.click(firstBtn);
     let favs = JSON.parse(localStorage.getItem("gallery-favorites"));

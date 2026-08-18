@@ -21,7 +21,7 @@ import {
   UsersRound,
   X,
 } from "lucide-react";
-import { api, getToken, onUnauthorized, setToken } from "../lib/api";
+import { api, getToken, onSlowRequest, onUnauthorized, setToken } from "../lib/api";
 import QuotationWorkspace from "./QuotationWorkspace";
 import AdminPanel from "./AdminPanel";
 import ProjectsPanel from "./ProjectsPanel";
@@ -57,6 +57,12 @@ export default function EmployeeLogin({ onBackToSite }) {
   const [showFollowupForm, setShowFollowupForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [wakingServer, setWakingServer] = useState(false);
+
+  // The backend spins down after inactivity on its current hosting plan — the
+  // first request after idle can take 30-60s. Surface that honestly instead
+  // of leaving the sign-in button looking frozen.
+  useEffect(() => onSlowRequest(() => setWakingServer(true)), []);
 
   useEffect(() => {
     if (!getToken()) { setCheckingSession(false); return; }
@@ -80,6 +86,7 @@ export default function EmployeeLogin({ onBackToSite }) {
   const login = async (event) => {
     event.preventDefault();
     setSigningIn(true);
+    setWakingServer(false);
     setError("");
     try {
       const { token, employee: profile } = await api.login(employeeId.trim(), password);
@@ -90,6 +97,7 @@ export default function EmployeeLogin({ onBackToSite }) {
       setError(err.message || "The employee ID or password is incorrect.");
     } finally {
       setSigningIn(false);
+      setWakingServer(false);
     }
   };
 
@@ -165,7 +173,7 @@ export default function EmployeeLogin({ onBackToSite }) {
           <p className="mt-12 text-xs text-sage-200/60">Avaya Udyog · Employee Portal</p>
         </section>
         <section className="flex items-center bg-white p-8 text-ink md:p-12"><div className="w-full"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-100 text-sage-700"><CircleUserRound size={24} /></div><p className="mt-8 text-[0.65rem] font-bold uppercase tracking-label text-sage-600">Secure sign in</p><h2 className="mt-3 font-display text-3xl">Welcome back</h2><p className="mt-2 text-sm leading-6 text-ink-muted">Sign in with your employee ID and password.</p>
-          <form className="mt-8 space-y-5" onSubmit={login}><label className="block text-sm font-semibold">Employee ID<input value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} autoComplete="username" placeholder="Enter your ID" className="mt-2 w-full rounded-xl border border-line-strong px-4 py-3 text-sm outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" /></label><label className="block text-sm font-semibold">Password<span className="relative mt-2 block"><input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="Enter your password" className="w-full rounded-xl border border-line-strong px-4 py-3 pr-11 text-sm outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" /><button type="button" onClick={() => setShowPassword((v) => !v)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-ink-faint transition hover:bg-sage-50 hover:text-ink-muted">{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></label>{error && <p className="rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">{error}</p>}<button disabled={signingIn} className="btn-primary w-full disabled:opacity-60">{signingIn ? "Signing in…" : "Sign in"} <ChevronRight size={16} /></button></form>
+          <form className="mt-8 space-y-5" onSubmit={login}><label className="block text-sm font-semibold">Employee ID<input value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} autoComplete="username" placeholder="Enter your ID" className="mt-2 w-full rounded-xl border border-line-strong px-4 py-3 text-sm outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" /></label><label className="block text-sm font-semibold">Password<span className="relative mt-2 block"><input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="Enter your password" className="w-full rounded-xl border border-line-strong px-4 py-3 pr-11 text-sm outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" /><button type="button" onClick={() => setShowPassword((v) => !v)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-ink-faint transition hover:bg-sage-50 hover:text-ink-muted">{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></label>{error && <p className="rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">{error}</p>}{wakingServer && <p className="rounded-xl bg-gold-soft px-3 py-2.5 text-xs leading-5 text-gold-deep">Waking up the server — this can take up to a minute on the first sign-in after a while. Hang tight.</p>}<button disabled={signingIn} className="btn-primary w-full disabled:opacity-60">{signingIn ? (wakingServer ? "Waking up…" : "Signing in…") : "Sign in"} <ChevronRight size={16} /></button></form>
           </div></section>
       </div>
     </div>

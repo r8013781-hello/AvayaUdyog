@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, EyeOff, LockKeyhole, X } from "lucide-react";
-import { api, setToken } from "../lib/api";
+import { api, onSlowRequest, setToken } from "../lib/api";
 
 export default function CrmLoginModal({ onClose, onAuthenticated }) {
   const [employeeId, setEmployeeId] = useState("");
@@ -8,6 +8,25 @@ export default function CrmLoginModal({ onClose, onAuthenticated }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const submit = async (event) => { event.preventDefault(); setLoading(true); setError(""); try { const { token } = await api.login(employeeId.trim(), password); setToken(token); onAuthenticated(); } catch (err) { setError(err.message || "Unable to sign in."); } finally { setLoading(false); } };
-  return <div className="fixed inset-0 z-[100] flex items-center justify-center bg-sage-950/45 p-4 backdrop-blur-sm"><form onSubmit={submit} className="w-full max-w-md rounded-3xl bg-white p-7 shadow-float"><div className="flex items-start justify-between"><div><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sage-100 text-sage-700"><LockKeyhole size={20} /></span><p className="mt-5 text-[.62rem] font-bold uppercase tracking-label text-sage-600">Employee login</p><h2 className="mt-2 font-display text-3xl text-ink">Sign in</h2></div><button type="button" onClick={onClose} className="rounded-full p-2 text-ink-muted hover:bg-sage-50"><X size={18} /></button></div><label className="mt-7 block text-sm font-semibold text-ink">Employee ID<input autoFocus value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} className="mt-2 w-full rounded-xl border border-line-strong px-4 py-3 outline-none focus:border-sage-500" /></label><label className="mt-4 block text-sm font-semibold text-ink">Password<span className="relative mt-2 block"><input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-xl border border-line-strong px-4 py-3 pr-11 outline-none focus:border-sage-500" /><button type="button" onClick={() => setShowPassword((v) => !v)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-ink-faint transition hover:bg-sage-50 hover:text-ink-muted">{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></label>{error && <p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}<button disabled={loading} className="btn-primary mt-6 w-full disabled:opacity-60">{loading ? "Signing in…" : "Continue"}</button></form></div>;
+  const [wakingServer, setWakingServer] = useState(false);
+
+  useEffect(() => onSlowRequest(() => setWakingServer(true)), []);
+
+  const submit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setWakingServer(false);
+    setError("");
+    try {
+      const { token } = await api.login(employeeId.trim(), password);
+      setToken(token);
+      onAuthenticated();
+    } catch (err) {
+      setError(err.message || "Unable to sign in.");
+    } finally {
+      setLoading(false);
+      setWakingServer(false);
+    }
+  };
+  return <div className="fixed inset-0 z-[100] flex items-center justify-center bg-sage-950/45 p-4 backdrop-blur-sm"><form onSubmit={submit} className="w-full max-w-md rounded-3xl bg-white p-7 shadow-float"><div className="flex items-start justify-between"><div><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sage-100 text-sage-700"><LockKeyhole size={20} /></span><p className="mt-5 text-[.62rem] font-bold uppercase tracking-label text-sage-600">Employee login</p><h2 className="mt-2 font-display text-3xl text-ink">Sign in</h2></div><button type="button" onClick={onClose} className="rounded-full p-2 text-ink-muted hover:bg-sage-50"><X size={18} /></button></div><label className="mt-7 block text-sm font-semibold text-ink">Employee ID<input autoFocus value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} className="mt-2 w-full rounded-xl border border-line-strong px-4 py-3 outline-none focus:border-sage-500" /></label><label className="mt-4 block text-sm font-semibold text-ink">Password<span className="relative mt-2 block"><input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-xl border border-line-strong px-4 py-3 pr-11 outline-none focus:border-sage-500" /><button type="button" onClick={() => setShowPassword((v) => !v)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-ink-faint transition hover:bg-sage-50 hover:text-ink-muted">{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></label>{error && <p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}{wakingServer && <p className="mt-4 rounded-xl bg-gold-soft px-3 py-2.5 text-xs leading-5 text-gold-deep">Waking up the server — this can take up to a minute on the first sign-in after a while. Hang tight.</p>}<button disabled={loading} className="btn-primary mt-6 w-full disabled:opacity-60">{loading ? (wakingServer ? "Waking up…" : "Signing in…") : "Continue"}</button></form></div>;
 }

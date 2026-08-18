@@ -22,12 +22,28 @@ export function onUnauthorized(handler) {
   return () => window.removeEventListener(UNAUTHORIZED_EVENT, handler);
 }
 
+/**
+ * The backend runs on a free-tier host that spins down after inactivity —
+ * the first request after a while can take 30-60s to wake it back up. That's
+ * an infrastructure limit no amount of frontend code can remove, but a form
+ * silently doing nothing for a minute reads as broken. Fire a "this is slow"
+ * event once a request has been pending a few seconds so calling UI can show
+ * something reassuring instead of a frozen button.
+ */
+const SLOW_REQUEST_EVENT = "avaya:slow-request";
+export function onSlowRequest(handler) {
+  window.addEventListener(SLOW_REQUEST_EVENT, handler);
+  return () => window.removeEventListener(SLOW_REQUEST_EVENT, handler);
+}
+
 async function request(path, { method = "GET", body, auth = false } = {}) {
   const headers = { "Content-Type": "application/json" };
   if (auth) {
     const token = getToken();
     if (token) headers.Authorization = `Bearer ${token}`;
   }
+
+  const slowTimer = setTimeout(() => window.dispatchEvent(new CustomEvent(SLOW_REQUEST_EVENT, { detail: { path } })), 4000);
 
   let response;
   try {
@@ -38,6 +54,8 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
     });
   } catch {
     throw new Error("Could not reach the server. Check your connection and try again.");
+  } finally {
+    clearTimeout(slowTimer);
   }
 
   const data = await response.json().catch(() => ({}));

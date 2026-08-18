@@ -13,7 +13,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { captureWebsiteEnquiry } from "../lib/crmIntake";
-import { api } from "../lib/api";
+import { api, onSlowRequest } from "../lib/api";
 
 const emptyForm = {
   name: "",
@@ -41,11 +41,13 @@ export default function ContactPanel({ isOpen, onClose }) {
   const [sent, setSent] = useState(false);
   const [submitFailed, setSubmitFailed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [wakingServer, setWakingServer] = useState(false);
   const panelRef = useRef(null);
   const closeRef = useRef(null);
   const revertTimer = useRef(null);
 
   useEffect(() => () => clearTimeout(revertTimer.current), []);
+  useEffect(() => onSlowRequest(() => setWakingServer(true)), []);
 
   /* Lock the page, move focus in, and wire Escape while the drawer is open. */
   useEffect(() => {
@@ -93,6 +95,7 @@ export default function ContactPanel({ isOpen, onClose }) {
     }
 
     setSubmitting(true);
+    setWakingServer(false);
     setSubmitFailed(false);
     try {
       await api.submitEnquiry(formData);
@@ -109,6 +112,7 @@ export default function ContactPanel({ isOpen, onClose }) {
       setSubmitFailed(true);
     } finally {
       setSubmitting(false);
+      setWakingServer(false);
     }
   };
 
@@ -257,18 +261,19 @@ export default function ContactPanel({ isOpen, onClose }) {
                       <textarea
                         name="message"
                         placeholder="Briefly describe your project..."
-                        value={formData.query}
+                        value={formData.message}
                         onChange={handleInputChange}
                         rows="4"
-                        aria-invalid={Boolean(errors.query)}
+                        aria-invalid={Boolean(errors.message)}
                         className={`${fieldClass("message")} resize-none py-3.5`}
                       />
                     </div>
-                    {errors.query && <FieldError message={errors.query} />}
+                    {errors.message && <FieldError message={errors.message} />}
                   </div>
 
+                  {wakingServer && <p className="rounded-2xl border border-gold/40 bg-gold-soft/70 px-4 py-3 text-xs leading-5 text-gold-deep">Waking up the server — this can take up to a minute on the first message after a while. Hang tight, don't refresh.</p>}
                   <button type="submit" disabled={submitting} className="btn-primary group w-full disabled:opacity-60">
-                    {submitting ? "Sending…" : submitFailed ? "Try again" : "Send Inquiry"}
+                    {submitting ? (wakingServer ? "Waking up…" : "Sending…") : submitFailed ? "Try again" : "Send Inquiry"}
                     <Send
                       size={15}
                       className="transition-transform duration-300 group-hover:translate-x-0.5"
