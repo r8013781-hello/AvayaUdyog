@@ -172,7 +172,7 @@ function EmployeeFormModal({ mode, initial, onClose, onSaved }) {
             <input value={name} onChange={(e) => setName(e.target.value)} required placeholder="e.g. Priya Sharma" className="mt-2 w-full rounded-xl border border-line-strong px-3 py-2.5 text-sm font-normal outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" />
           </label>
           <label className="text-sm font-semibold">{mode === "create" ? "Password" : "New password"}
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required={mode === "create"} minLength={6} placeholder={mode === "edit" ? "Leave blank to keep current" : "Minimum 6 characters"} className="mt-2 w-full rounded-xl border border-line-strong px-3 py-2.5 text-sm font-normal outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required={mode === "create"} minLength={8} placeholder={mode === "edit" ? "Leave blank to keep current" : "Minimum 8 characters"} className="mt-2 w-full rounded-xl border border-line-strong px-3 py-2.5 text-sm font-normal outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" />
           </label>
           <label className="text-sm font-semibold">Role / title
             <input value={role} onChange={(e) => setRole(e.target.value)} required placeholder="e.g. Sales Executive" className="mt-2 w-full rounded-xl border border-line-strong px-3 py-2.5 text-sm font-normal outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" />

@@ -13,7 +13,7 @@ const permissionsSchema = Joi.object(
 const createSchema = Joi.object({
   employeeCode: Joi.string().trim().max(20).required(),
   name: Joi.string().trim().max(100).required(),
-  password: Joi.string().min(6).max(200).required(),
+  password: Joi.string().min(8).max(200).required(),
   role: Joi.string().trim().max(100).default("CRM Team Member"),
   isSuperAdmin: Joi.boolean().default(false),
   permissions: permissionsSchema,
@@ -21,7 +21,7 @@ const createSchema = Joi.object({
 
 const updateSchema = Joi.object({
   name: Joi.string().trim().max(100),
-  password: Joi.string().min(6).max(200).allow(""),
+  password: Joi.string().min(8).max(200).allow(""),
   role: Joi.string().trim().max(100),
   isSuperAdmin: Joi.boolean(),
   permissions: permissionsSchema,

@@ -25,10 +25,14 @@ router.post("/login", async (req, res, next) => {
 
     const employee = result.rows[0];
     const genericError = "The employee ID or password is incorrect.";
-    if (!employee) return res.status(401).json({ error: genericError });
 
-    const valid = await bcrypt.compare(value.password, employee.password_hash);
-    if (!valid) return res.status(401).json({ error: genericError });
+    // Always run bcrypt, even for an employee ID that doesn't exist, using a
+    // fixed dummy hash — otherwise a missing account returns instantly while
+    // a wrong password takes bcrypt's ~100ms, letting an attacker enumerate
+    // valid employee IDs purely by timing the response.
+    const hashToCheck = employee?.password_hash || "$2a$10$CwTycUXWue0Thq9StjUM0uJ8yb/D8vsFa7YxfmT5V2Kk4XKQ5UPGe";
+    const valid = await bcrypt.compare(value.password, hashToCheck);
+    if (!employee || !valid) return res.status(401).json({ error: genericError });
 
     if (employee.status !== "Active") return res.status(403).json({ error: "This account has been disabled. Contact your administrator." });
 
