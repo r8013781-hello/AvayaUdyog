@@ -150,7 +150,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="tel:+919830478820"
+                href="tel:+917980640714"
                 className="card card-hover group flex items-center gap-4 p-4"
               >
                 <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-sage-50 text-sage-600 transition-colors duration-500 group-hover:bg-sage-800 group-hover:text-white">
@@ -161,7 +161,7 @@ export default function Footer() {
                     Call us
                   </span>
                   <span className="mt-0.5 block text-[0.9rem] font-semibold text-ink">
-                    +91 98304 78820
+                    +91 79806 40714
                   </span>
                 </span>
                 <ArrowUpRight
@@ -226,9 +226,9 @@ export default function Footer() {
                         <p className="font-semibold">We couldn&apos;t send that just now.</p>
                         <p className="mt-0.5 text-red-700">
                           Your details are still filled in below — please try again, or reach us directly on{" "}
-                          <a href="tel:+919830478820" className="font-semibold underline underline-offset-2">call</a>
+                          <a href="tel:+917980640714" className="font-semibold underline underline-offset-2">call</a>
                           {" "}or{" "}
-                          <a href="https://wa.me/919830478820" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">WhatsApp</a>.
+                          <a href="https://wa.me/917980640714" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">WhatsApp</a>.
                         </p>
                       </div>
                     </div>
@@ -383,7 +383,7 @@ const CONNECT_LINKS = [
   { label: "Instagram", href: "#" },
   { label: "Facebook", href: "#" },
   { label: "LinkedIn", href: "#" },
-  { label: "WhatsApp", href: "https://wa.me/919830478820" },
+  { label: "WhatsApp", href: "https://wa.me/917980640714" },
 ];
 
 function FooterColumn({ heading, children }) {

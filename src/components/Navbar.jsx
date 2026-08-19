@@ -152,7 +152,7 @@ export default function Navbar({ openContactModal, onLoginClick }) {
 
             <div className="hidden items-center gap-3 lg:flex">
               <a
-                href="tel:+919830478820"
+                href="tel:+917980640714"
                 className={`group flex items-center gap-2.5 transition-colors ${
                   scrolled
                     ? "text-ink-soft hover:text-sage-700"
@@ -169,7 +169,7 @@ export default function Navbar({ openContactModal, onLoginClick }) {
                   <Phone size={13} />
                 </span>
                 <span className="text-[0.78rem] font-semibold tracking-tight">
-                  +91 98304 78820
+                  +91 79806 40714
                 </span>
               </a>
 
@@ -240,11 +240,11 @@ export default function Navbar({ openContactModal, onLoginClick }) {
 
         <div className="mt-5 border-t border-line pt-5">
           <a
-            href="tel:+919830478820"
+            href="tel:+917980640714"
             className="flex items-center gap-3 text-ink-soft transition-colors hover:text-sage-700"
           >
             <Phone size={15} className="text-sage-500" />
-            <span className="text-sm font-semibold">+91 98304 78820</span>
+            <span className="text-sm font-semibold">+91 79806 40714</span>
           </a>
         </div>
 

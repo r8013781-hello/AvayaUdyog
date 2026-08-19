@@ -59,7 +59,7 @@ export function generateQuotationPdf(quotation) {
   doc.setTextColor(210, 224, 214);
   doc.text("INTERIOR DESIGN", margin, 52);
   doc.setFontSize(8.5);
-  doc.text("info.avayaudyog@gmail.com   ·   +91 98304 78820   ·   Kolkata, West Bengal", margin, 72);
+  doc.text("info.avayaudyog@gmail.com   ·   +91 79806 40714   ·   Kolkata, West Bengal", margin, 72);
 
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "bold");
