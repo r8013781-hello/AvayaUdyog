@@ -1,37 +1,16 @@
 import "./globals.css";
-import { localBusinessSchema, websiteSchema } from "../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
-const TITLE = "Avaya Udyog | Premium Interior Designer in Kolkata";
-const DESCRIPTION =
-  "Looking for the best interior designer in Kolkata? Avaya Udyog delivers luxury interiors with 35+ years of expertise. Book a free consultation today.";
-const OG_IMAGE = `${SITE_URL}/hero/exterior.webp`;
 
-// Ported 1:1 from index.html's <head> — same title/description/canonical/
-// OG/Twitter values verified in an earlier audit pass, not rewritten here.
-// metadataBase lets every relative URL below (icons, OG image) resolve
-// against the real production host instead of wherever the build runs.
+// Only what's genuinely shared by every route (marketing and /portal
+// alike) lives here — icons, manifest, theme-color, fonts. Title,
+// description, canonical, Open Graph, Twitter metadata, and the business
+// JSON-LD are marketing-specific and live in app/(marketing)/layout.jsx
+// instead, so /portal (a sibling route, not a descendant of that layout)
+// never inherits them. metadataBase stays here since it's a general
+// base-URL setting, not marketing content on its own.
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: {
-    canonical: `${SITE_URL}/`,
-  },
-  openGraph: {
-    type: "website",
-    siteName: "Avaya Udyog",
-    title: TITLE,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/`,
-    images: [OG_IMAGE],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: TITLE,
-    description: DESCRIPTION,
-    images: [OG_IMAGE],
-  },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -56,30 +35,14 @@ export default function RootLayout({ children }) {
         {/* Same reasoning as the Vite app: a <link rel="stylesheet"> next to
             the preconnects, not an @import inside globals.css, so the
             browser discovers and fetches the fonts before the CSSOM has to
-            parse anything. The App Router hoists <link>/<meta> rendered
-            here into the document <head> automatically. */}
+            parse anything. Both the marketing site and /portal use these
+            fonts, so this stays shared. The App Router hoists <link>/<meta>
+            rendered here into the document <head> automatically. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..600&display=swap"
           rel="stylesheet"
-        />
-
-        {/* Static export still ships a client-rendered slideshow (see
-            HeroSlideshow.jsx) — this preload is what lets the browser start
-            fetching the first hero image in parallel with the JS bundle
-            instead of waiting for it to mount. */}
-        <link rel="preload" as="image" href="/hero/exterior.webp" fetchPriority="high" />
-
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-        />
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
       {/* Marketing chrome (Navbar/Footer/WhatsappButton/ContactModalProvider)
