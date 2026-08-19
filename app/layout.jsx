@@ -1,5 +1,5 @@
 import "./globals.css";
-import { localBusinessSchema } from "../lib/schema";
+import { localBusinessSchema, websiteSchema } from "../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Avaya Udyog | Premium Interior Designer in Kolkata";
@@ -75,6 +75,11 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
       {/* Marketing chrome (Navbar/Footer/WhatsappButton/ContactModalProvider)
