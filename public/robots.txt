@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /portal
-
-Sitemap: https://avayaudyog.com/sitemap.xml

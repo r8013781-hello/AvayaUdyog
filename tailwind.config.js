@@ -1,8 +1,12 @@
 import typography from "@tailwindcss/typography";
 
+// Ported unchanged from the root Vite app's tailwind.config.js — same
+// palette, type scale, shadows, and radii. Only `content` changed, to
+// point at the App Router's file layout instead of Vite's.
+
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,html}"],
+  content: ["./app/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
   theme: {
     extend: {
       colors: {

@@ -1,42 +1,36 @@
 {
-  "name": "avaya-udyog-landing",
+  "name": "avaya-udyog-marketing",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "description": "Avaya Udyog — marketing site (/) and CRM (/portal) in one Next.js App Router, static export. The CRM at /portal reuses the existing React CRM components unchanged; see components/crm and lib/crm.",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "test": "vitest run",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "dev:backend": "npm --prefix backend run dev"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.19",
     "framer-motion": "^11.0.3",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "lucide-react": "^0.344.0",
+    "next": "^14.2.15",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.49.3",
-    "tailwind": "^4.0.0"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.55.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
-    "gh-pages": "^6.3.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
     "jsdom": "^25.0.1",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.1",
-    "vite": "^5.0.8",
+    "@tailwindcss/typography": "^0.5.19",
     "vitest": "^2.1.8"
   }
 }

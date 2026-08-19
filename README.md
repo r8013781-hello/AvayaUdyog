@@ -1,95 +1,63 @@
-# React + Vite
+# Avaya Udyog
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+One Next.js App Router app, static export, one domain (`avayaudyog.com`):
 
-Currently, two official plugins are available:
+- **`/`** — the public marketing site.
+- **`/portal`** — the employee CRM (`?view=leads`, `?view=customers`,
+  `?view=projects`, `?view=quotations`, etc. — same in-app navigation it
+  always had). Reuses the existing CRM React components, see
+  `components/crm/` and `lib/crm/`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+There is no separate CRM app, no `portal.avayaudyog.com` subdomain, and
+no second deployment.
 
-## React Compiler
+`backend/` is a separate Express + Supabase API, deployed independently,
+unchanged by anything in this directory.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Why the marketing site is static export
 
-Note: This will impact Vite dev & build performances.
+Client-side-only rendering means the HTML a crawler first receives is an
+empty shell, with all real content injected after the JS bundle downloads
+and executes. Static export fixes that — every route (`/`, `/portal`,
+and future marketing pages) is real HTML at build time (`output: 'export'`
+in `next.config.mjs`), so `curl`ing any of them returns complete,
+crawlable content with zero JS execution required.
 
-## Project Installation
+## Why `/portal` is a route here, not SEO-driven
 
-1. Ensure you have [Node.js](https://nodejs.org) installed (version 14 or above recommended).
-2. Clone the repository and navigate to the project directory.
-3. Run the following to install dependencies:
+No SEO reason — the CRM is authenticated and explicitly excluded from
+indexing (`robots.txt` disallow + a page-level `noindex`). It's a route
+in this same app purely so there's one deployment, one domain, and one
+build to maintain. `/portal` is a Client Component; under static export
+it's a static shell that mounts and behaves like a normal SPA once JS
+loads — same `?view=` navigation, same JWT-in-`localStorage` auth, same
+API client the CRM always had.
 
-   ```
-   npm install
-   ```
+## Local development
 
-## Development Server
-
-To run the local development server with hot module replacement, run:
-
+```bash
+cp .env.example .env.local   # then fill in real values
+npm install
+npm run dev                  # http://localhost:3000
 ```
-npm run dev
-```
 
-This starts the server on `http://localhost:3000` (or another available port).
+## Build (static export)
 
-## Build for Production
-
-To create a production build of the app, run:
-
-```
+```bash
 npm run build
 ```
 
-This outputs static assets to the `dist` folder.
+Output lands in `out/` — pure static files, deployable to any static host.
+No Node server required at runtime.
 
-## Preview Production Build
+## Tests
 
-To locally preview the production build, run:
-
-```
-npm run preview
-```
-
-## Testing
-
-This project uses [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) for component tests.
-
-To run tests, execute:
-
-```
-npm run test
+```bash
+npx vitest run
 ```
 
-Ensure tests for UI behavior and accessibility are passing.
+## Backend
 
-## Accessibility Guidelines
-
-- Keyboard focus styles are implemented using visible outlines and shadow.
-- Reduced motion support respects user preference to reduce animations.
-- Ensure color contrast meets WCAG AA standards.
-
-## Responsive Design
-
-The app is designed to be responsive on common breakpoints: 1440px (desktop), 1024px (tablet), and 375px (mobile).
-
-## Assets
-
-- All assets should be placed in the `src/assets` or `public/assets` folder.
-- Assets should be optimized and provided in multiple formats (webp, avif, png) and sizes for performance.
-
-## Packaging for Handoff
-
-Package the entire project directory including:
-
-- Source code (`src/`)
-- Public assets (`public/`)
-- Dependency manifests (`package.json`, `package-lock.json`)
-- Configuration files (`vite.config.js`, `tailwind.config.js`, ESLint config, etc.)
-- README.md with installation, build, testing, and usage instructions.
-
-Ensure all extracted and optimized assets are included.
-
-## Support
-
-For issues or questions, please open an issue in the repository or contact the maintainer.
+See `backend/README.md` (if present) or `backend/server.js` — a separate
+Express API backed by Supabase Postgres, deployed on its own Render
+service. Set `NEXT_PUBLIC_API_BASE_URL` to wherever it's reachable.
