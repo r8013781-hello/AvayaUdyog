@@ -107,7 +107,7 @@ export default function Hero() {
               style={enter("270ms")}
             >
               <button
-                onClick={openContactModal}
+                onClick={() => openContactModal("hero_cta")}
                 className="btn group bg-white px-7 py-3.5 text-sage-900 shadow-float hover:-translate-y-0.5 hover:bg-gold-soft"
               >
                 Book a Consultation

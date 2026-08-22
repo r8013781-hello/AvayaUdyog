@@ -14,6 +14,14 @@ const enquirySchema = Joi.object({
   city: Joi.string().trim().allow("").max(100),
   address: Joi.string().trim().allow("").max(255),
   message: Joi.string().trim().allow("").max(4000),
+  utm_source: Joi.string().trim().allow("", null).max(100),
+  utm_medium: Joi.string().trim().allow("", null).max(100),
+  utm_campaign: Joi.string().trim().allow("", null).max(200),
+  utm_content: Joi.string().trim().allow("", null).max(200),
+  utm_term: Joi.string().trim().allow("", null).max(200),
+  gclid: Joi.string().trim().allow("", null).max(255),
+  landing_page: Joi.string().trim().allow("", null).max(500),
+  referrer: Joi.string().trim().allow("", null).max(500),
 });
 
 const leadSchema = Joi.object({
@@ -35,7 +43,9 @@ const leadUpdateSchema = Joi.object({
 
 const LEAD_COLUMNS = `l.id, l.name, l.phone, l.email, l.city, l.address, l.project, l.message, l.source,
   l.value, l.stage, l.owner_id AS "ownerId", e.name AS owner, l.next_action_date AS "nextActionDate",
-  l.created_at AS "createdAt"`;
+  l.created_at AS "createdAt", l.utm_source AS "utmSource", l.utm_medium AS "utmMedium",
+  l.utm_campaign AS "utmCampaign", l.utm_content AS "utmContent", l.utm_term AS "utmTerm",
+  l.gclid, l.landing_page AS "landingPage", l.referrer`;
 
 router.post("/enquiries", async (req, res, next) => {
   try {
@@ -43,10 +53,18 @@ router.post("/enquiries", async (req, res, next) => {
     if (error) return res.status(400).json({ error: error.details[0].message });
 
     const result = await query(
-      `INSERT INTO leads (name, phone, email, city, address, message, source, stage)
-       VALUES ($1, $2, $3, $4, $5, $6, 'Website', 'New')
+      `INSERT INTO leads (
+         name, phone, email, city, address, message, source, stage,
+         utm_source, utm_medium, utm_campaign, utm_content, utm_term, gclid, landing_page, referrer
+       )
+       VALUES ($1, $2, $3, $4, $5, $6, 'Website', 'New', $7, $8, $9, $10, $11, $12, $13, $14)
        RETURNING id, name, created_at AS "createdAt"`,
-      [value.name, value.phone, value.email, value.city, value.address, value.message],
+      [
+        value.name, value.phone, value.email, value.city, value.address, value.message,
+        value.utm_source || null, value.utm_medium || null, value.utm_campaign || null,
+        value.utm_content || null, value.utm_term || null, value.gclid || null,
+        value.landing_page || null, value.referrer || null,
+      ],
     );
 
     res.status(201).json(result.rows[0]);

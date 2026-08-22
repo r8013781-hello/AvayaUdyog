@@ -2,6 +2,7 @@ import ContactModalProvider from "../../components/ContactModalProvider";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import WhatsappButton from "../../components/WhatsappButton";
+import Analytics from "../../components/Analytics";
 import { localBusinessSchema, websiteSchema } from "../../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
@@ -57,6 +58,8 @@ export default function MarketingLayout({ children }) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
+
+      <Analytics />
 
       <ContactModalProvider>
         <Navbar />

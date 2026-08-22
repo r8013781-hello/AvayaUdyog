@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   Mail,
   Phone,
@@ -15,6 +16,13 @@ import {
 } from "lucide-react";
 import { captureWebsiteEnquiry } from "../lib/crmIntake";
 import { api, onSlowRequest } from "../lib/api";
+import {
+  trackPhoneClick,
+  trackEmailClick,
+  trackWhatsAppClick,
+  trackConsultationSubmit,
+  trackConsultationError,
+} from "../lib/tracking";
 
 const emptyForm = {
   name: "",
@@ -78,6 +86,7 @@ export default function Footer() {
       setSubmitted(true);
       setFormData(emptyForm);
       setErrors({});
+      trackConsultationSubmit("footer", { has_email: Boolean(formData.email), city: formData.city || undefined });
       /* Briefly confirm, then return to a blank form so a visitor (or the
          same device) can send another enquiry without feeling stuck. */
       revertTimer.current = setTimeout(() => setSubmitted(false), 2600);
@@ -86,6 +95,7 @@ export default function Footer() {
          succeeded when we didn't — that's how enquiries go missing silently. */
       captureWebsiteEnquiry(formData, "Consultation request");
       setSubmitFailed(true);
+      trackConsultationError("footer", "submit_failed");
     } finally {
       setSubmitting(false);
       setWakingServer(false);
@@ -132,6 +142,7 @@ export default function Footer() {
             <div className="mt-10 space-y-2.5">
               <a
                 href="mailto:info.avayaudyog@gmail.com"
+                onClick={() => trackEmailClick("footer")}
                 className="card card-hover group flex items-center gap-4 p-4"
               >
                 <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-sage-50 text-sage-600 transition-colors duration-500 group-hover:bg-sage-800 group-hover:text-white">
@@ -153,6 +164,7 @@ export default function Footer() {
 
               <a
                 href="tel:+917980640714"
+                onClick={() => trackPhoneClick("footer")}
                 className="card card-hover group flex items-center gap-4 p-4"
               >
                 <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-sage-50 text-sage-600 transition-colors duration-500 group-hover:bg-sage-800 group-hover:text-white">
@@ -228,9 +240,9 @@ export default function Footer() {
                         <p className="font-semibold">We couldn&apos;t send that just now.</p>
                         <p className="mt-0.5 text-red-700">
                           Your details are still filled in below — please try again, or reach us directly on{" "}
-                          <a href="tel:+917980640714" className="font-semibold underline underline-offset-2">call</a>
+                          <a href="tel:+917980640714" onClick={() => trackPhoneClick("error_fallback")} className="font-semibold underline underline-offset-2">call</a>
                           {" "}or{" "}
-                          <a href="https://wa.me/917980640714" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">WhatsApp</a>.
+                          <a href="https://wa.me/917980640714" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("error_fallback")} className="font-semibold underline underline-offset-2">WhatsApp</a>.
                         </p>
                       </div>
                     </div>
@@ -346,13 +358,13 @@ export default function Footer() {
               </p>
             </div>
             <div className="flex items-center gap-5">
-              <button type="button" className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700">
+              <Link href="/privacy-policy" className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700">
                 Privacy Policy
-              </button>
+              </Link>
               <span className="h-1 w-1 rotate-45 bg-gold/60" aria-hidden="true" />
-              <button type="button" className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700">
+              <Link href="/terms" className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700">
                 Terms of Service
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -455,6 +467,7 @@ function FooterNav() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={link.label === "WhatsApp" ? () => trackWhatsAppClick("footer") : undefined}
                       className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
                     >
                       {link.label}

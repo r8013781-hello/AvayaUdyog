@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Menu, X, Phone, ArrowUpRight } from "lucide-react";
 import { useContactModal } from "./ContactModalProvider";
+import { trackPhoneClick } from "../lib/tracking";
 
 const NAV_LINKS = [
   { id: "hero", label: "Home" },
@@ -79,7 +80,7 @@ export default function Navbar() {
 
   const closeAndContact = () => {
     setMobileMenuOpen(false);
-    openContactModal();
+    openContactModal("mobile_menu");
   };
 
   return (
@@ -161,6 +162,7 @@ export default function Navbar() {
             <div className="hidden items-center gap-3 lg:flex">
               <a
                 href="tel:+917980640714"
+                onClick={() => trackPhoneClick("navbar")}
                 className={`group flex items-center gap-2.5 transition-colors ${
                   scrolled
                     ? "text-ink-soft hover:text-sage-700"
@@ -245,6 +247,7 @@ export default function Navbar() {
         <div className="mt-5 border-t border-line pt-5">
           <a
             href="tel:+917980640714"
+            onClick={() => trackPhoneClick("navbar_mobile")}
             className="flex items-center gap-3 text-ink-soft transition-colors hover:text-sage-700"
           >
             <Phone size={15} className="text-sage-500" />

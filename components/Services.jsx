@@ -112,7 +112,7 @@ export default function Services() {
                   </p>
 
                   <button
-                    onClick={openContactModal}
+                    onClick={() => openContactModal("service_cta")}
                     className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
                   >
                     <span className="relative">
@@ -151,7 +151,7 @@ export default function Services() {
             </div>
 
             <button
-              onClick={openContactModal}
+              onClick={() => openContactModal("service_cta")}
               className="btn group shrink-0 bg-white px-7 py-3.5 text-sage-900 shadow-soft hover:-translate-y-0.5 hover:shadow-lift"
             >
               Start Your Project

@@ -16,6 +16,13 @@ import {
 } from "lucide-react";
 import { captureWebsiteEnquiry } from "../lib/crmIntake";
 import { api, onSlowRequest } from "../lib/api";
+import {
+  trackPhoneClick,
+  trackEmailClick,
+  trackWhatsAppClick,
+  trackConsultationSubmit,
+  trackConsultationError,
+} from "../lib/tracking";
 
 const emptyForm = {
   name: "",
@@ -104,6 +111,7 @@ export default function ContactPanel({ isOpen, onClose }) {
       setSent(true);
       setFormData(emptyForm);
       setErrors({});
+      trackConsultationSubmit("contact_panel", { has_email: Boolean(formData.email), city: formData.city || undefined });
       /* Briefly confirm, then return to a blank form so a visitor can send
          another enquiry without the panel feeling stuck on the receipt. */
       revertTimer.current = setTimeout(() => setSent(false), 2600);
@@ -112,6 +120,7 @@ export default function ContactPanel({ isOpen, onClose }) {
          succeeded when we didn't — that's how enquiries go missing silently. */
       captureWebsiteEnquiry(formData, "Website enquiry");
       setSubmitFailed(true);
+      trackConsultationError("contact_panel", "submit_failed");
     } finally {
       setSubmitting(false);
       setWakingServer(false);
@@ -202,9 +211,9 @@ export default function ContactPanel({ isOpen, onClose }) {
                         <p className="font-semibold">We couldn&apos;t send that just now.</p>
                         <p className="mt-0.5 text-red-700">
                           Your details are still filled in below — please try again, or reach us directly on{" "}
-                          <a href="tel:+917980640714" className="font-semibold underline underline-offset-2">call</a>
+                          <a href="tel:+917980640714" onClick={() => trackPhoneClick("error_fallback")} className="font-semibold underline underline-offset-2">call</a>
                           {" "}or{" "}
-                          <a href="https://wa.me/917980640714" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">WhatsApp</a>.
+                          <a href="https://wa.me/917980640714" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("error_fallback")} className="font-semibold underline underline-offset-2">WhatsApp</a>.
                         </p>
                       </div>
                     </div>
@@ -290,6 +299,7 @@ export default function ContactPanel({ isOpen, onClose }) {
           <div className="space-y-2.5">
             <a
               href="tel:+917980640714"
+              onClick={() => trackPhoneClick("contact_panel")}
               className="card card-hover group flex items-center gap-4 p-4"
             >
               <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-sage-50 text-sage-600 transition-colors duration-500 group-hover:bg-sage-800 group-hover:text-white">
@@ -309,6 +319,7 @@ export default function ContactPanel({ isOpen, onClose }) {
               href="https://wa.me/917980640714"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsAppClick("contact_panel")}
               className="card card-hover group flex items-center gap-4 p-4"
             >
               <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[#25d366]/12 text-[#128c4a] transition-colors duration-500 group-hover:bg-[#25d366] group-hover:text-white">
@@ -326,6 +337,7 @@ export default function ContactPanel({ isOpen, onClose }) {
 
             <a
               href="mailto:info.avayaudyog@gmail.com"
+              onClick={() => trackEmailClick("contact_panel")}
               className="card card-hover group flex items-center gap-4 p-4"
             >
               <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-sage-50 text-sage-600 transition-colors duration-500 group-hover:bg-sage-800 group-hover:text-white">

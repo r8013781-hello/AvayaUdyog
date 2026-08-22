@@ -155,7 +155,7 @@ export default function AboutCompany() {
             </ul>
 
             <button
-              onClick={openContactModal}
+              onClick={() => openContactModal("founder_cta")}
               className="btn-primary reveal group mt-10"
               data-reveal-delay="0.4s"
             >

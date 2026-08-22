@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import ContactPanel from "./ContactPanel";
+import { trackConsultationOpen } from "../lib/tracking";
 
 // The Vite app had one root component (App.jsx) holding isContactOpen and
 // prop-drilling openContactModal into Hero/About/Services/AboutCompany/
@@ -24,7 +25,10 @@ export function useContactModal() {
 
 export default function ContactModalProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
-  const open = () => setIsOpen(true);
+  const open = (triggerSource = "unknown") => {
+    trackConsultationOpen(triggerSource);
+    setIsOpen(true);
+  };
   const close = () => setIsOpen(false);
 
   return (

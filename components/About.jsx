@@ -117,7 +117,7 @@ export default function About() {
             </ul>
 
             <button
-              onClick={openContactModal}
+              onClick={() => openContactModal("about_cta")}
               className="reveal group mt-10 inline-flex items-center gap-2.5 text-[0.78rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
               data-reveal-delay="0.5s"
             >

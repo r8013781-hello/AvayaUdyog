@@ -1,7 +1,7 @@
-// No "use client" — a plain <a>, animate-ping is a Tailwind CSS utility
-// (no JS timer). Server-rendered.
+"use client";
 
 import { MessageCircle } from "lucide-react";
+import { trackWhatsAppClick } from "../lib/tracking";
 
 export default function WhatsappButton() {
   return (
@@ -9,6 +9,7 @@ export default function WhatsappButton() {
       href="https://wa.me/917980640714"
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackWhatsAppClick("floating_button")}
       className="group fixed bottom-6 right-6 z-[75]"
       aria-label="Chat with us on WhatsApp"
     >
