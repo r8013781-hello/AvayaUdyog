@@ -1,13 +1,31 @@
 import Link from "next/link";
 
 const SITE_URL = "https://avayaudyog.com";
+const TITLE = "Terms of Service | Avaya Udyog";
+const DESCRIPTION =
+  "Terms and conditions governing the use of the Avaya Udyog website and interior design services.";
+const OG_IMAGE = `${SITE_URL}/hero/exterior.webp`;
+const PAGE_URL = `${SITE_URL}/terms`;
 
 export const metadata = {
-  title: "Terms of Service | Avaya Udyog",
-  description:
-    "Terms and conditions governing the use of the Avaya Udyog website and interior design services.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: {
-    canonical: `${SITE_URL}/terms`,
+    canonical: PAGE_URL,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Avaya Udyog",
+    title: TITLE,
+    description: DESCRIPTION,
+    url: PAGE_URL,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [OG_IMAGE],
   },
 };
 

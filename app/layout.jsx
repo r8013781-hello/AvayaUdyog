@@ -1,4 +1,5 @@
 import "./globals.css";
+import { fraunces, plusJakarta } from "./fonts";
 
 const SITE_URL = "https://avayaudyog.com";
 
@@ -28,22 +29,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en-IN">
+    // next/font emits the @font-face rules and exposes them as CSS variables
+    // (see app/fonts.js). Applying both variable classes here means the
+    // marketing site and /portal share the same self-hosted faces, exactly
+    // as they shared the old Google Fonts stylesheet — but with no
+    // render-blocking request to a third-party origin.
+    <html lang="en-IN" className={`${fraunces.variable} ${plusJakarta.variable}`}>
       <head>
         <link rel="mask-icon" href="/favicon.svg" color="#2b4f36" />
-
-        {/* Same reasoning as the Vite app: a <link rel="stylesheet"> next to
-            the preconnects, not an @import inside globals.css, so the
-            browser discovers and fetches the fonts before the CSSOM has to
-            parse anything. Both the marketing site and /portal use these
-            fonts, so this stays shared. The App Router hoists <link>/<meta>
-            rendered here into the document <head> automatically. */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..600&display=swap"
-          rel="stylesheet"
-        />
       </head>
       {/* Marketing chrome (Navbar/Footer/WhatsappButton/ContactModalProvider)
           lives in app/(marketing)/layout.jsx, not here — this root layout

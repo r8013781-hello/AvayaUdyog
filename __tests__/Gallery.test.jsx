@@ -24,11 +24,24 @@ describe("Gallery Component", () => {
   it("renders Gallery header and description", async () => {
     render(<Gallery />);
     expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-      /Recently Completed Spaces/i,
+      /The interiors we design/i,
     );
     expect(
-      screen.getByText(/Explore our latest projects/i),
+      screen.getByText(/tailored to its people, location and budget/i),
     ).toBeInTheDocument();
+  });
+
+  // The gallery images are self-hosted stock photography (see commit 054f46d),
+  // not photographs of delivered Avaya Udyog projects. Alt text must therefore
+  // describe the room rather than attribute it to a completed project — this
+  // guards against the attribution creeping back in.
+  it("does not attribute gallery photography to completed projects", () => {
+    render(<Gallery />);
+    screen.getAllByRole("img").forEach((img) => {
+      const alt = img.getAttribute("alt") || "";
+      expect(alt.length).toBeGreaterThan(0);
+      expect(alt).not.toMatch(/by Avaya Udyog|Avaya Udyog .*project/i);
+    });
   });
 
   it("renders filter buttons with correct labels and default active", () => {

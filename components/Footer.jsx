@@ -331,7 +331,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ---------- Studio / Services / Connect / Newsletter ---------- */}
+        {/* ---------- Studio / Services / Connect ---------- */}
         <FooterNav />
 
         {/* ---------- Bottom bar ---------- */}
@@ -382,8 +382,10 @@ function scrollToSection(id) {
 const STUDIO_LINKS = [
   { label: "About", id: "about" },
   { label: "Services", id: "services" },
+  { label: "Process", id: "how-we-work" },
   { label: "Gallery", id: "gallery" },
   { label: "Founder", id: "founder" },
+  { label: "FAQ", id: "faq" },
 ];
 
 const SERVICE_LINKS = [
@@ -393,11 +395,22 @@ const SERVICE_LINKS = [
   "Turnkey Execution",
 ];
 
+// Only channels that actually go somewhere.
+//
+// Instagram, Facebook and LinkedIn were listed here with href="#" — three
+// links that looked like a social presence and did nothing when clicked. A
+// dead link is worse than an absent one: it spends a visitor's intent and
+// returns nothing, and search engines read it as a broken outbound link.
+// No profile URL exists anywhere in this repository (there is no `sameAs`
+// in the JSON-LD either), so there was nothing to point them at.
+//
+// To restore them, add the real profile URLs here and mirror them into
+// `sameAs` on localBusinessSchema in lib/schema.js so Google can connect the
+// profiles to the business.
 const CONNECT_LINKS = [
-  { label: "Instagram", href: "#" },
-  { label: "Facebook", href: "#" },
-  { label: "LinkedIn", href: "#" },
   { label: "WhatsApp", href: "https://wa.me/917980640714" },
+  { label: "Call us", href: "tel:+917980640714" },
+  { label: "Email us", href: "mailto:info.avayaudyog@gmail.com" },
 ];
 
 function FooterColumn({ heading, children }) {
@@ -410,20 +423,9 @@ function FooterColumn({ heading, children }) {
 }
 
 function FooterNav() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (event) => {
-    event.preventDefault();
-    if (!email.trim()) return;
-    console.log("Newsletter signup:", email);
-    setSubscribed(true);
-    setEmail("");
-  };
-
   return (
     <div className="mt-20 border-t border-line pt-14">
-      <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 sm:gap-x-10">
+      <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 sm:gap-x-10">
         <FooterColumn heading="Studio">
           <ul className="space-y-3">
             {STUDIO_LINKS.map((link) => (
@@ -459,62 +461,35 @@ function FooterNav() {
         <FooterColumn heading="Connect">
           <ul className="space-y-3">
             {CONNECT_LINKS.map((link) => {
-              const isExternal = link.href.startsWith("http");
+              // Only http(s) destinations open in a new tab. tel: and mailto:
+              // hand off to the device, so a new tab would leave a blank one
+              // behind — and both are still real links, not buttons.
+              const isHttp = link.href.startsWith("http");
+              const onClick =
+                link.label === "WhatsApp"
+                  ? () => trackWhatsAppClick("footer")
+                  : link.href.startsWith("tel:")
+                    ? () => trackPhoneClick("footer_connect")
+                    : link.href.startsWith("mailto:")
+                      ? () => trackEmailClick("footer_connect")
+                      : undefined;
+
               return (
                 <li key={link.label}>
-                  {isExternal ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={link.label === "WhatsApp" ? () => trackWhatsAppClick("footer") : undefined}
-                      className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <button type="button" className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700">
-                      {link.label}
-                    </button>
-                  )}
+                  <a
+                    href={link.href}
+                    target={isHttp ? "_blank" : undefined}
+                    rel={isHttp ? "noopener noreferrer" : undefined}
+                    onClick={onClick}
+                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                  >
+                    {link.label}
+                  </a>
                 </li>
               );
             })}
           </ul>
         </FooterColumn>
-
-        <div className="col-span-2 sm:col-span-1">
-          <FooterColumn heading="Newsletter">
-            <p className="text-[0.86rem] leading-[1.7] text-ink-soft">
-              Design notes and finished spaces, a few times a year.
-            </p>
-            {subscribed ? (
-              <p className="mt-5 text-[0.84rem] font-semibold text-sage-700">
-                You&apos;re on the list.
-              </p>
-            ) : (
-              <form onSubmit={handleSubscribe} className="mt-5">
-                <div className="flex items-end gap-2 border-b border-line-strong pb-2.5 transition-colors focus-within:border-sage-500">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    className="w-full min-w-0 bg-transparent text-[0.86rem] text-ink placeholder-ink-faint focus:outline-none"
-                  />
-                  <button
-                    type="submit"
-                    aria-label="Subscribe"
-                    className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-sage-800 text-white transition-colors hover:bg-sage-900"
-                  >
-                    <ArrowUpRight size={13} />
-                  </button>
-                </div>
-              </form>
-            )}
-          </FooterColumn>
-        </div>
       </div>
     </div>
   );

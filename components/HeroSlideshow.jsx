@@ -13,28 +13,28 @@ export const HERO_SLIDES = [
   {
     id: "exterior",
     src: "/hero/exterior.webp",
-    alt: "A signature Avaya Udyog residence at dusk, architecture glowing from within",
+    alt: "A contemporary residence at dusk, architecture glowing from within",
     eyebrow: "Signature Residences",
     title: "Where architecture meets atmosphere",
   },
   {
     id: "living",
     src: "/hero/living.webp",
-    alt: "A warm, considered living room designed by Avaya Udyog",
+    alt: "A warm, considered living room with layered lighting",
     eyebrow: "Living Spaces",
     title: "Warm textures, considered light",
   },
   {
     id: "bedroom",
     src: "/hero/bedroom.webp",
-    alt: "A calm, tailored bedroom in deep navy tones designed by Avaya Udyog",
+    alt: "A calm, tailored bedroom in deep navy tones",
     eyebrow: "Private Quarters",
     title: "Calm palettes, tailored comfort",
   },
   {
     id: "bath",
     src: "/hero/bath.webp",
-    alt: "A bold, dark-material wellness bathroom designed by Avaya Udyog",
+    alt: "A bold, dark-material wellness bathroom",
     eyebrow: "Wellness Retreats",
     title: "Bold materials, quiet luxury",
   },
@@ -60,7 +60,7 @@ export default function HeroSlideshow({ active, className = "" }) {
           src={slide.src}
           alt=""
           loading={index === 0 ? "eager" : "lazy"}
-          fetchpriority={index === 0 ? "high" : undefined}
+          fetchPriority={index === 0 ? "high" : undefined}
           decoding="async"
           onError={handleImageError}
           className={`animate-slow-zoom absolute inset-0 h-full w-full object-cover contrast-125 brightness-95 transition-opacity duration-[1600ms] ease-smooth ${

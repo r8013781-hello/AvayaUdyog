@@ -1,40 +1,79 @@
 "use client";
 
-import { Star, ShieldCheck } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Star, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
-
-// No stock photos of "clients" here on purpose — a random Unsplash face next
-// to a name reads as fabricated social proof. Initials only, always.
-const TESTIMONIALS = [
-  {
-    id: 1,
-    name: "Mr. Rakesh Tanwani",
-    role: "Homeowner",
-    content:
-      "Avaya Udyog transformed our apartment into a visionary space. Their meticulous focus and thoughtful design surpassed everything we had hoped for.",
-  },
-  {
-    id: 2,
-    name: "Rajesh Kumar",
-    role: "Business Owner",
-    content:
-      "The office transformation was executed flawlessly, on schedule and within scope. Our team is energised by the new environment every single day.",
-  },
-  {
-    id: 3,
-    name: "Anita Patel",
-    role: "Interior Designer",
-    content:
-      "Collaborating with Avaya Udyog is an absolute delight. The artistry, warmth, and design acumen are genuinely extraordinary.",
-  },
-];
+import { api } from "../lib/api";
 
 /**
- * The one deep-green room on the page. Everything else is paper, so this
- * section carries the weight — white cards float on forest.
+ * Client reviews, sourced from Google.
+ *
+ * The site never talks to Google directly. Reviews are synced into the CRM,
+ * a super admin approves the ones that should be public, and this component
+ * reads only those approved rows from our own backend
+ * (GET /api/reviews/public).
+ *
+ * There is deliberately NO hardcoded fallback: if nothing has been approved,
+ * or the request fails, the section renders nothing rather than showing
+ * placeholder quotes. A testimonial with no verifiable source is worse than
+ * no testimonial.
+ *
+ * The carousel behaves identically at every screen size — one horizontal,
+ * scroll-snapped, swipeable track, never a grid on desktop and a slider on
+ * mobile.
  */
 export default function Testimonials() {
   const ref = useReveal();
+  const trackRef = useRef(null);
+  const [reviews, setReviews] = useState([]);
+  const [state, setState] = useState("loading");
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .getPublicReviews()
+      .then((data) => {
+        if (cancelled) return;
+        const rows = Array.isArray(data) ? data : [];
+        setReviews(rows);
+        setState(rows.length ? "ready" : "empty");
+      })
+      .catch(() => {
+        if (!cancelled) setState("empty");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  /* Keep the dots/arrows in sync with wherever the user has swiped to. */
+  const syncIndex = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector("[data-card]");
+    if (!card) return;
+    const step = card.offsetWidth + 20; /* card + gap-5 */
+    setIndex(Math.round(track.scrollLeft / step));
+  }, []);
+
+  const scrollTo = (target) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector("[data-card]");
+    if (!card) return;
+    const step = card.offsetWidth + 20;
+    const clamped = Math.max(0, Math.min(target, reviews.length - 1));
+    track.scrollTo({
+      left: clamped * step,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  };
+
+  if (state !== "ready") return null;
+
+  const atStart = index <= 0;
+  const atEnd = index >= reviews.length - 1;
 
   return (
     <section id="testimonials" className="section bg-sage-900">
@@ -45,25 +84,55 @@ export default function Testimonials() {
       </div>
 
       <div ref={ref} className="shell relative">
-        <div className="reveal text-center">
-          <span className="eyebrow-center !text-gold-light">
-            Client Stories
-          </span>
-          <h2 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
-            Trusted by the people
-            <br />
-            <span className="accent text-gold-light">
-              who live in our work.
-            </span>
-          </h2>
+        <div className="reveal flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="eyebrow !text-gold-light">Client Stories</span>
+            <h2 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
+              Trusted by the people
+              <br />
+              <span className="accent text-gold-light">who live in our work.</span>
+            </h2>
+          </div>
+
+          {/* Arrows sit with the heading so the track itself stays edge-to-edge. */}
+          <div className="flex shrink-0 items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => scrollTo(index - 1)}
+              disabled={atStart}
+              aria-label="Previous review"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition-all duration-300 hover:border-gold/60 hover:text-gold-light disabled:pointer-events-none disabled:opacity-30"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTo(index + 1)}
+              disabled={atEnd}
+              aria-label="Next review"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition-all duration-300 hover:border-gold/60 hover:text-gold-light disabled:pointer-events-none disabled:opacity-30"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
         </div>
 
-        <div className="mt-16 grid gap-5 md:grid-cols-3">
-          {TESTIMONIALS.map((testimonial, index) => (
+        {/* One scroll-snapped track at every breakpoint — native swipe on
+            touch, arrows/keyboard elsewhere. `no-scrollbar` hides the bar
+            without disabling the scrolling itself. */}
+        <div
+          ref={trackRef}
+          onScroll={syncIndex}
+          tabIndex={0}
+          role="group"
+          aria-label="Client reviews"
+          className="no-scrollbar mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 focus:outline-none"
+        >
+          {reviews.map((review) => (
             <figure
-              key={testimonial.id}
-              className="reveal group relative flex flex-col rounded-[1.75rem] bg-white p-8 shadow-float transition-transform duration-500 ease-smooth hover:-translate-y-1.5"
-              data-reveal-delay={`${index * 0.1}s`}
+              key={review.id}
+              data-card
+              className="group relative flex w-[85%] shrink-0 snap-start flex-col rounded-[1.75rem] bg-white p-8 shadow-float sm:w-[47%] lg:w-[31.5%]"
             >
               <span
                 className="absolute right-7 top-4 font-display text-[4rem] leading-none text-sage-900/[0.07]"
@@ -72,32 +141,74 @@ export default function Testimonials() {
                 &rdquo;
               </span>
 
-              <div className="relative flex gap-1 text-gold">
-                {[0, 1, 2, 3, 4].map((star) => (
-                  <Star key={star} size={14} className="fill-current" />
-                ))}
-              </div>
+              {/* Stars only when there is a real rating. A written testimonial
+                  has none, and rendering five empty stars for it would read as
+                  a zero-star review — worse than showing nothing. */}
+              {typeof review.rating === "number" && (
+                <div
+                  className="relative flex gap-1 text-gold"
+                  aria-label={`${review.rating} out of 5 stars`}
+                >
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <Star
+                      key={n}
+                      size={14}
+                      className={n <= review.rating ? "fill-current" : "opacity-25"}
+                    />
+                  ))}
+                </div>
+              )}
 
-              <blockquote className="relative mt-6 flex-1 text-[0.98rem] leading-[1.85] text-ink-soft">
-                {testimonial.content}
+              <blockquote
+                className={`relative flex-1 text-[0.98rem] leading-[1.85] text-ink-soft ${
+                  typeof review.rating === "number" ? "mt-6" : "mt-2"
+                }`}
+              >
+                {review.text}
               </blockquote>
 
               <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-6">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sage-100 font-display text-lg text-sage-700 ring-1 ring-line-strong" aria-hidden="true">
-                  {testimonial.name[0]}
+                <span
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sage-100 font-display text-lg text-sage-700 ring-1 ring-line-strong"
+                  aria-hidden="true"
+                >
+                  {review.authorName?.[0] || "·"}
                 </span>
-                <div>
-                  <p className="font-display text-[1.05rem] font-semibold text-ink">
-                    {testimonial.name}
+                <div className="min-w-0">
+                  <p className="truncate font-display text-[1.05rem] font-semibold text-ink">
+                    {review.authorName}
                   </p>
+                  {/* Never label a transcribed testimonial a Google review.
+                      "Google review" means Google verified it; these did not
+                      come from there, so they say what they actually are. */}
                   <p className="mt-0.5 text-[0.58rem] font-bold uppercase tracking-label text-sage-600">
-                    {testimonial.role}
+                    {review.source === "google"
+                      ? "Google review"
+                      : review.authorRole || "Client testimonial"}
                   </p>
                 </div>
               </figcaption>
             </figure>
           ))}
         </div>
+
+        {/* Progress dots double as direct navigation. */}
+        {reviews.length > 1 && (
+          <div className="mt-8 flex justify-center gap-2">
+            {reviews.map((review, i) => (
+              <button
+                key={review.id}
+                type="button"
+                onClick={() => scrollTo(i)}
+                aria-label={`Go to review ${i + 1}`}
+                aria-current={i === index}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === index ? "w-7 bg-gold-light" : "w-1.5 bg-white/30 hover:bg-white/60"
+                }`}
+              />
+            ))}
+          </div>
+        )}
 
         <div
           className="reveal mx-auto mt-14 flex max-w-2xl items-center justify-center gap-3.5 rounded-full border border-white/15 bg-white/[0.06] px-7 py-4 backdrop-blur-sm"
@@ -106,10 +217,8 @@ export default function Testimonials() {
           <ShieldCheck size={18} className="flex-shrink-0 text-gold-light" />
           <p className="text-center text-[0.9rem] leading-[1.7] text-sage-100/80">
             Every client receives the same promise —{" "}
-            <span className="font-semibold text-white">
-              homely atmosphere, home-like care
-            </span>
-            , and 100% satisfaction.
+            <span className="font-semibold text-white">homely atmosphere, home-like care</span>, and
+            100% satisfaction.
           </p>
         </div>
       </div>

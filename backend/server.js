@@ -11,6 +11,7 @@ const followupsRoutes = require("./routes/followups");
 const quotationsRoutes = require("./routes/quotations");
 const projectsRoutes = require("./routes/projects");
 const employeesRoutes = require("./routes/employees");
+const reviewsRoutes = require("./routes/reviews");
 
 const app = express();
 
@@ -30,6 +31,10 @@ app.use(express.json());
 
 const publicLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20 });
 app.use("/api/enquiries", publicLimiter);
+// Every marketing page load hits /api/reviews/public, so it needs a far more
+// generous ceiling than the enquiry form — but still a ceiling, since it is
+// unauthenticated and reachable by anyone.
+app.use("/api/reviews/public", rateLimit({ windowMs: 15 * 60 * 1000, max: 600 }));
 app.use("/api/auth/login", rateLimit({ windowMs: 15 * 60 * 1000, max: 20 }));
 
 app.use("/api/auth", authRoutes);
@@ -39,6 +44,7 @@ app.use("/api/followups", followupsRoutes);
 app.use("/api/quotations", quotationsRoutes);
 app.use("/api/projects", projectsRoutes);
 app.use("/api/employees", employeesRoutes);
+app.use("/api/reviews", reviewsRoutes);
 
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 

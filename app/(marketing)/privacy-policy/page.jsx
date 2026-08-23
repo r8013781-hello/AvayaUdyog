@@ -1,13 +1,31 @@
 import Link from "next/link";
 
 const SITE_URL = "https://avayaudyog.com";
+const TITLE = "Privacy Policy | Avaya Udyog";
+const DESCRIPTION =
+  "Learn how Avaya Udyog collects, uses, and protects your personal information when you use our website and services.";
+const OG_IMAGE = `${SITE_URL}/hero/exterior.webp`;
+const PAGE_URL = `${SITE_URL}/privacy-policy`;
 
 export const metadata = {
-  title: "Privacy Policy | Avaya Udyog",
-  description:
-    "Learn how Avaya Udyog collects, uses, and protects your personal information when you use our website and services.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: {
-    canonical: `${SITE_URL}/privacy-policy`,
+    canonical: PAGE_URL,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Avaya Udyog",
+    title: TITLE,
+    description: DESCRIPTION,
+    url: PAGE_URL,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [OG_IMAGE],
   },
 };
 

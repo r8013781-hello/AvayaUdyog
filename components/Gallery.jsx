@@ -19,7 +19,7 @@ const IMAGES = [
   {
     id: "t1",
     title: "Warm Modern Living Room",
-    alt: "Warm modern living room interior design by Avaya Udyog, Kolkata — curated finishes and layered warm lighting",
+    alt: "Warm modern living room with curated finishes and layered warm lighting",
     category: "residential",
     src: "/gallery/g1-1505693416388.webp",
     meta: "Curated finishes · warm lighting",
@@ -27,7 +27,7 @@ const IMAGES = [
   {
     id: "t2",
     title: "Luxury Lounge Styling",
-    alt: "Luxury lounge interior styling in a Kolkata residence, layered textures with a contemporary design theme",
+    alt: "Luxury lounge interior styling with layered textures and a contemporary design theme",
     category: "residential",
     src: "/gallery/g2-1494526585095.webp",
     meta: "Layered textures · contemporary",
@@ -35,7 +35,7 @@ const IMAGES = [
   {
     id: "t3",
     title: "Calm Bedroom Retreat",
-    alt: "Calm bedroom interior with soft neutral tones and inviting natural light, residential interior design Kolkata",
+    alt: "Calm bedroom interior with soft neutral tones and inviting natural light",
     category: "residential",
     src: "/gallery/g3-1540518614846.webp",
     meta: "Soft neutrals · inviting light",
@@ -43,7 +43,7 @@ const IMAGES = [
   {
     id: "t4",
     title: "Contemporary Bedroom",
-    alt: "Contemporary bedroom interior with plush textures and warm wood finishes, Avaya Udyog residential project",
+    alt: "Contemporary bedroom interior with plush textures and warm wood finishes",
     category: "residential",
     src: "/gallery/g4-1484154218962.webp",
     meta: "Plush textures · warm wood",
@@ -51,7 +51,7 @@ const IMAGES = [
   {
     id: "t5",
     title: "Open-Plan Kitchen",
-    alt: "Open-plan modular kitchen design with a wood island and minimalist cabinetry, Kolkata interior design project",
+    alt: "Open-plan modular kitchen with a wood island and minimalist cabinetry",
     category: "residential",
     src: "/gallery/g5-1556911220.webp",
     meta: "Wood island · minimalist",
@@ -59,7 +59,7 @@ const IMAGES = [
   {
     id: "t6",
     title: "Signature Office Workspace",
-    alt: "Signature commercial office workspace interior design with natural light and premium build finish, Kolkata",
+    alt: "Modern office workspace interior with natural light and a premium build finish",
     category: "commercial",
     src: "/gallery/g6-1497366754035.webp",
     meta: "Natural light · premium build",
@@ -67,7 +67,7 @@ const IMAGES = [
   {
     id: "t7",
     title: "Retail Showroom Experience",
-    alt: "Retail showroom interior design with an elegant product display and strong brand presence, commercial project",
+    alt: "Retail showroom interior with an elegant product display and strong brand presence",
     category: "commercial",
     src: "/gallery/g7-1524758631624.webp",
     meta: "Elegant display · strong brand",
@@ -75,7 +75,7 @@ const IMAGES = [
   {
     id: "t8",
     title: "Refined Dining Room",
-    alt: "Refined dining room interior with statement pendant lighting and gold accents, luxury home interior Kolkata",
+    alt: "Refined dining room interior with statement pendant lighting and gold accents",
     category: "residential",
     src: "/gallery/g8-dining-refined.webp",
     meta: "Statement lighting · gold accents",
@@ -83,7 +83,7 @@ const IMAGES = [
   {
     id: "t9",
     title: "Modern Boutique Hotel Lounge",
-    alt: "Modern boutique hotel lounge with bespoke hospitality interior design, commercial interiors by Avaya Udyog",
+    alt: "Modern boutique hotel lounge with a bespoke hospitality interior",
     category: "commercial",
     src: "/gallery/g9-1560448204.webp",
     meta: "Hospitality interiors · bespoke",
@@ -161,15 +161,16 @@ export default function Gallery() {
 
       <div ref={ref} className="shell relative">
         <div className="reveal text-center">
-          <span className="eyebrow-center">Featured Gallery</span>
+          <span className="eyebrow-center">Design Gallery</span>
           <h2 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
-            Recently completed{" "}
-            <span className="accent text-sage-600">spaces.</span>
+            The interiors{" "}
+            <span className="accent text-sage-600">we design.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-[0.96rem] leading-[1.85] text-ink-muted">
-            Explore our latest projects — every interior is tailored to its
-            people, location and budget while keeping Avaya Udyog&apos;s
-            signature warmth and detail.
+            A sense of the material palette, lighting and detailing our work is
+            built around — every interior we take on is tailored to its people,
+            location and budget, with Avaya Udyog&apos;s signature warmth and
+            detail.
           </p>
         </div>
 

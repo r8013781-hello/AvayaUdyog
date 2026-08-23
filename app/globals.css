@@ -1,9 +1,8 @@
-/* Ported unchanged from the Vite app's src/index.css. Fraunces + Plus
-   Jakarta Sans are loaded via a <link> rendered in app/layout.jsx (App
-   Router hoists <link>/<meta> tags rendered in a Server Component into
-   <head> automatically), not @import here — same reasoning as before:
-   the browser discovers and fetches the fonts before this stylesheet
-   even has to parse. */
+/* Ported from the Vite app's src/index.css. Fraunces + Plus Jakarta Sans
+   are now self-hosted by next/font (see app/fonts.js) and reach Tailwind
+   as the --font-display / --font-sans CSS variables wired up in
+   tailwind.config.js — so `font-display` and `font-sans` utilities below
+   work exactly as they did under the old Google Fonts <link>. */
 
 @tailwind base;
 @tailwind components;
@@ -196,6 +195,17 @@
       transparent
     );
     mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /* Hides the scrollbar on the testimonials track without disabling the
+     scrolling itself — the track still swipes on touch, still responds to
+     the arrow buttons, and remains keyboard-scrollable. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

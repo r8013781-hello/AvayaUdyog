@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
@@ -13,14 +14,14 @@ const SERVICES = [
     tag: "Homes",
     text: "Warm, modern homes shaped around your lifestyle — thoughtful layouts, curated finishes, and elevated details that make every day feel special.",
     src: "/services/s1-residential.webp",
-    alt: "Bright, gallery-walled modern living room — residential interior design by Avaya Udyog, Kolkata",
+    alt: "Bright, gallery-walled modern living room — residential interior design",
   },
   {
     title: "Commercial Spaces",
     tag: "Workplaces",
     text: "Brand-first offices and retail environments designed to impress clients and keep teams inspired, productive, and proud of where they work.",
     src: "/services/s2-commercial.webp",
-    alt: "Glass-walled modern office corridor — commercial interior design by Avaya Udyog, Kolkata",
+    alt: "Glass-walled modern office corridor — commercial interior design",
   },
   {
     title: "Design Consultation",
@@ -34,7 +35,7 @@ const SERVICES = [
     tag: "End-to-end",
     text: "From first sketch to final styling, we manage every detail so your project feels effortless from start to finish.",
     src: "/services/s4-execution.webp",
-    alt: "A turnkey interior project site being overseen by the Avaya Udyog execution team",
+    alt: "An interior project site during turnkey execution",
   },
 ];
 
@@ -60,7 +61,13 @@ export default function Services() {
           </div>
           <p className="max-w-xs text-[0.94rem] leading-[1.8] text-ink-muted md:pb-2">
             Every service is delivered with the same promise — homely
-            atmosphere, home-like care, and an uncompromising eye for detail.
+            atmosphere, home-like care, and an uncompromising eye for detail.{" "}
+            <Link
+              href="/interior-designer-kolkata"
+              className="font-semibold text-sage-700 underline underline-offset-2 transition-colors hover:text-sage-900"
+            >
+              See how we work as an interior designer in Kolkata.
+            </Link>
           </p>
         </div>
 

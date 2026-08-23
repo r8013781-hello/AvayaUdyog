@@ -51,7 +51,7 @@ export default function About() {
               <figure className="relative overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift">
                 <img
                   src="/about/living-space.webp"
-                  alt="A refined modern living space designed by Avaya Udyog"
+                  alt="A refined modern living space"
                   loading="lazy"
                   decoding="async"
                   onError={handleImageError}

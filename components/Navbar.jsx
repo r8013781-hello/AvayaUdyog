@@ -9,8 +9,10 @@ const NAV_LINKS = [
   { id: "hero", label: "Home" },
   { id: "about", label: "About" },
   { id: "services", label: "Services" },
+  { id: "how-we-work", label: "Process" },
   { id: "gallery", label: "Gallery" },
   { id: "founder", label: "Founder" },
+  { id: "faq", label: "FAQ" },
 ];
 
 // The CRM lives inside this same app at /portal (see app/portal/page.jsx) —

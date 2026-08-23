@@ -58,8 +58,11 @@ export default {
       },
 
       fontFamily: {
-        display: ['"Fraunces"', "ui-serif", "Georgia", "serif"],
-        sans: ['"Plus Jakarta Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
+        // The var() names come from next/font (see app/fonts.js), which
+        // self-hosts both faces. Fallbacks stay in place for the moment
+        // before the font files finish loading.
+        display: ["var(--font-display)", "ui-serif", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
 
       fontSize: {
