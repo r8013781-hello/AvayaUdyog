@@ -395,8 +395,8 @@ const STUDIO_LINKS = [
 // four different labels did exactly the same thing and neither service page
 // got a footer link at all.
 const SERVICE_LINKS = [
-  { label: "Residential Interiors", href: "/residential-interior-designer-kolkata" },
-  { label: "Commercial Spaces", href: "/commercial-interior-designer-kolkata" },
+  { label: "Residential Interiors", href: "/services/residential-interior-design" },
+  { label: "Commercial Spaces", href: "/services/commercial-interior-design" },
   { label: "Modular Kitchens", href: "/services/modular-kitchen" },
   { label: "Renovation", href: "/services/home-renovation" },
   { label: "Design Consultation", id: "services" },

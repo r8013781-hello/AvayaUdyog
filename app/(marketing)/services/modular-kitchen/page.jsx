@@ -314,7 +314,7 @@ export default function ModularKitchenPage() {
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-5">
                 <PageCTAButton triggerSource="modular_kitchen_footer_cta">Book a Consultation</PageCTAButton>
-                <Link href="/residential-interior-designer-kolkata" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
+                <Link href="/services/residential-interior-design" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
                   Full-home interiors
                 </Link>
                 <Link href="/process" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">

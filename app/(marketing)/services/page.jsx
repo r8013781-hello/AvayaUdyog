@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Home, Building2, CookingPot, Hammer, MessagesSquare, Layers } from "lucide-react";
+import { ArrowUpRight, Home, Building2, CookingPot, Hammer, MessagesSquare, Layers, PenTool, Sparkles } from "lucide-react";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { webPageSchema } from "../../../lib/schema";
 import PageCTAButton from "../../../components/PageCTAButton";
@@ -58,18 +58,47 @@ const webPage = webPageSchema({
  * residential copy. Nothing here is an invented service line.
  */
 
+/**
+ * Carried over verbatim from /interior-designer-kolkata, which this hub
+ * replaces. This is positioning copy the business already published — nothing
+ * has been rewritten or added.
+ *
+ * That page's CAPABILITIES section was deliberately NOT merged: it was two
+ * cards for residential and commercial, which this hub's SERVICES grid below
+ * already covers, and it carried stock photography into a page that is
+ * otherwise image-free. Duplicating it would have made the hub weaker, not
+ * stronger. Its DESIGN_DIRECTION gallery was dropped for the same reason.
+ */
+const PRINCIPLES = [
+  {
+    icon: PenTool,
+    title: "Timeless Aesthetics",
+    text: "We harmonise inherited design wisdom with contemporary innovation, crafting rooms that stay relevant and captivating for generations.",
+  },
+  {
+    icon: Home,
+    title: "Personalised Approach",
+    text: "Your story shapes our design. We listen deeply and turn your aspirations and lifestyle into spaces that are practical and breathtaking.",
+  },
+  {
+    icon: Sparkles,
+    title: "Uncompromising Quality",
+    text: "From premium materials to expert craftsmanship, we hold every project to the most rigorous standards of excellence.",
+  },
+];
+
 const SERVICES = [
   {
     icon: Home,
     title: "Residential Interiors",
-    href: "/residential-interior-designer-kolkata",
+    href: "/services/residential-interior-design",
     text: "Full-home interiors for flats and houses — layouts, finishes and the detail work that decides whether a home feels considered or merely furnished.",
     scope: ["Living rooms", "Bedrooms", "Kitchens", "Dining"],
   },
   {
     icon: Building2,
     title: "Commercial Spaces",
-    href: "/commercial-interior-designer-kolkata",
+    href: "/services/commercial-interior-design",
     text: "Offices and retail environments designed to hold up to daily use and to say something accurate about the business occupying them.",
     scope: ["Offices", "Retail", "Workspaces"],
   },
@@ -204,6 +233,36 @@ export default function ServicesPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      <section className="section !py-20">
+        <div className="shell relative">
+          <div className="max-w-2xl">
+            <span className="eyebrow">How We Design</span>
+            <h2 className="display mt-6 text-[2.2rem] text-ink sm:text-4xl">
+              Every project follows the same{" "}
+              <span className="accent text-sage-600">three principles.</span>
+            </h2>
+            <p className="mt-5 text-[0.98rem] leading-[1.8] text-ink-soft">
+              Whichever service a project starts from, the approach underneath it does
+              not change. Residential and commercial are two disciplines run by one
+              studio, and each has its own page covering approach, capability and
+              process in detail.
+            </p>
+          </div>
+
+          <ul className="mt-14 grid gap-6 sm:grid-cols-3">
+            {PRINCIPLES.map(({ icon: Icon, title, text }) => (
+              <li key={title} className="rounded-[1.5rem] border border-line bg-white p-7 shadow-hair">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line-strong bg-sage-50 text-sage-600">
+                  <Icon size={18} strokeWidth={1.6} aria-hidden="true" />
+                </span>
+                <h3 className="mt-5 font-display text-[1.2rem] font-semibold text-ink">{title}</h3>
+                <p className="mt-2 text-[0.92rem] leading-[1.8] text-ink-muted">{text}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

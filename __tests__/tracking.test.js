@@ -86,33 +86,33 @@ describe("attribution capture", () => {
   });
 
   it("records the landing page for organic visits too", () => {
-    setUrl("/interior-designer-kolkata");
+    setUrl("/services");
     captureTrackingParams();
-    expect(getTrackingParams().landing_page).toBe("/interior-designer-kolkata");
+    expect(getTrackingParams().landing_page).toBe("/services");
   });
 
   it("keeps the FIRST organic landing page across later page loads", () => {
     // Otherwise every attributed lead would look like it came from whichever
     // page the visitor happened to be on when they finally submitted.
-    setUrl("/interior-designer-kolkata");
+    setUrl("/services");
     captureTrackingParams();
 
-    setUrl("/residential-interior-designer-kolkata");
+    setUrl("/services/residential-interior-design");
     captureTrackingParams();
 
-    expect(getTrackingParams().landing_page).toBe("/interior-designer-kolkata");
+    expect(getTrackingParams().landing_page).toBe("/services");
   });
 
   it("lets a real campaign arrival overwrite an earlier organic visit", () => {
     setUrl("/");
     captureTrackingParams();
 
-    setUrl("/interior-designer-kolkata?utm_source=google&gclid=NEW");
+    setUrl("/services?utm_source=google&gclid=NEW");
     captureTrackingParams();
 
     const params = getTrackingParams();
     expect(params.gclid).toBe("NEW");
-    expect(params.landing_page).toBe("/interior-designer-kolkata");
+    expect(params.landing_page).toBe("/services");
   });
 
   it("captures only whitelisted parameters", () => {

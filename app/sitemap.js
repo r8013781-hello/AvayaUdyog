@@ -14,7 +14,6 @@ import { INSIGHTS } from "../lib/insights";
 // changes.
 const LAST_MODIFIED = {
   home: "2026-08-23",
-  kolkata: "2026-08-23",
   services: "2026-08-23",
   modularKitchen: "2026-08-23",
   renovation: "2026-08-23",
@@ -38,12 +37,6 @@ export default function sitemap() {
       priority: 1.0,
     },
     {
-      url: `${SITE_URL}/interior-designer-kolkata`,
-      lastModified: LAST_MODIFIED.kolkata,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
       url: `${SITE_URL}/services`,
       lastModified: LAST_MODIFIED.services,
       changeFrequency: "monthly",
@@ -62,13 +55,13 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/residential-interior-designer-kolkata`,
+      url: `${SITE_URL}/services/residential-interior-design`,
       lastModified: LAST_MODIFIED.residential,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/commercial-interior-designer-kolkata`,
+      url: `${SITE_URL}/services/commercial-interior-design`,
       lastModified: LAST_MODIFIED.commercial,
       changeFrequency: "monthly",
       priority: 0.8,

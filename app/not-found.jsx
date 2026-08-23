@@ -25,17 +25,17 @@ export const metadata = {
 const DESTINATIONS = [
   { href: "/", label: "Home", note: "Start from the beginning" },
   {
-    href: "/interior-designer-kolkata",
-    label: "Interior design in Kolkata",
-    note: "What we do and how we work",
+    href: "/services",
+    label: "Services",
+    note: "Everything the studio does",
   },
   {
-    href: "/residential-interior-designer-kolkata",
+    href: "/services/residential-interior-design",
     label: "Homes",
     note: "Residential interiors",
   },
   {
-    href: "/commercial-interior-designer-kolkata",
+    href: "/services/commercial-interior-design",
     label: "Offices & retail",
     note: "Commercial spaces",
   },

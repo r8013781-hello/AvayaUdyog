@@ -16,7 +16,7 @@ const SERVICES = [
     // contact modal. Before this, both pages had a single inbound internal
     // link each and were effectively orphaned — the section describing a
     // service is the most natural place to send a reader deeper into it.
-    href: "/residential-interior-designer-kolkata",
+    href: "/services/residential-interior-design",
     linkLabel: "Residential interior design",
     text: "Warm, modern homes shaped around your lifestyle — thoughtful layouts, curated finishes, and elevated details that make every day feel special.",
     src: "/services/s1-residential.webp",
@@ -25,7 +25,7 @@ const SERVICES = [
   {
     title: "Commercial Spaces",
     tag: "Workplaces",
-    href: "/commercial-interior-designer-kolkata",
+    href: "/services/commercial-interior-design",
     linkLabel: "Commercial interior design",
     text: "Brand-first offices and retail environments designed to impress clients and keep teams inspired, productive, and proud of where they work.",
     src: "/services/s2-commercial.webp",
@@ -71,10 +71,10 @@ export default function Services() {
             Every service is delivered with the same promise — homely
             atmosphere, home-like care, and an uncompromising eye for detail.{" "}
             <Link
-              href="/interior-designer-kolkata"
+              href="/services"
               className="font-semibold text-sage-700 underline underline-offset-2 transition-colors hover:text-sage-900"
             >
-              See how we work as an interior designer in Kolkata.
+              See every interior design service we offer in Kolkata.
             </Link>
           </p>
         </div>

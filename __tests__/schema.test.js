@@ -9,7 +9,7 @@ import {
   webPageSchema,
 } from "../lib/schema";
 
-const URL = "https://avayaudyog.com/residential-interior-designer-kolkata";
+const URL = "https://avayaudyog.com/services/residential-interior-design";
 
 /** Collect every bare {"@id": ...} reference in a node. */
 function references(node, acc = []) {
