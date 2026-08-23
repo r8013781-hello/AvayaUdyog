@@ -4,6 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Star, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { api } from "../lib/api";
+import { trackGoogleReviewClick } from "../lib/tracking";
+
+const GOOGLE_REVIEW_URL = "https://g.page/r/CcWI3rhXDzjpEAE/review";
 
 /**
  * Client reviews, sourced from Google.
@@ -74,6 +77,14 @@ export default function Testimonials() {
 
   const atStart = index <= 0;
   const atEnd = index >= reviews.length - 1;
+
+  const trackReviewClick = () => {
+    trackGoogleReviewClick({
+      sourceSection: "testimonials",
+      pagePath: window.location.pathname,
+      ctaType: "outbound_link",
+    });
+  };
 
   return (
     <section id="testimonials" className="section bg-sage-900">
@@ -210,8 +221,23 @@ export default function Testimonials() {
           </div>
         )}
 
+        <div className="reveal mt-10 flex flex-col items-center gap-4 text-center" data-reveal-delay="0.1s">
+          <p className="max-w-xl text-[0.94rem] leading-[1.75] text-sage-100/80">
+            Worked with Avaya Udyog? We&apos;d value an honest review of your experience.
+          </p>
+          <a
+            href={GOOGLE_REVIEW_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={trackReviewClick}
+            className="btn border border-gold-light/55 bg-transparent px-6 py-3 text-gold-light transition hover:-translate-y-0.5 hover:border-gold-light hover:bg-white/10"
+          >
+            Review us on Google
+          </a>
+        </div>
+
         <div
-          className="reveal mx-auto mt-14 flex max-w-2xl items-center justify-center gap-3.5 rounded-full border border-white/15 bg-white/[0.06] px-7 py-4 backdrop-blur-sm"
+          className="reveal mx-auto mt-12 flex max-w-2xl items-center justify-center gap-3.5 rounded-full border border-white/15 bg-white/[0.06] px-7 py-4 backdrop-blur-sm"
           data-reveal-delay="0.2s"
         >
           <ShieldCheck size={18} className="flex-shrink-0 text-gold-light" />

@@ -5,6 +5,7 @@ import {
   trackWhatsAppClick,
   trackConsultationSubmit,
   trackConsultationError,
+  trackGoogleReviewClick,
 } from "../lib/tracking";
 import { captureTrackingParams, getTrackingParams } from "../lib/trackingParams";
 
@@ -49,6 +50,21 @@ describe("tracking events", () => {
     trackPhoneClick("navbar");
     expect(window.gtag).toHaveBeenCalledWith("event", "phone_click", {
       link_location: "navbar",
+    });
+  });
+
+  it("records Google review CTA context without customer data", () => {
+    window.gtag = vi.fn();
+    trackGoogleReviewClick({
+      sourceSection: "testimonials",
+      pagePath: "/",
+      ctaType: "outbound_link",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith("event", "google_review_click", {
+      source_section: "testimonials",
+      page_path: "/",
+      cta_type: "outbound_link",
     });
   });
 
