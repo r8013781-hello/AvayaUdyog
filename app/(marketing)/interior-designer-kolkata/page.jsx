@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, PenTool, Home, Sparkles } from "lucide-react";
 import Breadcrumbs from "../../../components/Breadcrumbs";
+import { webPageSchema } from "../../../lib/schema";
 import PageCTAButton from "../../../components/PageCTAButton";
 import StatStrip from "../../../components/StatStrip";
 
@@ -104,9 +105,21 @@ const DESIGN_DIRECTION = [
   },
 ];
 
+const webPage = webPageSchema({
+  url: PAGE_URL,
+  name: TITLE,
+  description: DESCRIPTION,
+  about: undefined,
+});
+
 export default function InteriorDesignerKolkataPage() {
   return (
     <div className="bg-canvas">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }}
+      />
       <div className="shell pt-32 md:pt-36">
         <Breadcrumbs
           items={[

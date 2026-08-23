@@ -12,6 +12,12 @@ const SERVICES = [
   {
     title: "Residential Interiors",
     tag: "Homes",
+    // Services with a dedicated page link to it instead of opening the
+    // contact modal. Before this, both pages had a single inbound internal
+    // link each and were effectively orphaned — the section describing a
+    // service is the most natural place to send a reader deeper into it.
+    href: "/residential-interior-designer-kolkata",
+    linkLabel: "Residential interior design",
     text: "Warm, modern homes shaped around your lifestyle — thoughtful layouts, curated finishes, and elevated details that make every day feel special.",
     src: "/services/s1-residential.webp",
     alt: "Bright, gallery-walled modern living room — residential interior design",
@@ -19,6 +25,8 @@ const SERVICES = [
   {
     title: "Commercial Spaces",
     tag: "Workplaces",
+    href: "/commercial-interior-designer-kolkata",
+    linkLabel: "Commercial interior design",
     text: "Brand-first offices and retail environments designed to impress clients and keep teams inspired, productive, and proud of where they work.",
     src: "/services/s2-commercial.webp",
     alt: "Glass-walled modern office corridor — commercial interior design",
@@ -73,7 +81,7 @@ export default function Services() {
 
         {/* ---------- Alternating editorial blocks ---------- */}
         <div className="mt-6">
-          {SERVICES.map(({ title, tag, text, src, alt }, index) => {
+          {SERVICES.map(({ title, tag, text, src, alt, href, linkLabel }, index) => {
             const reversed = index % 2 === 1;
             return (
               <div
@@ -118,19 +126,35 @@ export default function Services() {
                     {text}
                   </p>
 
-                  <button
-                    onClick={() => openContactModal("service_cta")}
-                    className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
-                  >
-                    <span className="relative">
-                      Explore {tag}
-                      <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
-                    </span>
-                    <ArrowUpRight
-                      size={14}
-                      className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
-                    />
-                  </button>
+                  {href ? (
+                    <Link
+                      href={href}
+                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
+                    >
+                      <span className="relative">
+                        {linkLabel}
+                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
+                      </span>
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
+                      />
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => openContactModal("service_cta")}
+                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
+                    >
+                      <span className="relative">
+                        Explore {tag}
+                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
+                      </span>
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
+                      />
+                    </button>
+                  )}
                 </div>
               </div>
             );

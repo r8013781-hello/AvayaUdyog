@@ -85,10 +85,17 @@ export default function TermsPage() {
 
           <Section title="5. Project Photography">
             <p>
-              Photographs of completed projects displayed on our website and
-              portfolio are used with appropriate permissions. These images
-              represent actual work completed by Avaya Udyog and may not be
-              reproduced without our consent.
+              Photographs used across this website are licensed stock images,
+              published to convey design direction, material palette and
+              detailing — they are illustrative and do not depict projects
+              completed by Avaya Udyog. The only exception is imagery of our
+              team, which is our own.
+            </p>
+            <p>
+              Where we publish photography of our own completed projects in
+              future, it will be identified as such and used only with the
+              client&apos;s permission. Our own images may not be reproduced
+              without our consent.
             </p>
           </Section>
 

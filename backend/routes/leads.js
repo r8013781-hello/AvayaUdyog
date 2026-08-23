@@ -49,7 +49,22 @@ const LEAD_COLUMNS = `l.id, l.name, l.phone, l.email, l.city, l.address, l.proje
 
 router.post("/enquiries", async (req, res, next) => {
   try {
-    const { error, value } = enquirySchema.validate(req.body);
+    // stripUnknown, deliberately. The website spreads its whole tracking blob
+    // (lib/trackingParams.js, read from sessionStorage) into this body. Joi
+    // rejects unknown keys by default, so a single unrecognised marketing
+    // parameter would 400 — and a real person who filled in the form would be
+    // told their enquiry failed.
+    //
+    // That is not hypothetical: it happens to a returning visitor holding
+    // stale sessionStorage from an older build, and it would happen the moment
+    // anyone adds a param to TRACKED_PARAMS (Google's gbraid/wbraid click ids,
+    // for instance) without editing this schema in the same commit.
+    //
+    // Losing a lead over a tracking field is never the right trade. Unknown
+    // keys are dropped; the enquiry goes through.
+    const { error, value } = enquirySchema.validate(req.body, {
+      stripUnknown: true,
+    });
     if (error) return res.status(400).json({ error: error.details[0].message });
 
     const result = await query(

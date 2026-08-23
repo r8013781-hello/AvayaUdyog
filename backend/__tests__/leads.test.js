@@ -66,3 +66,70 @@ describe("GET /api/leads", () => {
     expect(res.body).toEqual([{ id: 1, name: "Priya", stage: "New" }]);
   });
 });
+
+describe("POST /api/enquiries — tracking payload robustness", () => {
+  beforeEach(() => query.mockReset());
+
+  it("still accepts the enquiry when the tracking blob carries an unknown key", async () => {
+    // The website spreads sessionStorage straight into this body. A returning
+    // visitor with stale storage, or a newly added click id like Google's
+    // gbraid, must never cost a real lead.
+    query.mockResolvedValueOnce({
+      rows: [{ id: 1, name: "Priya", createdAt: "2026-08-23T00:00:00.000Z" }],
+    });
+
+    const res = await request(app).post("/api/enquiries").send({
+      name: "Priya",
+      phone: "9999999999",
+      utm_source: "google",
+      gbraid: "abc123",
+      some_future_param: "whatever",
+    });
+
+    expect(res.status).toBe(201);
+    expect(query).toHaveBeenCalledTimes(1);
+  });
+
+  it("drops the unknown keys rather than storing them", async () => {
+    query.mockResolvedValueOnce({ rows: [{ id: 1, name: "Priya" }] });
+    await request(app).post("/api/enquiries").send({
+      name: "Priya",
+      phone: "9999999999",
+      gbraid: "abc123",
+    });
+
+    const params = query.mock.calls[0][1];
+    expect(params).not.toContain("abc123");
+  });
+
+  it("still rejects an enquiry missing a required field", async () => {
+    // stripUnknown must not weaken real validation.
+    const res = await request(app)
+      .post("/api/enquiries")
+      .send({ phone: "9999999999", utm_source: "google" });
+
+    expect(res.status).toBe(400);
+    expect(query).not.toHaveBeenCalled();
+  });
+
+  it("keeps every attribution field the schema does know about", async () => {
+    query.mockResolvedValueOnce({ rows: [{ id: 1, name: "Priya" }] });
+    await request(app).post("/api/enquiries").send({
+      name: "Priya",
+      phone: "9999999999",
+      utm_source: "google",
+      utm_medium: "cpc",
+      utm_campaign: "kolkata-interiors",
+      utm_content: "ad-a",
+      utm_term: "interior designer kolkata",
+      gclid: "CjwKCA",
+      landing_page: "/interior-designer-kolkata",
+      referrer: "https://www.google.com/",
+    });
+
+    const params = query.mock.calls[0][1];
+    ["google", "cpc", "kolkata-interiors", "ad-a", "interior designer kolkata",
+     "CjwKCA", "/interior-designer-kolkata", "https://www.google.com/"]
+      .forEach((v) => expect(params).toContain(v));
+  });
+});

@@ -9,8 +9,12 @@ const SITE_URL = "https://avayaudyog.com";
  * two can never drift apart. No client JS — plain Links, server-rendered.
  */
 export default function Breadcrumbs({ items }) {
+  // The last item is always the current page, so its URL is the one the
+  // WebPage node references this list by.
+  const pageUrl = `${SITE_URL}${items[items.length - 1].path}`;
   const schema = breadcrumbSchema(
     items.map((item) => ({ name: item.name, url: `${SITE_URL}${item.path}` })),
+    pageUrl,
   );
 
   return (

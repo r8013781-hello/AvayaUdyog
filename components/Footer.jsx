@@ -380,19 +380,27 @@ function scrollToSection(id) {
 }
 
 const STUDIO_LINKS = [
-  { label: "About", id: "about" },
+  { label: "Services", href: "/services" },
+  { label: "About", href: "/about" },
   { label: "Services", id: "services" },
-  { label: "Process", id: "how-we-work" },
+  { label: "Process", href: "/process" },
   { label: "Gallery", id: "gallery" },
   { label: "Founder", id: "founder" },
+  { label: "Insights", href: "/insights" },
   { label: "FAQ", id: "faq" },
 ];
 
+// Two of these have a dedicated page and should go to it. The other two are
+// homepage sections. Previously all four scrolled to #services, which meant
+// four different labels did exactly the same thing and neither service page
+// got a footer link at all.
 const SERVICE_LINKS = [
-  "Residential Interiors",
-  "Commercial Spaces",
-  "Design Consultation",
-  "Turnkey Execution",
+  { label: "Residential Interiors", href: "/residential-interior-designer-kolkata" },
+  { label: "Commercial Spaces", href: "/commercial-interior-designer-kolkata" },
+  { label: "Modular Kitchens", href: "/services/modular-kitchen" },
+  { label: "Renovation", href: "/services/home-renovation" },
+  { label: "Design Consultation", id: "services" },
+  { label: "Turnkey Execution", id: "services" },
 ];
 
 // Only channels that actually go somewhere.
@@ -430,13 +438,22 @@ function FooterNav() {
           <ul className="space-y-3">
             {STUDIO_LINKS.map((link) => (
               <li key={link.label}>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection(link.id)}
-                  className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                >
-                  {link.label}
-                </button>
+                {link.href ? (
+                  <Link
+                    href={link.href}
+                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection(link.id)}
+                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                  >
+                    {link.label}
+                  </button>
+                )}
               </li>
             ))}
           </ul>
@@ -444,15 +461,24 @@ function FooterNav() {
 
         <FooterColumn heading="Services">
           <ul className="space-y-3">
-            {SERVICE_LINKS.map((label) => (
-              <li key={label}>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection("services")}
-                  className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                >
-                  {label}
-                </button>
+            {SERVICE_LINKS.map((link) => (
+              <li key={link.label}>
+                {link.href ? (
+                  <Link
+                    href={link.href}
+                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection(link.id)}
+                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                  >
+                    {link.label}
+                  </button>
+                )}
               </li>
             ))}
           </ul>

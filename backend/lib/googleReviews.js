@@ -129,7 +129,13 @@ async function fetchReviews() {
         authorPhotoUrl: review.reviewer?.profilePhotoUrl || null,
         rating,
         text: review.comment || null,
-        reviewUrl: review.name || null,
+        // NOT review.name. That field is a resource path
+        // ("accounts/{a}/locations/{l}/reviews/{r}"), not a URL — storing it
+        // here produced a relative href that resolved to a broken path inside
+        // the CRM. The v4 reviews collection does not return a public review
+        // URL at all, so the honest value is null; review.reviewId is already
+        // kept in external_id if the resource path is ever needed again.
+        reviewUrl: null,
         reviewedAt: review.createTime || null,
       });
     }

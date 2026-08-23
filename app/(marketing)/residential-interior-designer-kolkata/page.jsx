@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import PageCTAButton from "../../../components/PageCTAButton";
 import StatStrip from "../../../components/StatStrip";
-import { serviceSchema } from "../../../lib/schema";
+import { serviceSchema, webPageSchema } from "../../../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Residential Interior Designer in Kolkata | Avaya Udyog";
@@ -71,9 +71,21 @@ const ROOMS = [
   },
 ];
 
+const webPage = webPageSchema({
+  url: PAGE_URL,
+  name: TITLE,
+  description: DESCRIPTION,
+  about: `${PAGE_URL}#service`,
+});
+
 export default function ResidentialInteriorDesignerKolkataPage() {
   return (
     <div className="bg-canvas">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }}
+      />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -251,6 +263,12 @@ export default function ResidentialInteriorDesignerKolkataPage() {
               <PageCTAButton triggerSource="residential_page_cta" className="bg-white text-sage-900 hover:bg-gold-soft">
                 Book a Consultation
               </PageCTAButton>
+              <Link href="/process" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
+                Our process
+              </Link>
+              <Link href="/services/modular-kitchen" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
+                Modular kitchens
+              </Link>
             </div>
           </div>
         </div>

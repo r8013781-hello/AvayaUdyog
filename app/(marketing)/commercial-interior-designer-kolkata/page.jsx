@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import PageCTAButton from "../../../components/PageCTAButton";
 import StatStrip from "../../../components/StatStrip";
-import { serviceSchema } from "../../../lib/schema";
+import { serviceSchema, webPageSchema } from "../../../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Commercial Interior Designer in Kolkata | Avaya Udyog";
@@ -60,9 +60,21 @@ const SPACES = [
   },
 ];
 
+const webPage = webPageSchema({
+  url: PAGE_URL,
+  name: TITLE,
+  description: DESCRIPTION,
+  about: `${PAGE_URL}#service`,
+});
+
 export default function CommercialInteriorDesignerKolkataPage() {
   return (
     <div className="bg-canvas">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }}
+      />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -238,6 +250,9 @@ export default function CommercialInteriorDesignerKolkataPage() {
               <PageCTAButton triggerSource="commercial_page_cta" className="bg-white text-sage-900 hover:bg-gold-soft">
                 Discuss Your Commercial Project
               </PageCTAButton>
+              <Link href="/process" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
+                Our process
+              </Link>
             </div>
           </div>
         </div>

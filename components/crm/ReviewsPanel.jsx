@@ -262,7 +262,7 @@ export default function ReviewsPanel() {
                       : "—"}
                   </span>
                   <div className="flex items-center gap-1.5">
-                    {review.reviewUrl && (
+                    {/^https?:\/\//.test(review.reviewUrl || "") && (
                       <a
                         href={review.reviewUrl}
                         target="_blank"

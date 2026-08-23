@@ -120,7 +120,7 @@ export default function Hero() {
                 onClick={scrollToGallery}
                 className="btn border border-white/35 bg-white/5 px-7 py-3.5 text-white backdrop-blur-md hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/10"
               >
-                View Portfolio
+                View Gallery
               </button>
             </div>
 

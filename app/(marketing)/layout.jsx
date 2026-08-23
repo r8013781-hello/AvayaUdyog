@@ -8,7 +8,7 @@ import { localBusinessSchema, websiteSchema } from "../../lib/schema";
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Avaya Udyog | Premium Interior Designer in Kolkata";
 const DESCRIPTION =
-  "Looking for the best interior designer in Kolkata? Avaya Udyog delivers luxury interiors with 35+ years of expertise. Book a free consultation today.";
+  "Looking for the best interior designer in Kolkata? Avaya Udyog delivers luxury residential and commercial interiors with 35+ years of expertise. Book a consultation today.";
 const OG_IMAGE = `${SITE_URL}/hero/exterior.webp`;
 
 // Title/description/canonical/OG/Twitter/JSON-LD — everything specific to

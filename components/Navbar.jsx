@@ -1,17 +1,21 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { Menu, X, Phone, ArrowUpRight } from "lucide-react";
 import { useContactModal } from "./ContactModalProvider";
 import { trackPhoneClick } from "../lib/tracking";
 
 const NAV_LINKS = [
   { id: "hero", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "services", label: "Services" },
-  { id: "how-we-work", label: "Process" },
+  { href: "/about", label: "About" },
+  // A real page now, not a homepage anchor — the nav is the single
+  // highest-value internal link on the site and it should point at the hub.
+  { href: "/services", label: "Services" },
+  { href: "/process", label: "Process" },
   { id: "gallery", label: "Gallery" },
   { id: "founder", label: "Founder" },
+  { href: "/insights", label: "Insights" },
   { id: "faq", label: "FAQ" },
 ];
 
@@ -49,9 +53,11 @@ export default function Navbar() {
 
   /* Highlight the link for whichever section owns the upper third of the viewport. */
   useEffect(() => {
-    const sections = NAV_LINKS.map((link) =>
-      document.getElementById(link.id),
-    ).filter(Boolean);
+    // Entries with an href are real routes, not homepage sections — they have
+    // no element to observe.
+    const sections = NAV_LINKS.filter((link) => link.id)
+      .map((link) => document.getElementById(link.id))
+      .filter(Boolean);
     if (!sections.length || !("IntersectionObserver" in window))
       return undefined;
 
@@ -132,30 +138,38 @@ export default function Navbar() {
             {/* Desktop links — small caps, thin underline. */}
             <nav className="hidden items-center gap-1 lg:flex">
               {NAV_LINKS.map((link) => {
-                const isActive = activeId === link.id;
-                return (
+                const isActive = link.id ? activeId === link.id : false;
+                const className = `group relative px-3.5 py-2 text-[0.66rem] font-bold uppercase tracking-label transition-colors duration-300 ${
+                  scrolled
+                    ? isActive
+                      ? "text-sage-700"
+                      : "text-ink-muted hover:text-sage-700"
+                    : isActive
+                      ? "text-white"
+                      : "text-white/70 hover:text-white"
+                }`;
+                const underline = (
+                  <span
+                    className={`absolute inset-x-3.5 bottom-0.5 h-px origin-left bg-gold-hair transition-transform duration-500 ease-smooth ${
+                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
+                );
+
+                return link.href ? (
+                  <Link key={link.href} href={link.href} className={className}>
+                    {link.label}
+                    {underline}
+                  </Link>
+                ) : (
                   <button
                     key={link.id}
                     onClick={() => scrollTo(link.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={`group relative px-3.5 py-2 text-[0.66rem] font-bold uppercase tracking-label transition-colors duration-300 ${
-                      scrolled
-                        ? isActive
-                          ? "text-sage-700"
-                          : "text-ink-muted hover:text-sage-700"
-                        : isActive
-                          ? "text-white"
-                          : "text-white/70 hover:text-white"
-                    }`}
+                    className={className}
                   >
                     {link.label}
-                    <span
-                      className={`absolute inset-x-3.5 bottom-0.5 h-px origin-left bg-gold-hair transition-transform duration-500 ease-smooth ${
-                        isActive
-                          ? "scale-x-100"
-                          : "scale-x-0 group-hover:scale-x-100"
-                      }`}
-                    />
+                    {underline}
                   </button>
                 );
               })}
@@ -234,16 +248,26 @@ export default function Navbar() {
         <div className="hair-gold my-5" />
 
         <nav className="space-y-0.5">
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => scrollTo(link.id)}
-              className="flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left font-display text-lg font-medium text-ink transition-colors hover:bg-sage-50 hover:text-sage-700"
-            >
-              {link.label}
-              <ArrowUpRight size={16} className="text-sage-300" />
-            </button>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const className =
+              "flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left font-display text-lg font-medium text-ink transition-colors hover:bg-sage-50 hover:text-sage-700";
+            return link.href ? (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={className}
+              >
+                {link.label}
+                <ArrowUpRight size={16} className="text-sage-300" />
+              </Link>
+            ) : (
+              <button key={link.id} onClick={() => scrollTo(link.id)} className={className}>
+                {link.label}
+                <ArrowUpRight size={16} className="text-sage-300" />
+              </button>
+            );
+          })}
         </nav>
 
         <div className="mt-5 border-t border-line pt-5">
