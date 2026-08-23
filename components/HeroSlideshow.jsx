@@ -1,6 +1,7 @@
 "use client";
 
 import { handleImageError } from "../lib/imageFallback";
+import { imageSize } from "../lib/imageDimensions";
 
 // Self-hosted under public/hero/. Composed directly inside the (client)
 // Hero component and re-rendered every time `active` changes — its output
@@ -58,6 +59,7 @@ export default function HeroSlideshow({ active, className = "" }) {
         <img
           key={slide.id}
           src={slide.src}
+          {...imageSize(slide.src)}
           alt=""
           loading={index === 0 ? "eager" : "lazy"}
           fetchPriority={index === 0 ? "high" : undefined}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import InsightArticle from "../../../../components/InsightArticle";
 import { getInsight } from "../../../../lib/insights";
 import { webPageSchema } from "../../../../lib/schema";
+import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
 const insight = getInsight("what-happens-in-a-design-consultation");
@@ -126,9 +127,9 @@ export default function Page() {
         <p>
           What follows is the design stage, then execution, then finishing. The
           sequence and what each stage decides is set out on our{" "}
-          <Link href="/process" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+          <SectionLink href="/#how-we-work" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
             process page
-          </Link>{" "}
+          </SectionLink>{" "}
           — worth reading before the first meeting, because it makes the conversation
           shorter and more specific.
         </p>

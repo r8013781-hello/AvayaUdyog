@@ -2,6 +2,7 @@ import Link from "next/link";
 import InsightArticle from "../../../../components/InsightArticle";
 import { getInsight } from "../../../../lib/insights";
 import { webPageSchema } from "../../../../lib/schema";
+import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
 const insight = getInsight("apartment-society-rules-renovation-kolkata");
@@ -157,9 +158,9 @@ export default function Page() {
           into the slab beyond a permitted depth. If your plan touches any of these,
           establish it at the design stage — this is exactly the kind of constraint that
           should surface during{" "}
-          <Link href="/process" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+          <SectionLink href="/#how-we-work" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
             the first consultation
-          </Link>
+          </SectionLink>
           , not during execution.
         </p>
 

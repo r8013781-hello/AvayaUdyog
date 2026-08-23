@@ -5,6 +5,7 @@ import SectionLink from "./SectionLink";
 import { ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
+import { imageSize } from "../lib/imageDimensions";
 import { useContactModal } from "./ContactModalProvider";
 
 /* Editorial, alternating image/text blocks rather than an icon-grid of
@@ -12,6 +13,7 @@ import { useContactModal } from "./ContactModalProvider";
 const SERVICES = [
   {
     title: "Residential Interiors",
+    id: "residential-interiors",
     tag: "Homes",
     // Services with a dedicated page link to it instead of opening the
     // contact modal. Before this, both pages had a single inbound internal
@@ -25,6 +27,7 @@ const SERVICES = [
   },
   {
     title: "Commercial Spaces",
+    id: "commercial-spaces",
     tag: "Workplaces",
     href: "/services/commercial-interior-design",
     linkLabel: "Commercial interior design",
@@ -34,18 +37,24 @@ const SERVICES = [
   },
   {
     title: "Design Consultation",
+    // These two have no page of their own and should not get a thin one. They
+    // used to anchor into the /services hub; that hub is now merged into this
+    // homepage, so the anchor target is this block itself — hence the id and
+    // the absent href.
+    id: "design-consultation",
     tag: "Guidance",
-    href: "/services#design-consultation",
-    linkLabel: "About design consultation",
+    href: null,
+    linkLabel: null,
     text: "Concept development, material guidance, and clear design direction that turn rough ideas into a refined, buildable vision.",
     src: "/services/s3-consultation.webp",
     alt: "Designer hand-drafting architectural interior plans during a consultation",
   },
   {
     title: "Turnkey Execution",
+    id: "turnkey-execution",
     tag: "End-to-end",
-    href: "/services#turnkey-execution",
-    linkLabel: "About turnkey execution",
+    href: null,
+    linkLabel: null,
     text: "From first sketch to final styling, we manage every detail so your project feels effortless from start to finish.",
     src: "/services/s4-execution.webp",
     alt: "An interior project site during turnkey execution",
@@ -57,7 +66,7 @@ export default function Services() {
   const openContactModal = useContactModal();
 
   return (
-    <section id="services" className="section bg-canvas">
+    <section id="services" className="section scroll-mt-24 bg-canvas md:scroll-mt-28">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="dot-paper absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_65%)]" />
       </div>
@@ -75,23 +84,24 @@ export default function Services() {
           <p className="max-w-xs text-[0.94rem] leading-[1.8] text-ink-muted md:pb-2">
             Every service is delivered with the same promise — homely
             atmosphere, home-like care, and an uncompromising eye for detail.{" "}
-            <Link
-              href="/services"
+            <SectionLink
+              href="/#which-service"
               className="font-semibold text-sage-700 underline underline-offset-2 transition-colors hover:text-sage-900"
             >
-              See every interior design service we offer in Kolkata.
-            </Link>
+              Not sure which one you need? Start from the problem instead.
+            </SectionLink>
           </p>
         </div>
 
         {/* ---------- Alternating editorial blocks ---------- */}
         <div className="mt-6">
-          {SERVICES.map(({ title, tag, text, src, alt, href, linkLabel }, index) => {
+          {SERVICES.map(({ id, title, tag, text, src, alt, href, linkLabel }, index) => {
             const reversed = index % 2 === 1;
             return (
               <div
                 key={title}
-                className="reveal grid items-center gap-10 border-t border-line py-14 first:border-t-0 lg:grid-cols-2 lg:gap-16 lg:py-16"
+                id={id}
+                className="reveal grid scroll-mt-24 items-center gap-10 border-t border-line py-14 first:border-t-0 md:scroll-mt-28 lg:grid-cols-2 lg:gap-16 lg:py-16"
                 data-reveal-delay={`${index * 0.08}s`}
               >
                 {/* Image — always first on mobile, alternates sides on desktop. */}
@@ -102,6 +112,7 @@ export default function Services() {
                 >
                   <img
                     src={src}
+                    {...imageSize(src)}
                     alt={alt}
                     loading="lazy"
                     decoding="async"
@@ -131,24 +142,50 @@ export default function Services() {
                     {text}
                   </p>
 
-                  {/* Every service card links somewhere real. The two without
-                      a page of their own anchor to their card on the services
-                      hub — previously they rendered "Explore {tag}" and opened
-                      the contact modal, so the label promised information and
-                      the click demanded a form. */}
-                  <SectionLink
-                    href={href}
-                    className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
-                  >
-                    <span className="relative">
-                      {linkLabel}
-                      <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
-                    </span>
-                    <ArrowUpRight
-                      size={14}
-                      className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
-                    />
-                  </SectionLink>
+                  {/* Two shapes, and the label always matches what the click
+                      actually does.
+
+                      Services with a page link to it. The two without one used
+                      to anchor into the /services hub; now that the hub is
+                      merged into this page, THIS block is the destination —
+                      there is nowhere further to send anyone, so they get an
+                      honest contact CTA instead.
+
+                      What is deliberately not done: the original code rendered
+                      "Explore {tag}" for those two and opened the contact
+                      modal, so the label promised information and the click
+                      demanded a form. A CTA that says it opens a conversation
+                      is fine; one disguised as a link is not. */}
+                  {href ? (
+                    <SectionLink
+                      href={href}
+                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
+                    >
+                      <span className="relative">
+                        {linkLabel}
+                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
+                      </span>
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
+                      />
+                    </SectionLink>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => openContactModal(`services_${id}`)}
+                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
+                    >
+                      <span className="relative">
+                        Talk to us about this
+                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
+                      </span>
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
+                      />
+                    </button>
+                  )}
                 </div>
               </div>
             );

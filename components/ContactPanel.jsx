@@ -14,8 +14,9 @@ import {
   Check,
   AlertTriangle,
 } from "lucide-react";
-import { captureWebsiteEnquiry } from "../lib/crmIntake";
-import { api, onSlowRequest } from "../lib/api";
+import { loadEnquiryDraft, clearEnquiryDraft, clearLegacyInbox } from "../lib/crmIntake";
+import { createEnquirySubmitter } from "../lib/enquirySubmission";
+import { api, onSlowRequest, warmUpApi } from "../lib/api";
 import {
   trackPhoneClick,
   trackEmailClick,
@@ -44,6 +45,14 @@ const FIELD_LABELS = {
 
 const REQUIRED_FIELDS = ["name", "phone", "message"];
 
+/**
+ * One submitter for the module, not one per mount. Both the duplicate guard
+ * and the in-flight guard have to outlive a remount to be worth anything —
+ * closing and reopening the drawer must not hand the visitor a fresh state
+ * machine that has forgotten what it already sent.
+ */
+const submitter = createEnquirySubmitter({ submit: (formData) => api.submitEnquiry(formData) });
+
 export default function ContactPanel({ isOpen, onClose }) {
   const [formData, setFormData] = useState(emptyForm);
   const [errors, setErrors] = useState({});
@@ -51,12 +60,48 @@ export default function ContactPanel({ isOpen, onClose }) {
   const [submitFailed, setSubmitFailed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [wakingServer, setWakingServer] = useState(false);
+  /* A draft restored from a previous failed attempt, so the notice can say so. */
+  const [restoredDraft, setRestoredDraft] = useState(false);
   const panelRef = useRef(null);
   const closeRef = useRef(null);
   const revertTimer = useRef(null);
 
+  const warmedRef = useRef(false);
+
   useEffect(() => () => clearTimeout(revertTimer.current), []);
   useEffect(() => onSlowRequest(() => setWakingServer(true)), []);
+
+  /* Retire the old, misleadingly-named "inbox" key from returning visitors. */
+  useEffect(() => clearLegacyInbox(), []);
+
+  /**
+   * Wake the sleeping backend on first real engagement with the form — not on
+   * mount, and not on open. Once per page load; see warmUpApi().
+   */
+  const handleFirstIntent = () => {
+    if (warmedRef.current) return;
+    warmedRef.current = true;
+    warmUpApi();
+  };
+
+  /**
+   * Restore an enquiry a previous attempt failed to send, so a refresh in the
+   * middle of a failure does not cost the visitor their typing. Only ever
+   * their own draft, only on open, and only when the form is otherwise blank
+   * so it can never overwrite something they are in the middle of writing.
+   */
+  useEffect(() => {
+    if (!isOpen) return;
+    const draft = loadEnquiryDraft();
+    if (!draft) return;
+    setFormData((prev) => {
+      const untouched = Object.values(prev).every((value) => !value.trim());
+      if (!untouched) return prev;
+      setRestoredDraft(true);
+      setSubmitFailed(true);
+      return { ...emptyForm, ...draft };
+    });
+  }, [isOpen]);
 
   /* Lock the page, move focus in, and wire Escape while the drawer is open. */
   useEffect(() => {
@@ -79,6 +124,7 @@ export default function ContactPanel({ isOpen, onClose }) {
     const timer = setTimeout(() => {
       setSent(false);
       setSubmitFailed(false);
+      setRestoredDraft(false);
       setFormData(emptyForm);
       setErrors({});
     }, 400);
@@ -106,25 +152,40 @@ export default function ContactPanel({ isOpen, onClose }) {
     setSubmitting(true);
     setWakingServer(false);
     setSubmitFailed(false);
-    try {
-      await api.submitEnquiry(formData);
+
+    /* The submitter owns delivery, duplicate suppression and the draft; this
+       handler only translates its answer into what the visitor sees. It never
+       throws, so there is no failure path that can leave the button stuck. */
+    const outcome = await submitter.send(formData);
+
+    if (outcome.status === "sent" || outcome.status === "duplicate") {
+      /* "duplicate" means this exact enquiry already reached the server, so
+         showing the same confirmation is accurate — the alternative is telling
+         someone their message failed when it did not. It is not re-counted as
+         a conversion: only a real send fires the analytics event. */
       setSent(true);
+      setRestoredDraft(false);
       setFormData(emptyForm);
       setErrors({});
-      trackConsultationSubmit("contact_panel", { has_email: Boolean(formData.email), city: formData.city || undefined });
+      if (outcome.status === "sent") {
+        trackConsultationSubmit("contact_panel", {
+          has_email: Boolean(formData.email),
+          city: formData.city || undefined,
+        });
+      }
       /* Briefly confirm, then return to a blank form so a visitor can send
          another enquiry without the panel feeling stuck on the receipt. */
       revertTimer.current = setTimeout(() => setSent(false), 2600);
-    } catch {
-      /* Keep it locally as a courtesy backup, but never tell the visitor we
-         succeeded when we didn't — that's how enquiries go missing silently. */
-      captureWebsiteEnquiry(formData, "Website enquiry");
+    } else {
+      /* Never claim success we did not have. Their typing is still on screen
+         and, where storage allows, kept for a refresh; the banner offers the
+         retry and the two channels that work when the API does not. */
       setSubmitFailed(true);
       trackConsultationError("contact_panel", "submit_failed");
-    } finally {
-      setSubmitting(false);
-      setWakingServer(false);
     }
+
+    setSubmitting(false);
+    setWakingServer(false);
   };
 
   const fieldClass = (name) =>
@@ -203,18 +264,60 @@ export default function ContactPanel({ isOpen, onClose }) {
                   Send an Inquiry
                 </h3>
 
-                <form onSubmit={handleSubmit} noValidate className="mt-5 space-y-3.5">
+                {/* onFocusCapture fires for whichever field the visitor reaches
+                    first, including via keyboard; onInputCapture covers the
+                    autofill case, where a browser can populate every field
+                    without a focus event ever landing. Both funnel into the
+                    same once-per-page-load guard, so the pair costs at most
+                    one request. */}
+                <form
+                  onSubmit={handleSubmit}
+                  onFocusCapture={handleFirstIntent}
+                  onInputCapture={handleFirstIntent}
+                  noValidate
+                  className="mt-5 space-y-3.5"
+                >
+                  {/* The wording is load-bearing. It says the message did NOT
+                      go through, and it never suggests anyone at Avaya Udyog
+                      has a copy — because nobody does. What it offers instead
+                      is the three things that are actually true: the typing is
+                      still here, the button retries, and the phone and
+                      WhatsApp both work when the API does not.
+                      role="alert" so a screen reader hears the failure rather
+                      than being left on a button that appears to have done
+                      nothing. */}
                   {submitFailed && (
-                    <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/70 p-4">
+                    <div role="alert" className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/70 p-4">
                       <AlertTriangle size={17} className="mt-0.5 shrink-0 text-red-600" />
                       <div className="text-[0.84rem] leading-6 text-red-800">
-                        <p className="font-semibold">We couldn&apos;t send that just now.</p>
+                        <p className="font-semibold">
+                          {restoredDraft
+                            ? "This message still hasn't been sent."
+                            : "We couldn't send that just now."}
+                        </p>
                         <p className="mt-0.5 text-red-700">
-                          Your details are still filled in below — please try again, or reach us directly on{" "}
+                          {restoredDraft
+                            ? "We've brought back what you typed last time so you don't have to write it again. Please try again, or reach us directly on "
+                            : "Your details are still filled in below — please try again, or reach us directly on "}
                           <a href="tel:+917980640714" onClick={() => trackPhoneClick("error_fallback")} className="font-semibold underline underline-offset-2">call</a>
                           {" "}or{" "}
                           <a href="https://wa.me/917980640714" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("error_fallback")} className="font-semibold underline underline-offset-2">WhatsApp</a>.
                         </p>
+                        {restoredDraft && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              clearEnquiryDraft();
+                              setRestoredDraft(false);
+                              setSubmitFailed(false);
+                              setFormData(emptyForm);
+                              setErrors({});
+                            }}
+                            className="mt-2 text-[0.78rem] font-semibold text-red-700 underline underline-offset-2 hover:text-red-900"
+                          >
+                            Start a new message instead
+                          </button>
+                        )}
                       </div>
                     </div>
                   )}

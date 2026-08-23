@@ -1,0 +1,75 @@
+# Security headers for the static export.
+#
+# ── Read this before assuming it is live ──────────────────────────────────
+# This file is the Cloudflare Pages / Netlify `_headers` format. `next build`
+# with output:"export" copies public/ verbatim into out/, so it ships with the
+# site — but it only DOES anything if the host reads it. Cloudflare Pages and
+# Netlify do. Render Static Sites do NOT: Render is configured through its own
+# dashboard or render.yaml. See docs/security-headers.md for the exact
+# equivalent settings, which must be applied by hand on the host.
+#
+# Nothing here changes application behaviour. These are response headers only —
+# no rewrite, no redirect, no cache change — so they cannot affect GA4, UTM or
+# GCLID capture, the CRM API, existing redirects, or /portal.
+
+/*
+  # Force HTTPS for two years, including subdomains. Only meaningful once the
+  # site is confirmed serving correctly over HTTPS on every subdomain — a
+  # premature preload is very hard to undo, which is why `preload` is
+  # deliberately NOT included here. Add it only after a deliberate decision.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+
+  # Clickjacking. frame-ancestors in the CSP below is the modern equivalent and
+  # takes precedence where both are understood; this stays for older clients.
+  X-Frame-Options: DENY
+
+  # Send the full URL to our own origin, but only the bare origin cross-site.
+  # strict-origin-when-cross-origin is what GA4, Google Ads and the referrer
+  # reports all expect — it is the browser default, stated explicitly so a
+  # future host default cannot silently loosen it.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Powerful features this site does not use. Note the empty allowlists mean
+  # "no origin, including this one".
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), usb=(), xr-spatial-tracking=()
+
+  # Legacy but free.
+  X-Content-Type-Options: nosniff
+
+  # ── CSP: REPORT-ONLY on purpose ────────────────────────────────────────
+  #
+  # This policy is believed correct, and belief is not a good enough reason to
+  # enforce a policy that can silently break the enquiry form or GA4 on a live
+  # site. Report-Only applies the rules and reports violations without blocking
+  # anything, so the real traffic tells you whether it is right.
+  #
+  # To promote it: watch the browser console (and a report endpoint if you add
+  # one) across the homepage, a service page, an insights article, the enquiry
+  # drawer and /portal for a week. If nothing is reported, rename the header to
+  # Content-Security-Policy. Do not promote it on the strength of one page load.
+  #
+  # Why each source is here:
+  #   script-src   'unsafe-inline' is unavoidable — a static export has no
+  #                server to mint a per-request nonce, and Next's hydration
+  #                payload plus the gtag bootstrap are both inline. Dropping it
+  #                breaks the entire site, not just analytics.
+  #                googletagmanager = GA4 + Google Ads gtag.js.
+  #                googleadservices / doubleclick = Ads conversion tracking,
+  #                included now so enabling a campaign later needs no CSP edit.
+  #   connect-src  onrender.com is the CRM API used by BOTH the enquiry form
+  #                and /portal. If NEXT_PUBLIC_API_BASE_URL ever changes, this
+  #                line must change with it or every form submission fails.
+  #                The analytics hosts are where GA4 posts its hits.
+  #   img-src      GA4 and Ads still use pixel beacons; data: covers inline
+  #                SVG data URIs.
+  #   font-src     'self' only. Fonts are self-hosted by next/font (app/fonts.js)
+  #                — there is no request to fonts.googleapis.com or
+  #                fonts.gstatic.com anywhere in the build, verified against the
+  #                built output. Do not add them "just in case": an unnecessary
+  #                allowance is the thing a CSP exists to remove.
+  #   form-action  'self' — the enquiry form posts via fetch, not a form
+  #                submission, so nothing legitimate navigates cross-origin.
+  #   WhatsApp     needs no entry at all. wa.me is an ordinary link the visitor
+  #                clicks; top-level navigation is not restricted by any
+  #                directive here (navigate-to is not shipped in browsers).
+  Content-Security-Policy-Report-Only: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.google.com https://www.google.co.in https://googleads.g.doubleclick.net; connect-src 'self' https://avayaudyog.onrender.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://td.doubleclick.net; upgrade-insecure-requests

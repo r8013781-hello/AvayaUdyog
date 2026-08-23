@@ -14,7 +14,7 @@ export default function FAQ() {
   const ref = useReveal();
 
   return (
-    <section id="faq" className="section">
+    <section id="faq" className="section scroll-mt-24 md:scroll-mt-28">
       <div ref={ref} className="shell relative">
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div className="reveal lg:sticky lg:top-32 lg:self-start">

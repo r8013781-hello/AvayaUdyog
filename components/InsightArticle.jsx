@@ -20,7 +20,7 @@ import PageCTAButton from "./PageCTAButton";
  * about materials or renovation is precisely where a stock photo would read
  * as "here is our work".
  */
-export default function InsightArticle({ insight, children }) {
+export default function InsightArticle({ insight, contents, children }) {
   // Every other article. Real related reading rather than link padding — with
   // three articles this is genuinely "the rest of the series", and it keeps
   // each one reachable from more than just the hub.
@@ -53,9 +53,44 @@ export default function InsightArticle({ insight, children }) {
 
           <div className="hair-gold my-12 max-w-3xl" />
 
-          {/* Article body. `prose-insight` styling lives here rather than in
-              each article so every one reads identically. */}
-          <div className="max-w-[42rem] space-y-6 text-[1rem] leading-[1.9] text-ink-soft [&>h2]:mt-14 [&>h2]:font-display [&>h2]:text-[1.55rem] [&>h2]:font-semibold [&>h2]:leading-snug [&>h2]:text-ink [&>h3]:mt-10 [&>h3]:font-display [&>h3]:text-[1.2rem] [&>h3]:font-semibold [&>h3]:text-ink [&>ul]:space-y-2.5 [&>ul]:pl-5 [&_li]:list-disc [&_strong]:font-semibold [&_strong]:text-ink">
+          {/* Contents, only for articles long enough to need one — see the
+              `contents` prop. An anchor list on a four-paragraph article is
+              furniture; on a 2,000-word cost breakdown it is the difference
+              between reading the section you came for and giving up.
+
+              These are also the article's deep links: a heading id is only
+              added where something actually points at it, so the ids here and
+              the ids on the headings below are the same list by construction. */}
+          {contents?.length > 0 && (
+            <nav aria-label="On this page" className="mb-12 max-w-[42rem] rounded-[1.25rem] border border-line bg-white p-6 shadow-hair">
+              <p className="text-[0.62rem] font-bold uppercase tracking-label text-sage-600">
+                On this page
+              </p>
+              <ol className="mt-4 space-y-2.5">
+                {contents.map(({ id, label }, index) => (
+                  <li key={id} className="flex gap-3 text-[0.93rem] leading-[1.6]">
+                    <span className="mt-0.5 shrink-0 font-display text-[0.78rem] font-semibold text-sage-400">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <a
+                      href={`#${id}`}
+                      className="text-ink-soft underline-offset-4 transition-colors hover:text-sage-700 hover:underline"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+
+          {/* Article body. The prose styling lives here rather than in each
+              article so every one reads identically.
+
+              scroll-mt-28 on the headings: the navbar is fixed, so without it
+              an anchor lands the heading underneath the nav and the reader
+              arrives looking at the paragraph after the one they wanted. */}
+          <div className="max-w-[42rem] space-y-6 text-[1rem] leading-[1.9] text-ink-soft [&>h2]:mt-14 [&>h2]:scroll-mt-28 [&>h2]:font-display [&>h2]:text-[1.55rem] [&>h2]:font-semibold [&>h2]:leading-snug [&>h2]:text-ink [&>h3]:mt-10 [&>h3]:scroll-mt-28 [&>h3]:font-display [&>h3]:text-[1.2rem] [&>h3]:font-semibold [&>h3]:text-ink [&>ul]:space-y-2.5 [&>ul]:pl-5 [&_li]:list-disc [&_strong]:font-semibold [&_strong]:text-ink">
             {children}
           </div>
 

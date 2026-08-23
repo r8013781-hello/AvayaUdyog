@@ -3,6 +3,7 @@
 import { Award, Building2, HeartHandshake, ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
+import { imageSize } from "../lib/imageDimensions";
 import { useContactModal } from "./ContactModalProvider";
 
 const STATS = [
@@ -34,7 +35,7 @@ export default function AboutCompany() {
   const openContactModal = useContactModal();
 
   return (
-    <section id="founder" className="section bg-sage-50/50">
+    <section id="founder" className="section scroll-mt-24 bg-sage-50/50 md:scroll-mt-28">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="absolute -left-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-gold/[0.07] blur-[130px]" />
       </div>
@@ -66,6 +67,7 @@ export default function AboutCompany() {
             <figure className="relative overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift">
               <img
                 src="/BISWANATH.jpeg"
+                {...imageSize("/BISWANATH.jpeg")}
                 alt="Mr. Biswanath Adhikari, Founder & Director of Avaya Udyog"
                 className="h-[30rem] w-full object-cover object-top sm:h-[34rem]"
                 loading="lazy"

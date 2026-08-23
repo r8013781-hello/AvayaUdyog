@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { Heart, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
+import { imageSize } from "../lib/imageDimensions";
 
 const FAVORITES_KEY = "gallery-favorites";
 
@@ -154,7 +155,7 @@ export default function Gallery() {
   const active = lightboxIndex !== null ? visibleImages[lightboxIndex] : null;
 
   return (
-    <section id="gallery" className="section bg-canvas">
+    <section id="gallery" className="section scroll-mt-24 bg-canvas md:scroll-mt-28">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="absolute -right-40 top-1/4 h-[30rem] w-[30rem] rounded-full bg-sage-100/60 blur-[140px]" />
       </div>
@@ -220,6 +221,7 @@ export default function Gallery() {
                 >
                   <img
                     src={img.src}
+                    {...imageSize(img.src)}
                     alt={img.alt}
                     loading="lazy"
                     decoding="async"
@@ -305,6 +307,7 @@ export default function Gallery() {
             <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10">
               <img
                 src={active.src}
+                {...imageSize(active.src)}
                 alt={active.title}
                 decoding="async"
                 onError={handleImageError}

@@ -1,5 +1,11 @@
 import { INSIGHTS } from "../lib/insights";
 
+// /about, /process and /services were merged into the homepage as sections
+// and their routes deleted, so they are gone from here too — a sitemap that
+// lists a URL the build does not produce is a self-inflicted 404 report in
+// Search Console. Those three URLs need host-side 301s to `/`; see
+// docs/page-merge.md.
+//
 // Replaces the Vite app's hand-maintained public/sitemap.xml with the App
 // Router's generated-route convention. Only routes with real, substantial
 // content are listed here — per the migration brief, no future URLs
@@ -13,15 +19,14 @@ import { INSIGHTS } from "../lib/insights";
 // change. Update a route's date here when that route's content actually
 // changes.
 const LAST_MODIFIED = {
-  home: "2026-08-23",
-  services: "2026-08-23",
+  // Absorbed the About, Process and Services-hub content.
+  home: "2026-08-24",
   modularKitchen: "2026-08-23",
   renovation: "2026-08-23",
-  about: "2026-08-23",
-  process: "2026-08-23",
   insights: "2026-08-23",
   residential: "2026-08-23",
-  commercial: "2026-08-23",
+  // Gained the constraints / workflow / phasing / delivery sections.
+  commercial: "2026-08-24",
   privacy: "2026-08-23",
   terms: "2026-08-23",
 };
@@ -35,12 +40,6 @@ export default function sitemap() {
       lastModified: LAST_MODIFIED.home,
       changeFrequency: "monthly",
       priority: 1.0,
-    },
-    {
-      url: `${SITE_URL}/services`,
-      lastModified: LAST_MODIFIED.services,
-      changeFrequency: "monthly",
-      priority: 0.9,
     },
     {
       url: `${SITE_URL}/services/modular-kitchen`,
@@ -67,18 +66,6 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/about`,
-      lastModified: LAST_MODIFIED.about,
-      changeFrequency: "yearly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/process`,
-      lastModified: LAST_MODIFIED.process,
-      changeFrequency: "yearly",
-      priority: 0.7,
-    },
-    {
       url: `${SITE_URL}/insights`,
       lastModified: LAST_MODIFIED.insights,
       changeFrequency: "monthly",
@@ -86,9 +73,12 @@ export default function sitemap() {
     },
     // Articles are generated from the registry so the sitemap can never list
     // one that does not exist, or miss one that does.
+    // `updated` where an article has been materially revised since it was
+    // published, `published` otherwise — same principle as the constants
+    // above: only claim a change when there was one.
     ...INSIGHTS.map((post) => ({
       url: `${SITE_URL}/insights/${post.slug}`,
-      lastModified: post.published,
+      lastModified: post.updated ?? post.published,
       changeFrequency: "yearly",
       priority: 0.6,
     })),

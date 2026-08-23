@@ -19,6 +19,26 @@ export const metadata = {
 const webPage = webPageSchema({ url: PAGE_URL, name: insight.title, description: insight.description });
 
 /**
+ * Deep links for the five sections worth arriving directly at.
+ *
+ * This is the site's longest and highest-intent article, and the sections
+ * people actually come for — "how do I compare these two quotes" — sit
+ * two-thirds of the way down. Every id here is pointed at by this list, so no
+ * heading carries an anchor that nothing uses.
+ *
+ * The H3s under "What actually moves the number" deliberately get no ids: nine
+ * more entries would turn a navigational aid into a wall, and nothing links to
+ * an individual driver.
+ */
+const CONTENTS = [
+  { id: "what-a-quote-contains", label: "Three different things, usually presented as one" },
+  { id: "cost-drivers", label: "What actually moves the number" },
+  { id: "comparing-quotes", label: "Why two quotes are so hard to compare" },
+  { id: "normalising-quotes", label: "A worksheet for putting quotes side by side" },
+  { id: "controlling-cost", label: "Practical ways to control cost" },
+];
+
+/**
  * Cost — deliberately with NO figures.
  *
  * This is the highest-intent query the site can answer and also the one where
@@ -40,7 +60,7 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }} />
-      <InsightArticle insight={insight}>
+      <InsightArticle insight={insight} contents={CONTENTS}>
         <p>
           Ask three studios what it costs to do up the same three-bedroom flat and
           you can get three very different answers, all of them given in good faith.
@@ -55,7 +75,7 @@ export default function Page() {
           quotation you receive and understand what is in it.
         </p>
 
-        <h2>Three different things, usually presented as one</h2>
+        <h2 id="what-a-quote-contains">Three different things, usually presented as one</h2>
         <p>
           Most confusion about interiors pricing comes from collapsing three separate
           costs into a single number.
@@ -87,7 +107,7 @@ export default function Page() {
           anything, but you cannot compare it to anything else. Ask for it split.
         </p>
 
-        <h2>What actually moves the number</h2>
+        <h2 id="cost-drivers">What actually moves the number</h2>
 
         <h3>Scope — by far the largest factor</h3>
         <p>
@@ -186,7 +206,7 @@ export default function Page() {
           </Link>.
         </p>
 
-        <h2>Why two quotes are so hard to compare</h2>
+        <h2 id="comparing-quotes">Why two quotes are so hard to compare</h2>
         <p>
           When quotations differ sharply, the cause is almost always one of these:
         </p>
@@ -204,6 +224,75 @@ export default function Page() {
           automatically thorough. The only way to know is to compare the same scope.
         </p>
 
+        <h2 id="normalising-quotes">A worksheet for putting quotes side by side</h2>
+        <p>
+          Knowing <em>why</em> quotes differ does not yet tell you which one to accept.
+          The practical move is to stop comparing totals and start normalising scope:
+          make every studio price the same thing, then the numbers become
+          comparable and the differences left over are real.
+        </p>
+        <p>
+          Take the same eight questions to each studio, in writing, and put the answers
+          in a column each. It takes an afternoon and it is the highest-value hour in
+          the whole process.
+        </p>
+        <ul>
+          <li>
+            <strong>What carcass material and thickness, in each wet and dry area?</strong>{" "}
+            The single largest driver of how long joinery lasts, and invisible the day
+            it is installed. If one quote does not say, it is not cheaper — it is
+            unspecified.
+          </li>
+          <li>
+            <strong>Which hardware, by brand and range?</strong> Hinges, channels and
+            lift-ups are rarely itemised and vary widely in price and in life. Ask for
+            the range name, not just the brand — most brands sell across the whole
+            spectrum.
+          </li>
+          <li>
+            <strong>Is loose furniture in or out?</strong> Sofas, beds, dining, rugs,
+            curtains, lighting. This one line can account for most of the gap between
+            two otherwise identical quotes.
+          </li>
+          <li>
+            <strong>Is civil work in or out, and who makes good afterwards?</strong>{" "}
+            Demolition, waterproofing, levels — and specifically who patches, plasters
+            and repaints where the work happened.
+          </li>
+          <li>
+            <strong>Are electrical and plumbing points assumed to stay or to move?</strong>{" "}
+            One assumption difference here can move a quote substantially, and it is
+            almost never stated.
+          </li>
+          <li>
+            <strong>Are appliances and sanitaryware provided, or your scope?</strong>{" "}
+            Both are legitimate; they are not comparable.
+          </li>
+          <li>
+            <strong>How are wastage, supervision and debris removal priced?</strong>{" "}
+            Explicitly as lines, or absorbed silently into rates. Absorbed is not free.
+          </li>
+          <li>
+            <strong>What is the payment schedule, and what triggers each stage?</strong>{" "}
+            A schedule tied to delivered milestones behaves very differently from one
+            tied to dates.
+          </li>
+        </ul>
+        <p>
+          Two further questions are worth asking even though they are not about price,
+          because they tell you what a number will be worth six months later:{" "}
+          <strong>what is covered after handover, and for how long</strong>, and{" "}
+          <strong>who is on site day to day</strong> — the person who designed it, a
+          dedicated supervisor, or whichever contractor is free. The answers explain a
+          great deal about why one quote is higher than another.
+        </p>
+        <p>
+          Once the columns are filled in, re-read the cheapest quote specifically for
+          what is <em>missing</em> rather than for what it costs. In most comparisons
+          the lowest number turns out to be pricing less work, and the gap closes on its
+          own the moment the scopes are matched.
+        </p>
+
         <h2>What a number actually needs before it means anything</h2>
         <p>
           A quotation becomes reliable once four things are settled: the layout,
@@ -218,7 +307,7 @@ export default function Page() {
           drawings and material boards are shared at that stage.
         </p>
 
-        <h2>Practical ways to control cost without gutting the design</h2>
+        <h2 id="controlling-cost">Practical ways to control cost without gutting the design</h2>
         <ul>
           <li><strong>Settle the layout early.</strong> Changes are nearly free on a drawing and expensive on site.</li>
           <li><strong>Design around existing services</strong> wherever the plan allows.</li>

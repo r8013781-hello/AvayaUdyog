@@ -4,6 +4,8 @@ import Breadcrumbs from "../../../../components/Breadcrumbs";
 import PageCTAButton from "../../../../components/PageCTAButton";
 import StatStrip from "../../../../components/StatStrip";
 import { serviceSchema, webPageSchema } from "../../../../lib/schema";
+import { imageSize } from "../../../../lib/imageDimensions";
+import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Residential Interior Designer in Kolkata | Avaya Udyog";
@@ -96,7 +98,6 @@ export default function ResidentialInteriorDesignerKolkataPage() {
         <Breadcrumbs
           items={[
             { name: "Home", path: "/" },
-            { name: "Services", path: "/services" },
             {
               name: "Residential Interior Design",
               path: "/services/residential-interior-design",
@@ -112,6 +113,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
             <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
               <img
                 src="/services/s1-residential.webp"
+                {...imageSize("/services/s1-residential.webp")}
                 alt="Bright, gallery-walled modern living room — residential interior design"
                 loading="eager"
                 decoding="async"
@@ -163,6 +165,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
               <div key={room.title} className="card card-hover overflow-hidden">
                 <img
                   src={room.src}
+                  {...imageSize(room.src)}
                   alt={room.alt}
                   loading="lazy"
                   decoding="async"
@@ -225,14 +228,14 @@ export default function ResidentialInteriorDesignerKolkataPage() {
       {/* ---------- Cross-links ---------- */}
       <section className="section !py-20">
         <div className="shell relative grid gap-6 sm:grid-cols-2">
-          <Link
-            href="/services"
+          <SectionLink
+            href="/#services"
             className="card card-hover group flex items-center justify-between gap-4 p-6"
           >
             <span className="font-display text-[1.05rem] font-semibold text-ink">
               ← All interior design services
             </span>
-          </Link>
+          </SectionLink>
           <Link
             href="/services/commercial-interior-design"
             className="card card-hover group flex items-center justify-between gap-4 p-6"
@@ -263,9 +266,9 @@ export default function ResidentialInteriorDesignerKolkataPage() {
               <PageCTAButton triggerSource="residential_page_cta" className="bg-white text-sage-900 hover:bg-gold-soft">
                 Book a Consultation
               </PageCTAButton>
-              <Link href="/process" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
+              <SectionLink href="/#how-we-work" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
                 Our process
-              </Link>
+              </SectionLink>
               <Link href="/services/modular-kitchen" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
                 Modular kitchens
               </Link>

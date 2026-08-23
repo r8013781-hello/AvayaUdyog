@@ -13,6 +13,8 @@ node_modules
 # Next.js build output
 .next
 out
+# Local verification builds (see next.config.mjs distDir)
+.next-verify
 
 # Environment files (never commit real credentials)
 .env

@@ -6,6 +6,7 @@
   "description": "Avaya Udyog — marketing site (/) and CRM (/portal) in one Next.js App Router, static export. The CRM at /portal reuses the existing React CRM components unchanged; see components/crm and lib/crm.",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/check-env.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

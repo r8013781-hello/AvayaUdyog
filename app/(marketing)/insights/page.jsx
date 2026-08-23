@@ -4,6 +4,7 @@ import Breadcrumbs from "../../../components/Breadcrumbs";
 import { webPageSchema } from "../../../lib/schema";
 import { listInsights } from "../../../lib/insights";
 import PageCTAButton from "../../../components/PageCTAButton";
+import SectionLink from "../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Interior Design Insights | Avaya Udyog, Kolkata";
@@ -93,9 +94,9 @@ export default function InsightsPage() {
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-5">
                 <PageCTAButton triggerSource="insights_hub_cta">Book a Consultation</PageCTAButton>
-                <Link href="/services" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
+                <SectionLink href="/#services" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
                   See what we do
-                </Link>
+                </SectionLink>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { PenTool, Home, Sparkles, ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
+import { imageSize } from "../lib/imageDimensions";
 import { useContactModal } from "./ContactModalProvider";
 
 const PRINCIPLES = [
@@ -51,6 +52,7 @@ export default function About() {
               <figure className="relative overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift">
                 <img
                   src="/about/living-space.webp"
+                  {...imageSize("/about/living-space.webp")}
                   alt="A refined modern living space"
                   loading="lazy"
                   decoding="async"

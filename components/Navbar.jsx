@@ -11,15 +11,40 @@ import { trackPhoneClick } from "../lib/tracking";
 // Every entry is a real href. Section entries point at /#id so they work from
 // any route — previously they were scroll-only, which meant Home, Gallery,
 // Founder and FAQ did nothing at all on the sixteen non-homepage routes.
+//
+// ── Deliberately four ──────────────────────────────────────────────────────
+// This list was eight (Home, About, Services, Process, Gallery, Founder,
+// Insights, FAQ). Eight small-caps items plus a phone number plus a Login
+// button is more than a header can carry legibly: at that density nothing is
+// emphasised, so the two things a visitor actually came to do — see the work,
+// and make contact — compete with six links of equal weight.
+//
+// What stays is the shortest set that still answers "who are you, what do you
+// do, show me, how do I reach you":
+//
+//   Home · About · Services · Gallery   + the phone number + Login
+//
+// Process, Founder, Insights and FAQ were removed from the HEADER, not from
+// the site. Every one of them keeps a link on every single page via
+// STUDIO_LINKS in components/Footer.jsx, so they lose no internal link equity
+// and stay one click from anywhere — checked by the "stays reachable" test in
+// __tests__/navigation.test.js, which is what stops this trim from quietly
+// orphaning a page later.
+//
+// They are also reachable from where they are actually relevant, which is
+// better placement than a permanent header slot: /process is linked from the
+// services hub and both service pages, /insights from the services hub and
+// every article, and #faq sits directly above the footer's enquiry form on
+// the homepage.
+//
+// Before adding an entry here, ask whether it belongs in the footer instead.
+// The header is the one place on the site where restraint is worth more than
+// completeness.
 const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
-  { href: "/process", label: "Process" },
+  { href: "/#about", label: "About" },
+  { href: "/#services", label: "Services" },
   { href: "/#gallery", label: "Gallery" },
-  { href: "/#founder", label: "Founder" },
-  { href: "/insights", label: "Insights" },
-  { href: "/#faq", label: "FAQ" },
 ];
 
 // The CRM lives inside this same app at /portal (see app/portal/page.jsx) —

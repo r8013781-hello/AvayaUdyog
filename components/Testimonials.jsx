@@ -73,7 +73,12 @@ export default function Testimonials() {
     });
   };
 
-  if (state !== "ready") return null;
+  /* The cards need approved reviews; the "Review us on Google" CTA below
+     does not. Gate only the carousel on this so the ask stays reachable
+     when nothing has been approved yet, or when the reviews API is
+     temporarily unavailable — which is exactly when we most need reviews.
+     Still no placeholder quotes: no approved review, no card. */
+  const hasReviews = state === "ready" && reviews.length > 0;
 
   const atStart = index <= 0;
   const atEnd = index >= reviews.length - 1;
@@ -95,17 +100,35 @@ export default function Testimonials() {
       </div>
 
       <div ref={ref} className="shell relative">
+        {/* The className on a .reveal element must never change across a
+            re-render. useReveal adds .is-visible imperatively and then
+            unobserves the node, so React rewriting this attribute later
+            strips that class and the element is stuck at opacity 0 forever.
+            Anything conditional goes on the inner wrapper instead. */}
         <div className="reveal flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
-          <div>
+          {/* With cards below, the heading promises what follows. With none,
+              that promise has nothing under it and the section reads broken —
+              so the empty state says what it actually is: an invitation. Same
+              section, honest copy, still no invented quotes. */}
+          <div className={hasReviews ? "" : "mx-auto max-w-2xl text-center"}>
             <span className="eyebrow !text-gold-light">Client Stories</span>
-            <h2 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
-              Trusted by the people
-              <br />
-              <span className="accent text-gold-light">who live in our work.</span>
-            </h2>
+            {hasReviews ? (
+              <h2 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
+                Trusted by the people
+                <br />
+                <span className="accent text-gold-light">who live in our work.</span>
+              </h2>
+            ) : (
+              <h2 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
+                The next review here
+                <br />
+                <span className="accent text-gold-light">could be yours.</span>
+              </h2>
+            )}
           </div>
 
           {/* Arrows sit with the heading so the track itself stays edge-to-edge. */}
+          {hasReviews && (
           <div className="flex shrink-0 items-center gap-2.5">
             <button
               type="button"
@@ -126,11 +149,13 @@ export default function Testimonials() {
               <ChevronRight size={18} />
             </button>
           </div>
+          )}
         </div>
 
         {/* One scroll-snapped track at every breakpoint — native swipe on
             touch, arrows/keyboard elsewhere. `no-scrollbar` hides the bar
             without disabling the scrolling itself. */}
+        {hasReviews && (
         <div
           ref={trackRef}
           onScroll={syncIndex}
@@ -202,9 +227,10 @@ export default function Testimonials() {
             </figure>
           ))}
         </div>
+        )}
 
         {/* Progress dots double as direct navigation. */}
-        {reviews.length > 1 && (
+        {hasReviews && reviews.length > 1 && (
           <div className="mt-8 flex justify-center gap-2">
             {reviews.map((review, i) => (
               <button

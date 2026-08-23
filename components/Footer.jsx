@@ -15,8 +15,8 @@ import {
   Check,
   AlertTriangle,
 } from "lucide-react";
-import { captureWebsiteEnquiry } from "../lib/crmIntake";
-import { api, onSlowRequest } from "../lib/api";
+import { createEnquirySubmitter } from "../lib/enquirySubmission";
+import { api, onSlowRequest, warmUpApi } from "../lib/api";
 import {
   trackPhoneClick,
   trackEmailClick,
@@ -45,6 +45,19 @@ const FIELD_LABELS = {
 
 const REQUIRED_FIELDS = ["name", "phone", "message"];
 
+/**
+ * Its own submitter, separate from the contact drawer's.
+ *
+ * The two forms are genuinely independent surfaces: someone can legitimately
+ * send from the footer and then send a different enquiry from the drawer, and
+ * a shared duplicate-guard would refuse the second one. What each instance
+ * still guarantees is the thing that matters — one lead per press of ITS
+ * button, however many times it is pressed.
+ *
+ * Module scope rather than per-render, so the guards survive a re-render.
+ */
+const submitter = createEnquirySubmitter({ submit: (formData) => api.submitEnquiry(formData) });
+
 export default function Footer() {
   const [formData, setFormData] = useState(emptyForm);
   const [errors, setErrors] = useState({});
@@ -53,8 +66,20 @@ export default function Footer() {
   const [submitting, setSubmitting] = useState(false);
   const [wakingServer, setWakingServer] = useState(false);
   const revertTimer = useRef(null);
+  const warmedRef = useRef(false);
 
   useEffect(() => () => clearTimeout(revertTimer.current), []);
+
+  /**
+   * Wake the sleeping backend on first engagement with this form. Once per
+   * page load across the whole app — warmUpApi() holds the guard, so the
+   * footer and the contact drawer between them still make at most one request.
+   */
+  const handleFirstIntent = () => {
+    if (warmedRef.current) return;
+    warmedRef.current = true;
+    warmUpApi();
+  };
   // The backend spins down after inactivity on its current hosting plan —
   // the first submission after idle can take up to a minute to wake it back
   // up. Say so, rather than leaving the button looking frozen.
@@ -82,25 +107,38 @@ export default function Footer() {
     setSubmitting(true);
     setWakingServer(false);
     setSubmitFailed(false);
-    try {
-      await api.submitEnquiry(formData);
+
+    /* Delivery, duplicate suppression and the local draft all live in the
+       submitter (lib/enquirySubmission.js). It never throws, so this handler
+       has no path that can leave the button stuck mid-send. */
+    const outcome = await submitter.send(formData);
+
+    if (outcome.status === "sent" || outcome.status === "duplicate") {
+      /* "duplicate" means the server already has this exact enquiry — showing
+         the confirmation is the accurate answer, not a convenient one. Only a
+         real send is counted as a conversion. */
       setSubmitted(true);
       setFormData(emptyForm);
       setErrors({});
-      trackConsultationSubmit("footer", { has_email: Boolean(formData.email), city: formData.city || undefined });
+      if (outcome.status === "sent") {
+        trackConsultationSubmit("footer", {
+          has_email: Boolean(formData.email),
+          city: formData.city || undefined,
+        });
+      }
       /* Briefly confirm, then return to a blank form so a visitor (or the
          same device) can send another enquiry without feeling stuck. */
       revertTimer.current = setTimeout(() => setSubmitted(false), 2600);
-    } catch {
-      /* Keep it locally as a courtesy backup, but never tell the visitor we
-         succeeded when we didn't — that's how enquiries go missing silently. */
-      captureWebsiteEnquiry(formData, "Consultation request");
+    } else {
+      /* Never claim success we did not have. Their typing stays on screen and
+         the banner offers retry plus the channels that work when the API
+         does not. */
       setSubmitFailed(true);
       trackConsultationError("footer", "submit_failed");
-    } finally {
-      setSubmitting(false);
-      setWakingServer(false);
     }
+
+    setSubmitting(false);
+    setWakingServer(false);
   };
 
   const fieldClass = (name) =>
@@ -233,9 +271,24 @@ export default function Footer() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} noValidate className="mt-9 space-y-3.5">
+                <form
+                  onSubmit={handleSubmit}
+                  /* onFocusCapture / onInputCapture drive the cold-start
+                     warm-up on first engagement — the pair covers keyboard
+                     focus and browser autofill, and both funnel into the same
+                     once-per-page-load guard in warmUpApi(). */
+                  onFocusCapture={handleFirstIntent}
+                  onInputCapture={handleFirstIntent}
+                  noValidate
+                  className="mt-9 space-y-3.5"
+                >
+                  {/* role="alert" so the failure is announced rather than
+                      leaving a screen-reader user on a button that appears to
+                      have done nothing. The copy states plainly that the
+                      message did NOT send and never implies anyone has a copy
+                      of it — nobody does. */}
                   {submitFailed && (
-                    <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/70 p-4">
+                    <div role="alert" className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/70 p-4">
                       <AlertTriangle size={17} className="mt-0.5 shrink-0 text-red-600" />
                       <div className="text-[0.84rem] leading-6 text-red-800">
                         <p className="font-semibold">We couldn&apos;t send that just now.</p>
@@ -397,9 +450,9 @@ export default function Footer() {
 // homepage-section scroll. Section entries are now /#id so they work from
 // every page rather than only the homepage.
 const STUDIO_LINKS = [
-  { label: "Services", href: "/services" },
-  { label: "About", href: "/about" },
-  { label: "Process", href: "/process" },
+  { label: "Services", href: "/#services" },
+  { label: "About", href: "/#about" },
+  { label: "Process", href: "/#how-we-work" },
   { label: "Gallery", href: "/#gallery" },
   { label: "Founder", href: "/#founder" },
   { label: "Insights", href: "/insights" },
@@ -418,8 +471,8 @@ const SERVICE_LINKS = [
   { label: "Commercial Spaces", href: "/services/commercial-interior-design" },
   { label: "Modular Kitchens", href: "/services/modular-kitchen" },
   { label: "Renovation", href: "/services/home-renovation" },
-  { label: "Design Consultation", href: "/services#design-consultation" },
-  { label: "Turnkey Execution", href: "/services#turnkey-execution" },
+  { label: "Design Consultation", href: "/#design-consultation" },
+  { label: "Turnkey Execution", href: "/#turnkey-execution" },
 ];
 
 // Only channels that actually go somewhere.

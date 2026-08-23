@@ -3,6 +3,7 @@ import { Hammer, CalendarClock, AlertTriangle, ShieldCheck } from "lucide-react"
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import { serviceSchema, webPageSchema, faqSchema } from "../../../../lib/schema";
 import PageCTAButton from "../../../../components/PageCTAButton";
+import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Home Renovation in Kolkata | Avaya Udyog";
@@ -106,7 +107,6 @@ export default function HomeRenovationPage() {
       <div className="shell pt-32 md:pt-36">
         <Breadcrumbs items={[
           { name: "Home", path: "/" },
-          { name: "Services", path: "/services" },
           { name: "Home Renovation", path: "/services/home-renovation" },
         ]} />
       </div>
@@ -259,9 +259,9 @@ export default function HomeRenovationPage() {
                 <Link href="/services/modular-kitchen" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
                   Modular kitchens
                 </Link>
-                <Link href="/process" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
+                <SectionLink href="/#how-we-work" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
                   Our process
-                </Link>
+                </SectionLink>
               </div>
             </div>
           </div>

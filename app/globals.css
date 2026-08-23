@@ -50,6 +50,42 @@
     border-radius: 4px;
   }
 
+  /**
+   * Skip link.
+   *
+   * The navbar is eight links plus a phone number and a CTA. Without this, a
+   * keyboard or screen-reader user tabs through all of them on every single
+   * page before reaching any content — and the site has sixteen routes.
+   *
+   * Positioned off-canvas rather than `display: none` or `visibility: hidden`,
+   * both of which remove an element from the tab order entirely and would make
+   * this unreachable, which is the classic way a skip link ships broken. It is
+   * in the DOM, focusable, and simply painted outside the viewport until it
+   * takes focus — at which point it becomes fully visible.
+   *
+   * z-index sits above the navbar (z-50) and the contact drawer's scrim (z-80)
+   * so it can never be focused underneath something.
+   */
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transform: translateY(-120%);
+    @apply rounded-br-2xl bg-sage-900 px-5 py-3 text-[0.85rem] font-semibold text-white shadow-float;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  /* Honour reduced-motion by not animating the reveal at all. */
+  @media (prefers-reduced-motion: no-preference) {
+    .skip-link {
+      transition: transform 180ms theme("transitionTimingFunction.smooth", ease-out);
+    }
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
   }
