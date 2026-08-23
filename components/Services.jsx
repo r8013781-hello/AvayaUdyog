@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import SectionLink from "./SectionLink";
 import { ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
@@ -34,6 +35,8 @@ const SERVICES = [
   {
     title: "Design Consultation",
     tag: "Guidance",
+    href: "/services#design-consultation",
+    linkLabel: "About design consultation",
     text: "Concept development, material guidance, and clear design direction that turn rough ideas into a refined, buildable vision.",
     src: "/services/s3-consultation.webp",
     alt: "Designer hand-drafting architectural interior plans during a consultation",
@@ -41,6 +44,8 @@ const SERVICES = [
   {
     title: "Turnkey Execution",
     tag: "End-to-end",
+    href: "/services#turnkey-execution",
+    linkLabel: "About turnkey execution",
     text: "From first sketch to final styling, we manage every detail so your project feels effortless from start to finish.",
     src: "/services/s4-execution.webp",
     alt: "An interior project site during turnkey execution",
@@ -126,35 +131,24 @@ export default function Services() {
                     {text}
                   </p>
 
-                  {href ? (
-                    <Link
-                      href={href}
-                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
-                    >
-                      <span className="relative">
-                        {linkLabel}
-                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
-                      </span>
-                      <ArrowUpRight
-                        size={14}
-                        className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
-                      />
-                    </Link>
-                  ) : (
-                    <button
-                      onClick={() => openContactModal("service_cta")}
-                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
-                    >
-                      <span className="relative">
-                        Explore {tag}
-                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
-                      </span>
-                      <ArrowUpRight
-                        size={14}
-                        className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
-                      />
-                    </button>
-                  )}
+                  {/* Every service card links somewhere real. The two without
+                      a page of their own anchor to their card on the services
+                      hub — previously they rendered "Explore {tag}" and opened
+                      the contact modal, so the label promised information and
+                      the click demanded a form. */}
+                  <SectionLink
+                    href={href}
+                    className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
+                  >
+                    <span className="relative">
+                      {linkLabel}
+                      <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
+                    </span>
+                    <ArrowUpRight
+                      size={14}
+                      className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5"
+                    />
+                  </SectionLink>
                 </div>
               </div>
             );

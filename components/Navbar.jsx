@@ -1,22 +1,25 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import SectionLink from "./SectionLink";
 import { Menu, X, Phone, ArrowUpRight } from "lucide-react";
 import { useContactModal } from "./ContactModalProvider";
 import { trackPhoneClick } from "../lib/tracking";
 
+// Every entry is a real href. Section entries point at /#id so they work from
+// any route — previously they were scroll-only, which meant Home, Gallery,
+// Founder and FAQ did nothing at all on the sixteen non-homepage routes.
 const NAV_LINKS = [
-  { id: "hero", label: "Home" },
+  { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  // A real page now, not a homepage anchor — the nav is the single
-  // highest-value internal link on the site and it should point at the hub.
   { href: "/services", label: "Services" },
   { href: "/process", label: "Process" },
-  { id: "gallery", label: "Gallery" },
-  { id: "founder", label: "Founder" },
+  { href: "/#gallery", label: "Gallery" },
+  { href: "/#founder", label: "Founder" },
   { href: "/insights", label: "Insights" },
-  { id: "faq", label: "FAQ" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 // The CRM lives inside this same app at /portal (see app/portal/page.jsx) —
@@ -43,6 +46,15 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState("hero");
+  const pathname = usePathname();
+
+  /** A nav entry is current if its route matches, or its section is in view. */
+  const isCurrent = (href) => {
+    const [path, hash] = href.split("#");
+    const target = path || "/";
+    if (hash) return pathname === target && activeId === hash;
+    return pathname === target;
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24);
@@ -53,10 +65,12 @@ export default function Navbar() {
 
   /* Highlight the link for whichever section owns the upper third of the viewport. */
   useEffect(() => {
-    // Entries with an href are real routes, not homepage sections — they have
-    // no element to observe.
-    const sections = NAV_LINKS.filter((link) => link.id)
-      .map((link) => document.getElementById(link.id))
+    // Only the /#section entries have an element to observe, and only on the
+    // page that owns them. Everywhere else this finds nothing and the observer
+    // simply never runs, which is correct.
+    const sections = NAV_LINKS.map((link) => link.href.split("#")[1])
+      .filter(Boolean)
+      .map((id) => document.getElementById(id))
       .filter(Boolean);
     if (!sections.length || !("IntersectionObserver" in window))
       return undefined;
@@ -81,11 +95,6 @@ export default function Navbar() {
     };
   }, [mobileMenuOpen]);
 
-  const scrollTo = useCallback((id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setMobileMenuOpen(false);
-  }, []);
-
   const closeAndContact = () => {
     setMobileMenuOpen(false);
     openContactModal("mobile_menu");
@@ -106,10 +115,10 @@ export default function Navbar() {
               scrolled ? "h-16" : "h-[4.75rem] md:h-[5.25rem]"
             }`}
           >
-            <button
-              onClick={() => scrollTo("hero")}
+            <Link
+              href="/"
               className="group flex items-center gap-3"
-              aria-label="Avaya Udyog — back to top"
+              aria-label="Avaya Udyog — home"
             >
               <Monogram className="h-10 w-10 md:h-11 md:w-11" />
               <span className="text-left">
@@ -133,12 +142,12 @@ export default function Navbar() {
                   Interior Design
                 </span>
               </span>
-            </button>
+            </Link>
 
             {/* Desktop links — small caps, thin underline. */}
             <nav className="hidden items-center gap-1 lg:flex">
               {NAV_LINKS.map((link) => {
-                const isActive = link.id ? activeId === link.id : false;
+                const isActive = isCurrent(link.href);
                 const className = `group relative px-3.5 py-2 text-[0.66rem] font-bold uppercase tracking-label transition-colors duration-300 ${
                   scrolled
                     ? isActive
@@ -156,21 +165,16 @@ export default function Navbar() {
                   />
                 );
 
-                return link.href ? (
-                  <Link key={link.href} href={link.href} className={className}>
-                    {link.label}
-                    {underline}
-                  </Link>
-                ) : (
-                  <button
-                    key={link.id}
-                    onClick={() => scrollTo(link.id)}
-                    aria-current={isActive ? "true" : undefined}
+                return (
+                  <SectionLink
+                    key={link.href}
+                    href={link.href}
                     className={className}
+                    aria-current={isActive ? "page" : undefined}
                   >
                     {link.label}
                     {underline}
-                  </button>
+                  </SectionLink>
                 );
               })}
             </nav>
@@ -251,21 +255,16 @@ export default function Navbar() {
           {NAV_LINKS.map((link) => {
             const className =
               "flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left font-display text-lg font-medium text-ink transition-colors hover:bg-sage-50 hover:text-sage-700";
-            return link.href ? (
-              <Link
+            return (
+              <SectionLink
                 key={link.href}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
+                onNavigate={() => setMobileMenuOpen(false)}
                 className={className}
               >
                 {link.label}
                 <ArrowUpRight size={16} className="text-sage-300" />
-              </Link>
-            ) : (
-              <button key={link.id} onClick={() => scrollTo(link.id)} className={className}>
-                {link.label}
-                <ArrowUpRight size={16} className="text-sage-300" />
-              </button>
+              </SectionLink>
             );
           })}
         </nav>

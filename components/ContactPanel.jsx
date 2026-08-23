@@ -221,6 +221,9 @@ export default function ContactPanel({ isOpen, onClose }) {
                   <Field
                     icon={User}
                     name="name"
+                    id="contact-name"
+                    label="Your name"
+                    required
                     placeholder="Your Name"
                     value={formData.name}
                     onChange={handleInputChange}
@@ -230,6 +233,8 @@ export default function ContactPanel({ isOpen, onClose }) {
                   <Field
                     icon={Building}
                     name="address"
+                    id="contact-address"
+                    label="Address or locality"
                     placeholder="Address / Locality"
                     value={formData.address}
                     onChange={handleInputChange}
@@ -240,6 +245,9 @@ export default function ContactPanel({ isOpen, onClose }) {
                     icon={Phone}
                     type="tel"
                     name="phone"
+                    id="contact-phone"
+                    label="Phone number"
+                    required
                     placeholder="Phone Number"
                     value={formData.phone}
                     onChange={handleInputChange}
@@ -250,6 +258,8 @@ export default function ContactPanel({ isOpen, onClose }) {
                     icon={Mail}
                     type="email"
                     name="email"
+                    id="contact-email"
+                    label="Email address"
                     placeholder="Email Address"
                     value={formData.email}
                     onChange={handleInputChange}
@@ -259,6 +269,8 @@ export default function ContactPanel({ isOpen, onClose }) {
                   <Field
                     icon={MapPin}
                     name="city"
+                    id="contact-city"
+                    label="City"
                     placeholder="City"
                     value={formData.city}
                     onChange={handleInputChange}
@@ -269,8 +281,13 @@ export default function ContactPanel({ isOpen, onClose }) {
                   <div>
                     <div className="relative">
                       <MessageSquare className="field-icon !top-5 !translate-y-0" />
+                      <label htmlFor="contact-message" className="sr-only">
+                        About your project
+                      </label>
                       <textarea
+                        id="contact-message"
                         name="message"
+                        required
                         placeholder="Briefly describe your project..."
                         value={formData.message}
                         onChange={handleInputChange}
@@ -380,12 +397,18 @@ function FieldError({ message }) {
   return <p className="mt-1.5 pl-1 text-[0.72rem] font-medium text-red-600">{message}</p>;
 }
 
-function Field({ icon: Icon, error, className, ...props }) {
+function Field({ icon: Icon, error, className, id, label, ...props }) {
   return (
     <div>
+      {/* A placeholder is not an accessible name — it disappears the moment
+          typing starts and is not reliably announced. The visible design is
+          unchanged; the label exists for screen readers and for click-to-focus. */}
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
       <div className="relative">
         <Icon className="field-icon" />
-        <input aria-invalid={Boolean(error)} className={className} {...props} />
+        <input id={id} aria-invalid={Boolean(error)} className={className} {...props} />
       </div>
       {error && <FieldError message={error} />}
     </div>

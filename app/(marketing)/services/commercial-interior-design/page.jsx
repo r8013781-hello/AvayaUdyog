@@ -217,7 +217,7 @@ export default function CommercialInteriorDesignerKolkataPage() {
             className="card card-hover group flex items-center justify-between gap-4 p-6"
           >
             <span className="font-display text-[1.05rem] font-semibold text-ink">
-              ← Back to Interior Designer in Kolkata
+              ← All interior design services
             </span>
           </Link>
           <Link

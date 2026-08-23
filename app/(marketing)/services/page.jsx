@@ -91,6 +91,7 @@ const SERVICES = [
   {
     icon: Home,
     title: "Residential Interiors",
+    id: "residential-interiors",
     href: "/services/residential-interior-design",
     text: "Full-home interiors for flats and houses — layouts, finishes and the detail work that decides whether a home feels considered or merely furnished.",
     scope: ["Living rooms", "Bedrooms", "Kitchens", "Dining"],
@@ -98,6 +99,7 @@ const SERVICES = [
   {
     icon: Building2,
     title: "Commercial Spaces",
+    id: "commercial-spaces",
     href: "/services/commercial-interior-design",
     text: "Offices and retail environments designed to hold up to daily use and to say something accurate about the business occupying them.",
     scope: ["Offices", "Retail", "Workspaces"],
@@ -105,6 +107,7 @@ const SERVICES = [
   {
     icon: CookingPot,
     title: "Modular Kitchens",
+    id: "modular-kitchens",
     href: "/services/modular-kitchen",
     text: "Kitchens planned around how you actually cook and host, then built with cabinetry and hardware chosen to survive that use for years.",
     scope: ["Layout planning", "Cabinetry", "Hardware", "Finishes"],
@@ -112,6 +115,7 @@ const SERVICES = [
   {
     icon: Hammer,
     title: "Renovation",
+    id: "renovation",
     href: "/services/home-renovation",
     text: "Reworking a space you already live in — a different problem from fitting out an empty flat, and one that has to be sequenced around your life.",
     scope: ["Full-home", "Room-level", "Sequencing"],
@@ -119,6 +123,7 @@ const SERVICES = [
   {
     icon: MessagesSquare,
     title: "Design Consultation",
+    id: "design-consultation",
     href: null,
     text: "Concept development, material guidance and clear design direction that turn rough ideas into a refined, buildable vision.",
     scope: ["Concepts", "Material guidance", "Direction"],
@@ -126,6 +131,7 @@ const SERVICES = [
   {
     icon: Layers,
     title: "Turnkey Execution",
+    id: "turnkey-execution",
     href: null,
     text: "From first sketch to final styling, we manage every detail so the project feels effortless from start to finish rather than becoming something you coordinate.",
     scope: ["Site coordination", "Finishing", "Handover"],
@@ -188,7 +194,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="mt-14 grid gap-5 md:grid-cols-2">
-            {SERVICES.map(({ icon: Icon, title, href, text, scope }) => {
+            {SERVICES.map(({ icon: Icon, id, title, href, text, scope }) => {
               const inner = (
                 <>
                   <div className="flex items-center gap-3">
@@ -218,15 +224,17 @@ export default function ServicesPage() {
               return href ? (
                 <Link
                   key={title}
+                  id={id}
                   href={href}
-                  className="group flex flex-col rounded-[1.5rem] border border-line bg-canvas p-7 transition-colors hover:border-sage-300 hover:bg-white"
+                  className="group flex flex-col scroll-mt-28 rounded-[1.5rem] border border-line bg-canvas p-7 transition-colors hover:border-sage-300 hover:bg-white"
                 >
                   {inner}
                 </Link>
               ) : (
                 <div
                   key={title}
-                  className="flex flex-col rounded-[1.5rem] border border-line bg-canvas p-7"
+                  id={id}
+                  className="flex flex-col rounded-[1.5rem] border border-line bg-canvas p-7 scroll-mt-28"
                 >
                   {inner}
                 </div>

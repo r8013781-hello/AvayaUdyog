@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import SectionLink from "./SectionLink";
 import {
   Mail,
   Phone,
@@ -251,6 +252,9 @@ export default function Footer() {
                     <Field
                       icon={User}
                       name="name"
+                    id="footer-name"
+                    label="Your name"
+                    required
                       placeholder="Your Name"
                       value={formData.name}
                       onChange={handleInputChange}
@@ -261,6 +265,9 @@ export default function Footer() {
                       icon={Phone}
                       type="tel"
                       name="phone"
+                    id="footer-phone"
+                    label="Phone number"
+                    required
                       placeholder="Phone Number"
                       value={formData.phone}
                       onChange={handleInputChange}
@@ -274,6 +281,8 @@ export default function Footer() {
                       icon={Mail}
                       type="email"
                       name="email"
+                    id="footer-email"
+                    label="Email address"
                       placeholder="Email Address"
                       value={formData.email}
                       onChange={handleInputChange}
@@ -283,6 +292,8 @@ export default function Footer() {
                     <Field
                       icon={MapPin}
                       name="city"
+                    id="footer-city"
+                    label="City"
                       placeholder="City"
                       value={formData.city}
                       onChange={handleInputChange}
@@ -294,6 +305,8 @@ export default function Footer() {
                   <Field
                     icon={Building}
                     name="address"
+                    id="footer-address"
+                    label="Address or locality"
                     placeholder="Address / Locality"
                     value={formData.address}
                     onChange={handleInputChange}
@@ -304,8 +317,13 @@ export default function Footer() {
                   <div>
                     <div className="relative">
                       <MessageSquare className="field-icon !top-5 !translate-y-0" />
+                      <label htmlFor="footer-message" className="sr-only">
+                        About your project
+                      </label>
                       <textarea
+                        id="footer-message"
                         name="message"
+                        required
                         placeholder="Describe your project vision..."
                         value={formData.message}
                         onChange={handleInputChange}
@@ -375,32 +393,33 @@ export default function Footer() {
 
 /* Scrolls to an in-page section without ever touching the URL — no more
    `/#services`-style hashes cluttering the address bar. */
-function scrollToSection(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-}
-
+// "Services" appeared twice here — once as a route and once as a dead
+// homepage-section scroll. Section entries are now /#id so they work from
+// every page rather than only the homepage.
 const STUDIO_LINKS = [
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
-  { label: "Services", id: "services" },
   { label: "Process", href: "/process" },
-  { label: "Gallery", id: "gallery" },
-  { label: "Founder", id: "founder" },
+  { label: "Gallery", href: "/#gallery" },
+  { label: "Founder", href: "/#founder" },
   { label: "Insights", href: "/insights" },
-  { label: "FAQ", id: "faq" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 // Two of these have a dedicated page and should go to it. The other two are
 // homepage sections. Previously all four scrolled to #services, which meant
 // four different labels did exactly the same thing and neither service page
 // got a footer link at all.
+// Design Consultation and Turnkey Execution have no page of their own, and
+// should not get a thin one. They now anchor to their card on the services
+// hub instead of scrolling to a section that exists only on the homepage.
 const SERVICE_LINKS = [
   { label: "Residential Interiors", href: "/services/residential-interior-design" },
   { label: "Commercial Spaces", href: "/services/commercial-interior-design" },
   { label: "Modular Kitchens", href: "/services/modular-kitchen" },
   { label: "Renovation", href: "/services/home-renovation" },
-  { label: "Design Consultation", id: "services" },
-  { label: "Turnkey Execution", id: "services" },
+  { label: "Design Consultation", href: "/services#design-consultation" },
+  { label: "Turnkey Execution", href: "/services#turnkey-execution" },
 ];
 
 // Only channels that actually go somewhere.
@@ -437,23 +456,13 @@ function FooterNav() {
         <FooterColumn heading="Studio">
           <ul className="space-y-3">
             {STUDIO_LINKS.map((link) => (
-              <li key={link.label}>
-                {link.href ? (
-                  <Link
-                    href={link.href}
-                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => scrollToSection(link.id)}
-                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                  >
-                    {link.label}
-                  </button>
-                )}
+              <li key={link.href}>
+                <SectionLink
+                  href={link.href}
+                  className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                >
+                  {link.label}
+                </SectionLink>
               </li>
             ))}
           </ul>
@@ -462,23 +471,13 @@ function FooterNav() {
         <FooterColumn heading="Services">
           <ul className="space-y-3">
             {SERVICE_LINKS.map((link) => (
-              <li key={link.label}>
-                {link.href ? (
-                  <Link
-                    href={link.href}
-                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => scrollToSection(link.id)}
-                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
-                  >
-                    {link.label}
-                  </button>
-                )}
+              <li key={link.href}>
+                <SectionLink
+                  href={link.href}
+                  className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                >
+                  {link.label}
+                </SectionLink>
               </li>
             ))}
           </ul>
@@ -525,12 +524,17 @@ function FieldError({ message }) {
   return <p className="mt-1.5 pl-1 text-[0.72rem] font-medium text-red-600">{message}</p>;
 }
 
-function Field({ icon: Icon, error, className, name, ...props }) {
+function Field({ icon: Icon, error, className, name, id, label, ...props }) {
   return (
     <div>
+      {/* See ContactPanel's Field — placeholders are not accessible names. */}
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
       <div className="relative">
         <Icon className="field-icon" />
         <input
+          id={id}
           name={name}
           aria-invalid={Boolean(error)}
           className={className}
