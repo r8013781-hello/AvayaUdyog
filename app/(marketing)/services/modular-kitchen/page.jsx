@@ -9,7 +9,7 @@ const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Modular Kitchen Design in Kolkata | Avaya Udyog";
 const DESCRIPTION =
   "How a modular kitchen is actually planned, built and fitted — layouts, carcass and shutter materials, hardware and finishes — from a Kolkata studio with 35+ years in interiors.";
-const OG_IMAGE = `${SITE_URL}/hero/exterior.webp`;
+const OG_IMAGE = `${SITE_URL}/gallery/renders/kitchen/kitchen-render-01.jpg`;
 const PAGE_URL = `${SITE_URL}/services/modular-kitchen`;
 
 export const metadata = {
@@ -169,22 +169,34 @@ export default function ModularKitchenPage() {
 
       <section className="section !pt-10">
         <div className="shell relative">
-          <div className="max-w-3xl">
-            <span className="eyebrow">Modular Kitchens</span>
-            <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
-              A kitchen is planned
-              <br />
-              <span className="accent text-sage-600">around how you cook.</span>
-            </h1>
-            <p className="mt-7 text-[1.04rem] leading-[1.85] text-ink-soft">
-              Most kitchen disappointments are layout decisions, not finish decisions.
-              A beautiful kitchen with the sink in the wrong place is a daily irritation;
-              a plain one that is properly planned disappears into your routine. This page
-              covers how the decisions are actually made — layouts, the materials that
-              matter, and what genuinely moves the cost.
-            </p>
-            <div className="mt-9">
-              <PageCTAButton triggerSource="modular_kitchen_cta">Book a Consultation</PageCTAButton>
+          <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
+            <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
+              <img
+                src="/gallery/renders/kitchen/kitchen-render-01.jpg"
+                alt="A minimalist modular kitchen with clean lines and premium finishes"
+                loading="eager"
+                decoding="async"
+                className="h-[24rem] w-full object-cover sm:h-[28rem]"
+              />
+            </figure>
+
+            <div className="order-1 lg:order-2">
+              <span className="eyebrow">Modular Kitchens</span>
+              <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
+                A kitchen is planned
+                <br />
+                <span className="accent text-sage-600">around how you cook.</span>
+              </h1>
+              <p className="mt-7 text-[1.04rem] leading-[1.85] text-ink-soft">
+                Most kitchen disappointments are layout decisions, not finish decisions.
+                A beautiful kitchen with the sink in the wrong place is a daily irritation;
+                a plain one that is properly planned disappears into your routine. This page
+                covers how the decisions are actually made — layouts, the materials that
+                matter, and what genuinely moves the cost.
+              </p>
+              <div className="mt-9">
+                <PageCTAButton triggerSource="modular_kitchen_cta">Book a Consultation</PageCTAButton>
+              </div>
             </div>
           </div>
         </div>
@@ -312,14 +324,17 @@ export default function ModularKitchenPage() {
                 consultation. A kitchen is easier to discuss in front of the actual space
                 than in the abstract.
               </p>
-              <div className="mt-7 flex flex-wrap items-center gap-5">
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <PageCTAButton triggerSource="modular_kitchen_footer_cta">Book a Consultation</PageCTAButton>
-                <Link href="/services/residential-interior-design" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
-                  Full-home interiors
-                </Link>
-                <SectionLink href="/#how-we-work" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
-                  Our process
-                </SectionLink>
+                <div className="flex flex-wrap items-center gap-4 text-[0.88rem] font-medium text-sage-600">
+                  <Link href="/services/residential-interior-design" className="transition-colors hover:text-sage-900">
+                    Full-home interiors
+                  </Link>
+                  <span className="h-1 w-1 rounded-full bg-sage-300" aria-hidden="true" />
+                  <SectionLink href="/#how-we-work" className="transition-colors hover:text-sage-900">
+                    Our process
+                  </SectionLink>
+                </div>
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
  * Attach the returned ref to a section/container; child elements with
  * .reveal (optionally with a style="--reveal-delay: 0.15s") animate in.
  */
-export default function useReveal() {
+export default function useReveal(deps = []) {
   const rootRef = useRef(null);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function useReveal() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, deps);
 
   return rootRef;
 }

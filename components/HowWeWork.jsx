@@ -30,31 +30,33 @@ const STAGES = [
     icon: MessagesSquare,
     tag: "Consultation",
     title: "We start with how you actually live",
-    // Source: Services.jsx — "Design Consultation" service description.
     text: "Concept development, material guidance and clear design direction — the conversation that turns rough ideas into a refined, buildable vision for the space.",
+    src: "/gallery/renders/living-room/living-room-render-01.jpg",
+    alt: "A refined 3D render representing the vision agreed upon during consultation",
   },
   {
     icon: Ruler,
     tag: "Design",
     title: "Layouts, finishes and detail",
-    // Source: Services.jsx residential copy + Marquee.jsx capability list
-    // ("Material Curation", "Bespoke Furniture").
     text: "Thoughtful layouts, curated finishes and elevated details are developed together — including material curation and any bespoke furniture — so the palette is settled before building begins.",
+    src: "/gallery/site-work/tv-panel-veneer-fitting.jpg",
+    alt: "Raw finishes and details coming together on a wall panel",
   },
   {
     icon: HardHat,
     tag: "Execution",
     title: "We manage every detail on site",
-    // Source: Services.jsx — "Turnkey Execution" service description.
     text: "Turnkey execution from first sketch onward. We coordinate the work so the project feels effortless from start to finish, rather than becoming something you have to manage.",
+    src: "/gallery/site-work/feature-wall-craftsmen-at-work.jpg",
+    alt: "Craftsmen actively installing a feature mandala panel on site",
   },
   {
     icon: Sparkles,
     tag: "Finishing",
     title: "Final styling, then it's yours",
-    // Source: Services.jsx "final styling" + the founder's published promise
-    // in AboutCompany.jsx.
     text: "The last layer — styling, detailing and the finish that carries the promise every project is held to: it should feel like home the moment you step in.",
+    src: "/gallery/renders/bedroom/bedroom-render-01.jpg",
+    alt: "A fully designed and immaculately styled primary bedroom",
   },
 ];
 
@@ -84,42 +86,57 @@ export default function HowWeWork() {
           </p>
         </div>
 
-        {/* The stage rail. On desktop a single hairline runs behind the numbered
-            nodes; on mobile the same line runs vertically down the left edge, so
-            the sequence reads identically at any width. */}
-        <ol className="relative mt-16 grid gap-10 md:mt-20 md:grid-cols-4 md:gap-7">
-          <span
-            className="absolute left-[1.35rem] top-2 h-[calc(100%-1rem)] w-px bg-gradient-to-b from-gold/50 via-gold/25 to-transparent md:left-0 md:top-[1.35rem] md:h-px md:w-full md:bg-gradient-to-r md:from-gold/50 md:via-gold/30 md:to-transparent"
-            aria-hidden="true"
-          />
+        {/* Editorial, alternating staggered layout for maximum image impact */}
+        <div className="mt-20 space-y-20 md:mt-28 md:space-y-32">
+          {STAGES.map(({ icon: Icon, tag, title, text, src, alt }, index) => {
+            const isEven = index % 2 === 1;
+            return (
+              <div
+                key={tag}
+                className="reveal flex flex-col gap-10 md:flex-row md:items-center md:gap-16 lg:gap-24"
+              >
+                <figure
+                  className={`w-full overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift md:w-1/2 ${
+                    isEven ? "md:order-2" : "md:order-1"
+                  }`}
+                >
+                  <img
+                    src={src}
+                    alt={alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-[4/3] w-full object-cover sm:aspect-[4/3] md:aspect-[5/4] transition-transform duration-700 hover:scale-105"
+                  />
+                </figure>
 
-          {STAGES.map(({ icon: Icon, tag, title, text }, index) => (
-            <li
-              key={tag}
-              className="reveal relative grid grid-cols-[auto_1fr] gap-5 md:block"
-              data-reveal-delay={`${index * 0.09}s`}
-            >
-              {/* Numbered node — sits on the rail. */}
-              <span className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line-strong bg-canvas font-display text-[0.82rem] font-semibold text-sage-700 shadow-hair">
-                {String(index + 1).padStart(2, "0")}
-              </span>
+                <div
+                  className={`w-full md:w-1/2 ${
+                    isEven ? "md:order-1" : "md:order-2"
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line-strong bg-canvas font-display text-[0.85rem] font-semibold text-sage-700 shadow-hair">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="flex items-center gap-2.5">
+                      <Icon size={16} strokeWidth={1.7} className="text-gold-deep" aria-hidden="true" />
+                      <span className="text-[0.65rem] font-bold uppercase tracking-label text-gold-deep">
+                        {tag}
+                      </span>
+                    </div>
+                  </div>
 
-              <div className="md:mt-7">
-                <div className="flex items-center gap-2.5">
-                  <Icon size={15} strokeWidth={1.7} className="text-gold-deep" aria-hidden="true" />
-                  <span className="text-[0.62rem] font-bold uppercase tracking-label text-gold-deep">
-                    {tag}
-                  </span>
+                  <h3 className="mt-6 font-display text-[1.8rem] font-semibold leading-tight text-ink sm:text-[2.2rem]">
+                    {title}
+                  </h3>
+                  <p className="mt-5 max-w-lg text-[1.05rem] leading-[1.8] text-ink-muted">
+                    {text}
+                  </p>
                 </div>
-
-                <h3 className="mt-3 font-display text-[1.28rem] font-semibold leading-snug text-ink">
-                  {title}
-                </h3>
-                <p className="mt-2.5 text-[0.93rem] leading-[1.8] text-ink-muted">{text}</p>
               </div>
-            </li>
-          ))}
-        </ol>
+            );
+          })}
+        </div>
 
         {/* Closing band — restates the one genuinely verifiable differentiator
             (single team, end to end) and routes to the consultation. */}

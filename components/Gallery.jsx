@@ -18,6 +18,55 @@ const CATEGORIES = [
 // static export, same as the Vite app (no basePath configured).
 const IMAGES = [
   {
+    id: "r1",
+    title: "Signature Living Room",
+    alt: "A warm, curated living room interior glowing with atmosphere",
+    category: "residential",
+    src: "/gallery/renders/living-room/living-room-render-01.jpg",
+    meta: "Signature interiors · atmosphere",
+  },
+  {
+    id: "r2",
+    title: "Contemporary Bedroom Design",
+    alt: "A calm, tailored bedroom interior in deep navy tones",
+    category: "residential",
+    src: "/gallery/renders/bedroom/bedroom-render-01.jpg",
+    meta: "Calm palettes · tailored comfort",
+  },
+  {
+    id: "r3",
+    title: "Warm Modern Bedroom",
+    alt: "A modern bedroom with warm wood textures and elegant lighting",
+    category: "residential",
+    src: "/gallery/renders/bedroom/bedroom-render-02.jpg",
+    meta: "Wood textures · elegant lighting",
+  },
+  {
+    id: "r4",
+    title: "Open Plan Kitchen",
+    alt: "A minimalist modular kitchen with clean lines and premium finishes",
+    category: "residential",
+    src: "/gallery/renders/kitchen/kitchen-render-01.jpg",
+    meta: "Modular design · premium finishes",
+  },
+  {
+    id: "r5",
+    title: "Heritage Stained Glass",
+    alt: "A finished heritage stained glass installation on site",
+    category: "residential",
+    src: "/gallery/site-work/finished-heritage-stained-glass.jpg",
+    meta: "Heritage install · on-site work",
+  },
+  {
+    id: "r6",
+    title: "Heritage Stained Glass",
+    alt: "A finished heritage stained glass installation on site",
+    category: "residential",
+    src: "/gallery/site-work/finished-heritage-stained-glass.jpg",
+    tag1: "Heritage Install",
+    tag2: "On-site Work",
+  },
+  {
     id: "t1",
     title: "Warm Modern Living Room",
     alt: "Warm modern living room with curated finishes and layered warm lighting",
@@ -35,30 +84,6 @@ const IMAGES = [
   },
   {
     id: "t3",
-    title: "Calm Bedroom Retreat",
-    alt: "Calm bedroom interior with soft neutral tones and inviting natural light",
-    category: "residential",
-    src: "/gallery/g3-1540518614846.webp",
-    meta: "Soft neutrals · inviting light",
-  },
-  {
-    id: "t4",
-    title: "Contemporary Bedroom",
-    alt: "Contemporary bedroom interior with plush textures and warm wood finishes",
-    category: "residential",
-    src: "/gallery/g4-1484154218962.webp",
-    meta: "Plush textures · warm wood",
-  },
-  {
-    id: "t5",
-    title: "Open-Plan Kitchen",
-    alt: "Open-plan modular kitchen with a wood island and minimalist cabinetry",
-    category: "residential",
-    src: "/gallery/g5-1556911220.webp",
-    meta: "Wood island · minimalist",
-  },
-  {
-    id: "t6",
     title: "Signature Office Workspace",
     alt: "Modern office workspace interior with natural light and a premium build finish",
     category: "commercial",
@@ -66,7 +91,7 @@ const IMAGES = [
     meta: "Natural light · premium build",
   },
   {
-    id: "t7",
+    id: "t4",
     title: "Retail Showroom Experience",
     alt: "Retail showroom interior with an elegant product display and strong brand presence",
     category: "commercial",
@@ -74,15 +99,7 @@ const IMAGES = [
     meta: "Elegant display · strong brand",
   },
   {
-    id: "t8",
-    title: "Refined Dining Room",
-    alt: "Refined dining room interior with statement pendant lighting and gold accents",
-    category: "residential",
-    src: "/gallery/g8-dining-refined.webp",
-    meta: "Statement lighting · gold accents",
-  },
-  {
-    id: "t9",
+    id: "t5",
     title: "Modern Boutique Hotel Lounge",
     alt: "Modern boutique hotel lounge with a bespoke hospitality interior",
     category: "commercial",
@@ -96,8 +113,9 @@ const IMAGES = [
 const spanFor = (index) => (index % 4 === 0 ? "sm:col-span-2" : "");
 
 export default function Gallery() {
-  const ref = useReveal();
   const [activeCategory, setActiveCategory] = useState("all");
+  const [visibleLimit, setVisibleLimit] = useState(6);
+  const ref = useReveal([activeCategory, visibleLimit]);
   const [favorites, setFavorites] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
@@ -111,13 +129,15 @@ export default function Gallery() {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
   }, [favorites]);
 
-  const visibleImages = useMemo(
+  const filteredImages = useMemo(
     () =>
       activeCategory === "all"
         ? IMAGES
         : IMAGES.filter((img) => img.category === activeCategory),
     [activeCategory],
   );
+
+  const visibleImages = useMemo(() => filteredImages.slice(0, visibleLimit), [filteredImages, visibleLimit]);
 
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
@@ -188,7 +208,7 @@ export default function Gallery() {
                   key={cat.id}
                   type="button"
                   aria-pressed={isActive}
-                  onClick={() => setActiveCategory(cat.id)}
+                  onClick={() => { setActiveCategory(cat.id); setVisibleLimit(6); }}
                   className={`rounded-full px-6 py-2.5 text-[0.72rem] font-bold uppercase tracking-label transition-all duration-300 ease-smooth ${
                     isActive
                       ? "bg-sage-800 text-white shadow-soft"
@@ -266,10 +286,11 @@ export default function Gallery() {
           })}
         </div>
 
-        <p className="reveal mt-14 text-center text-[0.62rem] font-semibold uppercase tracking-label text-ink-faint">
-          Full walkthroughs, drawings and material boards are shared during
-          consultation.
-        </p>
+        <div className="reveal mt-20 flex justify-center">
+          <p className="max-w-xl text-center text-lg font-medium leading-relaxed text-ink-dark">
+            Every space we design is custom-tailored to our clients' unique vision and lifestyle.
+          </p>
+        </div>
       </div>
 
       {/* ---------- Lightbox ---------- */}

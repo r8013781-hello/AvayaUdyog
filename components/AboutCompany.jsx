@@ -55,16 +55,9 @@ export default function AboutCompany() {
               About section above — rounded frame, gold corner brackets,
               caption baked into the gradient. Consistency, not novelty. ---------- */}
           <div className="reveal horizontal relative mx-auto w-full max-w-[26rem] lg:sticky lg:top-28">
-            <span
-              className="absolute -left-4 -top-4 h-24 w-24 border-l border-t border-gold/45"
-              aria-hidden="true"
-            />
-            <span
-              className="absolute -bottom-4 -right-4 h-24 w-24 border-b border-r border-gold/45"
-              aria-hidden="true"
-            />
 
-            <figure className="relative overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift">
+
+            <figure className="relative overflow-hidden rounded-[1.5rem] bg-sage-50 shadow-2xl ring-1 ring-black/5">
               <img
                 src="/BISWANATH.jpeg"
                 {...imageSize("/BISWANATH.jpeg")}
@@ -90,13 +83,8 @@ export default function AboutCompany() {
           {/* ---------- Copy ---------- */}
           <div>
             <blockquote className="reveal relative">
-              <span
-                className="absolute -left-1 -top-6 font-display text-[5rem] leading-none text-gold/25"
-                aria-hidden="true"
-              >
-                &ldquo;
-              </span>
-              <p className="relative font-display text-[1.5rem] font-medium italic leading-[1.5] text-ink sm:text-[1.75rem]">
+              <div className="absolute -left-4 top-0 h-full w-1 rounded-full bg-gold/40" aria-hidden="true" />
+              <p className="relative pl-6 font-serif text-[1.35rem] font-medium italic leading-[1.6] text-ink-dark sm:text-[1.6rem]">
                 Every space we design carries a simple promise — it should feel
                 like home the moment you step in, and feel like heirloom for
                 years to come.
@@ -114,12 +102,11 @@ export default function AboutCompany() {
               warm, functional, and luxurious in equal measure.
             </p>
 
-            {/* Stats — gold hairline above, no box. */}
-            <div className="reveal mt-10" data-reveal-delay="0.18s">
-              <div className="hair-gold" />
-              <dl className="grid grid-cols-3 gap-4 pt-7">
+            {/* Stats */}
+            <div className="reveal mt-12 border-t border-sage-200/60 pt-8" data-reveal-delay="0.18s">
+              <dl className="grid grid-cols-3 divide-x divide-sage-200/60 text-center">
                 {STATS.map((stat) => (
-                  <div key={stat.label}>
+                  <div key={stat.label} className="px-2">
                     <dt className="sr-only">{stat.label}</dt>
                     <dd>
                       <span className="block font-display text-[2.2rem] font-semibold leading-none tracking-[-0.03em] text-sage-700">
@@ -161,7 +148,7 @@ export default function AboutCompany() {
               className="btn-primary reveal group mt-10"
               data-reveal-delay="0.4s"
             >
-              Work With Our Founder&apos;s Team
+              Book a Design Consultation
               <ArrowUpRight
                 size={16}
                 className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

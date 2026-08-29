@@ -486,13 +486,15 @@ export default function CommercialInteriorDesignerKolkataPage() {
               Share your project with us and receive a personalised
               consultation from our design team.
             </p>
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex flex-col items-center gap-6">
               <PageCTAButton triggerSource="commercial_page_cta" className="bg-white text-sage-900 hover:bg-gold-soft">
                 Discuss Your Commercial Project
               </PageCTAButton>
-              <SectionLink href="/#how-we-work" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
-                Our process
-              </SectionLink>
+              <div className="flex flex-wrap items-center justify-center gap-5 text-[0.9rem] font-medium text-sage-200/90">
+                <SectionLink href="/#how-we-work" className="transition-colors hover:text-white">
+                  Our process
+                </SectionLink>
+              </div>
             </div>
           </div>
         </div>

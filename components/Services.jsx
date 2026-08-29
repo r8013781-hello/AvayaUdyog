@@ -22,8 +22,8 @@ const SERVICES = [
     href: "/services/residential-interior-design",
     linkLabel: "Residential interior design",
     text: "Warm, modern homes shaped around your lifestyle — thoughtful layouts, curated finishes, and elevated details that make every day feel special.",
-    src: "/services/s1-residential.webp",
-    alt: "Bright, gallery-walled modern living room — residential interior design",
+    src: "/gallery/renders/living-room/living-room-render-01.jpg",
+    alt: "Warm, curated living room interior glowing with atmosphere",
   },
   {
     title: "Commercial Spaces",
@@ -56,8 +56,8 @@ const SERVICES = [
     href: null,
     linkLabel: null,
     text: "From first sketch to final styling, we manage every detail so your project feels effortless from start to finish.",
-    src: "/services/s4-execution.webp",
-    alt: "An interior project site during turnkey execution",
+    src: "/gallery/renders/living-room/living-room-render-03.jpg",
+    alt: "A beautifully executed luxury interior living space",
   },
 ];
 

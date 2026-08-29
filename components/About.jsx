@@ -59,13 +59,11 @@ export default function About() {
                   onError={handleImageError}
                   className="h-[30rem] w-full object-cover transition-transform duration-[1200ms] ease-smooth hover:scale-[1.04] lg:h-[34rem]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-sage-950/40 via-transparent to-transparent" />
-                <figcaption className="absolute inset-x-5 bottom-5">
-                  <span className="inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-white/15 px-4 py-2 backdrop-blur-md">
-                    <span className="h-1.5 w-1.5 rounded-full bg-gold-light" />
-                    <span className="text-[0.6rem] font-bold uppercase tracking-label text-white">
-                      Est. with a legacy
-                    </span>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+                <figcaption className="absolute inset-x-8 bottom-8 flex items-center gap-4">
+                  <span className="h-[2px] w-12 bg-gold shadow-[0_0_8px_rgba(191,159,107,0.5)]"></span>
+                  <span className="text-lg font-semibold uppercase tracking-[0.2em] text-white drop-shadow-xl">
+                    Est. with a legacy
                   </span>
                 </figcaption>
               </figure>

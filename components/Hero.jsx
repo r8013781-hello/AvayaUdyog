@@ -78,7 +78,7 @@ export default function Hero() {
                 aria-hidden="true"
               />
               <h1 className="mt-4 font-display text-[1.15rem] italic font-semibold leading-snug tracking-[0.01em] text-gold-light [text-shadow:0_2px_18px_rgba(0,0,0,0.5)] sm:text-[1.5rem] lg:text-[1.75rem]">
-                Luxury Interior Design · Kolkata
+                Luxury Interior Design
               </h1>
             </div>
 

@@ -11,7 +11,7 @@ const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Residential Interior Designer in Kolkata | Avaya Udyog";
 const DESCRIPTION =
   "Warm, personalised home interiors in Kolkata — living rooms, bedrooms, kitchens and dining spaces designed by Avaya Udyog, led by Biswanath Adhikari.";
-const OG_IMAGE = `${SITE_URL}/services/s1-residential.webp`;
+const OG_IMAGE = `${SITE_URL}/gallery/renders/living-room/living-room-render-01.jpg`;
 const PAGE_URL = `${SITE_URL}/services/residential-interior-design`;
 
 export const metadata = {
@@ -50,25 +50,25 @@ const ROOMS = [
   {
     title: "Living Rooms",
     text: "Layouts and finishes built for how a family actually gathers, not just how a room photographs.",
-    src: "/gallery/g1-1505693416388.webp",
+    src: "/gallery/renders/living-room/living-room-render-03.jpg",
     alt: "Warm modern living room with curated finishes and layered warm lighting",
   },
   {
     title: "Bedrooms",
     text: "Calm, restful spaces in soft neutral tones, plush textures and warm wood finishes.",
-    src: "/gallery/g3-1540518614846.webp",
+    src: "/gallery/renders/bedroom/bedroom-render-01.jpg",
     alt: "Calm bedroom interior with soft neutral tones and inviting natural light",
   },
   {
     title: "Kitchens",
     text: "Modular kitchens with minimalist cabinetry, planned around how you actually cook and host.",
-    src: "/gallery/g5-1556911220.webp",
+    src: "/gallery/renders/kitchen/kitchen-render-01.jpg",
     alt: "Open-plan modular kitchen with a wood island and minimalist cabinetry",
   },
   {
     title: "Dining Spaces",
     text: "Refined dining rooms with statement lighting that anchor the rest of the home around them.",
-    src: "/gallery/g8-dining-refined.webp",
+    src: "/gallery/renders/dining-room/dining-room-render-01.jpg",
     alt: "Refined dining room interior with statement pendant lighting and gold accents",
   },
 ];
@@ -112,8 +112,8 @@ export default function ResidentialInteriorDesignerKolkataPage() {
           <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
             <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
               <img
-                src="/services/s1-residential.webp"
-                {...imageSize("/services/s1-residential.webp")}
+                src="/gallery/renders/living-room/living-room-render-01.jpg"
+                {...imageSize("/gallery/renders/living-room/living-room-render-01.jpg")}
                 alt="Bright, gallery-walled modern living room — residential interior design"
                 loading="eager"
                 decoding="async"
@@ -262,16 +262,19 @@ export default function ResidentialInteriorDesignerKolkataPage() {
               Share your vision with us and receive a personalised
               consultation from our design team.
             </p>
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex flex-col items-center gap-6">
               <PageCTAButton triggerSource="residential_page_cta" className="bg-white text-sage-900 hover:bg-gold-soft">
                 Book a Consultation
               </PageCTAButton>
-              <SectionLink href="/#how-we-work" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
-                Our process
-              </SectionLink>
-              <Link href="/services/modular-kitchen" className="text-[0.78rem] font-bold uppercase tracking-label text-white underline underline-offset-4 hover:text-gold-light">
-                Modular kitchens
-              </Link>
+              <div className="flex flex-wrap items-center justify-center gap-5 text-[0.9rem] font-medium text-sage-200/90">
+                <SectionLink href="/#how-we-work" className="transition-colors hover:text-white">
+                  Our process
+                </SectionLink>
+                <span className="h-1 w-1 rounded-full bg-sage-200/40" aria-hidden="true" />
+                <Link href="/services/modular-kitchen" className="transition-colors hover:text-white">
+                  Modular kitchens
+                </Link>
+              </div>
             </div>
           </div>
         </div>

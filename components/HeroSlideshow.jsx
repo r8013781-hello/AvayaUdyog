@@ -12,13 +12,6 @@ import { imageSize } from "../lib/imageDimensions";
    each lean into contrast (gold lamp light, deep navy, dark stone). */
 export const HERO_SLIDES = [
   {
-    id: "exterior",
-    src: "/hero/exterior.webp",
-    alt: "A contemporary residence at dusk, architecture glowing from within",
-    eyebrow: "Signature Residences",
-    title: "Where architecture meets atmosphere",
-  },
-  {
     id: "living",
     src: "/hero/living.webp",
     alt: "A warm, considered living room with layered lighting",
@@ -31,6 +24,13 @@ export const HERO_SLIDES = [
     alt: "A calm, tailored bedroom in deep navy tones",
     eyebrow: "Private Quarters",
     title: "Calm palettes, tailored comfort",
+  },
+  {
+    id: "exterior",
+    src: "/hero/exterior.webp",
+    alt: "A contemporary residence at dusk, architecture glowing from within",
+    eyebrow: "Signature Residences",
+    title: "Where architecture meets atmosphere",
   },
   {
     id: "bath",

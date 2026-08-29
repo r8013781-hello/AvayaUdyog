@@ -9,7 +9,7 @@ const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Home Renovation in Kolkata | Avaya Udyog";
 const DESCRIPTION =
   "Renovating a home you already live in is a different job from fitting out an empty flat. How sequencing, older-building constraints and living through the work are handled — from a Kolkata studio with 35+ years in interiors.";
-const OG_IMAGE = `${SITE_URL}/hero/exterior.webp`;
+const OG_IMAGE = `${SITE_URL}/gallery/site-work/fluted-panel-marine-plywood.jpg`;
 const PAGE_URL = `${SITE_URL}/services/home-renovation`;
 
 export const metadata = {
@@ -113,21 +113,33 @@ export default function HomeRenovationPage() {
 
       <section className="section !pt-10">
         <div className="shell relative">
-          <div className="max-w-3xl">
-            <span className="eyebrow">Renovation</span>
-            <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
-              Reworking a home
-              <br /><span className="accent text-sage-600">you already live in.</span>
-            </h1>
-            <p className="mt-7 text-[1.04rem] leading-[1.85] text-ink-soft">
-              Renovation is not a fit-out with furniture in the way. It is a different job
-              with different risks — unknowns behind the walls, a building with its own
-              rules, and a family who has to keep living somewhere while it happens. This
-              page is about how those parts are handled, because they are what actually
-              decides whether a renovation goes well.
-            </p>
-            <div className="mt-9">
-              <PageCTAButton triggerSource="renovation_cta">Book a Consultation</PageCTAButton>
+          <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
+            <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
+              <img
+                src="/gallery/site-work/fluted-panel-marine-plywood.jpg"
+                alt="Construction of a fluted panel wall with marine plywood"
+                loading="eager"
+                decoding="async"
+                className="h-[24rem] w-full object-cover sm:h-[28rem]"
+              />
+            </figure>
+
+            <div className="order-1 lg:order-2">
+              <span className="eyebrow">Renovation</span>
+              <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
+                Reworking a home
+                <br /><span className="accent text-sage-600">you already live in.</span>
+              </h1>
+              <p className="mt-7 text-[1.04rem] leading-[1.85] text-ink-soft">
+                Renovation is not a fit-out with furniture in the way. It is a different job
+                with different risks — unknowns behind the walls, a building with its own
+                rules, and a family who has to keep living somewhere while it happens. This
+                page is about how those parts are handled, because they are what actually
+                decides whether a renovation goes well.
+              </p>
+              <div className="mt-9">
+                <PageCTAButton triggerSource="renovation_cta">Book a Consultation</PageCTAButton>
+              </div>
             </div>
           </div>
         </div>
@@ -254,14 +266,17 @@ export default function HomeRenovationPage() {
                 building and the existing services is what turns a vague idea into a plan
                 anyone can cost.
               </p>
-              <div className="mt-7 flex flex-wrap items-center gap-5">
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <PageCTAButton triggerSource="renovation_footer_cta">Book a Consultation</PageCTAButton>
-                <Link href="/services/modular-kitchen" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
-                  Modular kitchens
-                </Link>
-                <SectionLink href="/#how-we-work" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
-                  Our process
-                </SectionLink>
+                <div className="flex flex-wrap items-center gap-4 text-[0.88rem] font-medium text-sage-600">
+                  <Link href="/services/modular-kitchen" className="transition-colors hover:text-sage-900">
+                    Modular kitchens
+                  </Link>
+                  <span className="h-1 w-1 rounded-full bg-sage-300" aria-hidden="true" />
+                  <SectionLink href="/#how-we-work" className="transition-colors hover:text-sage-900">
+                    Our process
+                  </SectionLink>
+                </div>
               </div>
             </div>
           </div>
