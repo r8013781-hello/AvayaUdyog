@@ -164,7 +164,7 @@ export default function Navbar() {
                     scrolled ? "text-ink-muted" : "text-white/70"
                   }`}
                 >
-                  Interior Design
+                  Interior Design &amp; Decoration
                 </span>
               </span>
             </Link>

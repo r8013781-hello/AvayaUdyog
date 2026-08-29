@@ -8,7 +8,7 @@ import { imageSize } from "../../../../lib/imageDimensions";
 import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
-const TITLE = "Residential Interior Designer in Kolkata | Avaya Udyog";
+const TITLE = "Residential Design & Decorationer in Kolkata | Avaya Udyog";
 const DESCRIPTION =
   "Warm, personalised home interiors in Kolkata — living rooms, bedrooms, kitchens and dining spaces designed by Avaya Udyog, led by Biswanath Adhikari.";
 const OG_IMAGE = `${SITE_URL}/gallery/renders/living-room/living-room-render-01.jpg`;
@@ -35,7 +35,7 @@ export const metadata = {
 };
 
 const service = serviceSchema({
-  name: "Residential Interior Design",
+  name: "Residential Design & Decoration",
   description:
     "Warm, modern homes shaped around your lifestyle — thoughtful layouts, curated finishes, and elevated details.",
   url: PAGE_URL,
@@ -99,7 +99,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
           items={[
             { name: "Home", path: "/" },
             {
-              name: "Residential Interior Design",
+              name: "Residential Design & Decoration",
               path: "/services/residential-interior-design",
             },
           ]}
@@ -122,7 +122,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
             </figure>
 
             <div className="order-1 lg:order-2">
-              <span className="eyebrow">Residential Interior Designer in Kolkata</span>
+              <span className="eyebrow">Residential Design & Decorationer in Kolkata</span>
               <h1 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
                 Homes shaped around{" "}
                 <span className="accent text-sage-600">how you live.</span>

@@ -168,7 +168,7 @@ export default function Footer() {
                   Avaya <span className="text-sage-600">Udyog</span>
                 </span>
                 <span className="mt-1 block text-[0.58rem] font-semibold uppercase tracking-wider2 text-ink-muted">
-                  Interior Design
+                  Interior Design &amp; Decoration
                 </span>
               </span>
             </div>

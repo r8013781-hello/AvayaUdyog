@@ -37,8 +37,8 @@ const STAGES = [
   {
     icon: Ruler,
     tag: "Design",
-    title: "Layouts, finishes and detail",
-    text: "Thoughtful layouts, curated finishes and elevated details are developed together — including material curation and any bespoke furniture — so the palette is settled before building begins.",
+    title: "Finishes, furnishings, and decorative detail",
+    text: "Curated finishes, styling selections, and elevated decorative details are developed together — including material curation and any bespoke furniture — so the palette is settled before building begins.",
     src: "/gallery/site-work/tv-panel-veneer-fitting.jpg",
     alt: "Raw finishes and details coming together on a wall panel",
   },
@@ -53,8 +53,8 @@ const STAGES = [
   {
     icon: Sparkles,
     tag: "Finishing",
-    title: "Final styling, then it's yours",
-    text: "The last layer — styling, detailing and the finish that carries the promise every project is held to: it should feel like home the moment you step in.",
+    title: "Final decoration, styling, and handover",
+    text: "The last layer — bespoke furnishings, beautiful decoration, and the styling that carries the promise every project is held to: it should feel like home the moment you step in.",
     src: "/gallery/renders/bedroom/bedroom-render-01.jpg",
     alt: "A fully designed and immaculately styled primary bedroom",
   },

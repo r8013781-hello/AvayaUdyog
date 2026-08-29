@@ -76,9 +76,9 @@ export default function Services() {
           <div>
             <span className="eyebrow">Our Services</span>
             <h2 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
-              Crafted for living
+              Designed for living.
               <br />
-              <span className="accent text-sage-600">beautifully.</span>
+              <span className="accent text-sage-600">Decorated for life.</span>
             </h2>
           </div>
           <p className="max-w-xs text-[0.94rem] leading-[1.8] text-ink-muted md:pb-2">

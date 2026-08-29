@@ -96,10 +96,10 @@ export default function AboutCompany() {
               data-reveal-delay="0.1s"
             >
               With over 35 years of industry experience, Mr. Biswanath Adhikari
-              has built Avaya Udyog on thoughtful design, reliable
+              has built Avaya Udyog on thoughtful design, exquisite decoration, reliable
               craftsmanship, and a deeply personal approach to every project.
               His guidance shapes every home and commercial space into something
-              warm, functional, and luxurious in equal measure.
+              warm, beautifully styled, and luxurious in equal measure.
             </p>
 
             {/* Stats */}
