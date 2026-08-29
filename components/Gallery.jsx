@@ -288,7 +288,7 @@ export default function Gallery() {
 
         <div className="reveal mt-20 flex justify-center">
           <p className="max-w-xl text-center text-lg font-medium leading-relaxed text-ink-dark">
-            Every space we design is custom-tailored to our clients' unique vision and lifestyle.
+            Every space we design is custom-tailored to our clients&apos; unique vision and lifestyle.
           </p>
         </div>
       </div>
