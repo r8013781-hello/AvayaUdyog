@@ -255,7 +255,16 @@ export default function ResidentialInteriorDesignerKolkataPage() {
                     {room.title}
                   </h3>
                   <p className="mt-2 text-[0.92rem] leading-[1.8] text-ink-muted">
-                    {room.text}
+                    {room.title === "Kitchens" ? (
+                      <>
+                        <Link href="/services/modular-kitchen" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                          Modular kitchens
+                        </Link>{" "}
+                        with minimalist cabinetry, planned around how you actually cook and host.
+                      </>
+                    ) : (
+                      room.text
+                    )}
                   </p>
                 </div>
               </div>
@@ -282,7 +291,23 @@ export default function ResidentialInteriorDesignerKolkataPage() {
             {SCOPE.map(({ title, text }) => (
               <div key={title} className="rounded-[1.25rem] border border-line bg-white p-7 shadow-hair">
                 <h3 className="font-display text-[1.1rem] font-semibold text-ink">{title}</h3>
-                <p className="mt-3 text-[0.93rem] leading-[1.8] text-ink-soft">{text}</p>
+                <p className="mt-3 text-[0.93rem] leading-[1.8] text-ink-soft">
+                  {title === "Structural and civil work, when the layout needs it" ? (
+                    <>
+                      Where a layout genuinely requires breaking or moving a wall, re-routing
+                      plumbing, or upgrading an electrical point, that work is coordinated as
+                      part of the project rather than left for you to arrange separately. If
+                      the project is really about reworking a home you already live in rather
+                      than a bare-shell fit-out, our{" "}
+                      <Link href="/services/home-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                        home renovation
+                      </Link>{" "}
+                      page covers that in more depth.
+                    </>
+                  ) : (
+                    text
+                  )}
+                </p>
               </div>
             ))}
           </div>
@@ -335,7 +360,18 @@ export default function ResidentialInteriorDesignerKolkataPage() {
                     <span className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-line-strong text-sage-600 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
                   </summary>
                   <p className="max-w-2xl pb-7 pr-12 text-[0.94rem] leading-[1.85] text-ink-muted">
-                    {i === 3 ? (
+                    {i === 0 ? (
+                      <>
+                        Either. A full-home scheme reads better because every room relates to
+                        the next, but a single room is a complete project in its own right,
+                        priced and scheduled on its own terms. If the kitchen is the room in
+                        question, it&apos;s worth a look at our dedicated{" "}
+                        <Link href="/services/modular-kitchen" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                          modular kitchen
+                        </Link>{" "}
+                        page — it goes deeper than we do here.
+                      </>
+                    ) : i === 3 ? (
                       <>
                         It depends on scope and sequencing more than on the size of the
                         home — a single room can often be done while you stay put; a

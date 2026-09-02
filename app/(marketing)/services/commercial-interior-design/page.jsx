@@ -353,8 +353,11 @@ export default function CommercialInteriorDesignerKolkataPage() {
               From brief to <span className="accent text-sage-600">final fit-out.</span>
             </h2>
             <p className="mt-6 text-[1rem] leading-[1.85] text-ink-soft">
-              The same two services a residential project uses — design consultation and
-              turnkey execution — but sequenced around an operating business. What
+              The same two services a residential project uses —{" "}
+              <Link href="/insights/what-happens-in-a-design-consultation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                design consultation
+              </Link>{" "}
+              and turnkey execution — but sequenced around an operating business. What
               changes is the order things have to be decided in, and how much of it has
               to be locked before anyone starts building.
             </p>

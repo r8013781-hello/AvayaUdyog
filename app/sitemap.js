@@ -27,7 +27,6 @@ const LAST_MODIFIED = {
   residential: "2026-08-23",
   // Gained the constraints / workflow / phasing / delivery sections.
   commercial: "2026-08-24",
-  privacy: "2026-08-23",
   terms: "2026-08-23",
 };
 
@@ -82,12 +81,13 @@ export default function sitemap() {
       changeFrequency: "yearly",
       priority: 0.6,
     })),
-    {
-      url: `${SITE_URL}/privacy-policy`,
-      lastModified: LAST_MODIFIED.privacy,
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
+    // /privacy-policy is deliberately not listed: it's noindex, follow
+    // (app/(marketing)/privacy-policy/page.jsx) — legal boilerplate with no
+    // commercial or informational value to a searcher. Listing a noindex
+    // page in the sitemap sends Google a contradictory signal for no
+    // benefit, so it's simply left out rather than included at a low
+    // priority. The page itself, its canonical, and the footer link are
+    // unchanged — only sitemap discovery is affected.
     {
       url: `${SITE_URL}/terms`,
       lastModified: LAST_MODIFIED.terms,

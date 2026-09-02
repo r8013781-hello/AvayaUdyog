@@ -13,6 +13,17 @@ export const metadata = {
   alternates: {
     canonical: PAGE_URL,
   },
+  // Legal boilerplate has no informational or commercial value to a
+  // searcher, and its sitewide footer link (every page links it once) was
+  // giving it enough weight to compete with real commercial pages for
+  // branded-query attention — see the entity/sitelink audit. `follow: true`
+  // is deliberate: the page must stay fully crawlable so Google can see
+  // this directive and continue through any links it contains; only
+  // indexing (making the page itself eligible to rank/appear) is disabled.
+  robots: {
+    index: false,
+    follow: true,
+  },
   openGraph: {
     type: "website",
     siteName: "Avaya Udyog",

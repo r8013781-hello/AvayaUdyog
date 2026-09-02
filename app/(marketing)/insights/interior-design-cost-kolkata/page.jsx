@@ -117,14 +117,34 @@ export default function Page() {
         </p>
 
         <h2 id="cost-drivers">What actually moves the number</h2>
+        <p>
+          Everything below assumes a home project. A commercial fit-out is priced
+          against a different set of drivers entirely — a lease, an operating
+          business and a date that costs money if it slips — covered on our{" "}
+          <Link href="/services/commercial-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            commercial interior design
+          </Link>{" "}
+          page rather than here.
+        </p>
 
         <h3>Scope — by far the largest factor</h3>
         <p>
           How much of the home is being touched, and how deeply. Painting and
           re-flooring a flat and taking it back to the shell are different projects by
-          an order of magnitude, not by a percentage. Within a single home, the
-          difference between refreshing a kitchen and rebuilding it is larger than
-          almost any material decision you will make.
+          an order of magnitude, not by a percentage — the difference between{" "}
+          <Link href="/services/residential-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            designing a home
+          </Link>{" "}
+          from scratch and a{" "}
+          <Link href="/services/home-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            renovation
+          </Link>{" "}
+          of one you already live in. Within a single home, the difference between
+          refreshing a kitchen and rebuilding it — see our{" "}
+          <Link href="/services/modular-kitchen" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            modular kitchen
+          </Link>{" "}
+          page — is larger than almost any material decision you will make.
         </p>
 
         <h3>Size — but less than people expect</h3>

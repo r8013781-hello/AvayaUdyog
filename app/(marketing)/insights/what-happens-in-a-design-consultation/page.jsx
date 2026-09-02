@@ -48,6 +48,25 @@ export default function Page() {
           decides the project. The conversation that matters is about how the space is
           used, because that is what constrains everything drawn afterwards.
         </p>
+        <p>
+          The shape of this conversation is the same whether the project is a full{" "}
+          <Link href="/services/residential-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            residential
+          </Link>{" "}
+          fit-out, a{" "}
+          <Link href="/services/modular-kitchen" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            kitchen
+          </Link>{" "}
+          on its own, a{" "}
+          <Link href="/services/home-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            renovation
+          </Link>{" "}
+          of a home you already live in, or a{" "}
+          <Link href="/services/commercial-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            commercial
+          </Link>{" "}
+          fit-out — only the specific questions change.
+        </p>
 
         <h2>What gets asked</h2>
         <p>

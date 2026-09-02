@@ -150,7 +150,13 @@ export default function Page() {
         </p>
         <p>
           Well-detailed panels are barely visible. A ceiling that cannot be opened is
-          not a cleaner design — it is a deferred cost.
+          not a cleaner design — it is a deferred cost. It is also exactly the kind of
+          hidden condition our{" "}
+          <Link href="/services/home-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            home renovation
+          </Link>{" "}
+          page discusses in more general terms — you cannot see what is behind a
+          finish until it is opened up.
         </p>
 
         <h2>Lighting, and what actually fails</h2>

@@ -4,6 +4,7 @@ import Breadcrumbs from "../../../../components/Breadcrumbs";
 import { serviceSchema, webPageSchema, faqSchema } from "../../../../lib/schema";
 import PageCTAButton from "../../../../components/PageCTAButton";
 import SectionLink from "../../../../components/SectionLink";
+import { imageSize } from "../../../../lib/imageDimensions";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Modular Kitchen Design in Kolkata | Avaya Udyog";
@@ -173,6 +174,7 @@ export default function ModularKitchenPage() {
             <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
               <img
                 src="/gallery/renders/kitchen/kitchen-render-01.jpg"
+                {...imageSize("/gallery/renders/kitchen/kitchen-render-01.jpg")}
                 alt="A minimalist modular kitchen with clean lines and premium finishes"
                 loading="eager"
                 decoding="async"
@@ -181,7 +183,7 @@ export default function ModularKitchenPage() {
             </figure>
 
             <div className="order-1 lg:order-2">
-              <span className="eyebrow">Modular Kitchens</span>
+              <span className="eyebrow">Modular Kitchen Design in Kolkata</span>
               <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
                 A kitchen is planned
                 <br />
@@ -191,8 +193,18 @@ export default function ModularKitchenPage() {
                 Most kitchen disappointments are layout decisions, not finish decisions.
                 A beautiful kitchen with the sink in the wrong place is a daily irritation;
                 a plain one that is properly planned disappears into your routine. This page
-                covers how the decisions are actually made — layouts, the materials that
-                matter, and what genuinely moves the cost.
+                covers how Avaya Udyog plans a modular kitchen in Kolkata — layouts, the
+                materials that matter, and what genuinely moves the cost.
+              </p>
+              <p className="mt-4 text-[0.92rem] leading-[1.8] text-ink-muted">
+                A kitchen on its own, this page. As one room inside a larger new-build
+                home, see{" "}
+                <Link href="/services/residential-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                  residential interior design
+                </Link>. As part of reworking a kitchen you already use every day, see{" "}
+                <Link href="/services/home-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                  home renovation
+                </Link>.
               </p>
               <div className="mt-9">
                 <PageCTAButton triggerSource="modular_kitchen_cta">Book a Consultation</PageCTAButton>
@@ -329,6 +341,10 @@ export default function ModularKitchenPage() {
                 <div className="flex flex-wrap items-center gap-4 text-[0.88rem] font-medium text-sage-600">
                   <Link href="/services/residential-interior-design" className="transition-colors hover:text-sage-900">
                     Full-home interiors
+                  </Link>
+                  <span className="h-1 w-1 rounded-full bg-sage-300" aria-hidden="true" />
+                  <Link href="/services/home-renovation" className="transition-colors hover:text-sage-900">
+                    Home renovation
                   </Link>
                   <span className="h-1 w-1 rounded-full bg-sage-300" aria-hidden="true" />
                   <SectionLink href="/#how-we-work" className="transition-colors hover:text-sage-900">

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Hammer, CalendarClock, AlertTriangle, ShieldCheck } from "lucide-react";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import { serviceSchema, webPageSchema, faqSchema } from "../../../../lib/schema";
+import { serviceSchema, webPageSchema, faqSchema, imageObjectSchema } from "../../../../lib/schema";
 import PageCTAButton from "../../../../components/PageCTAButton";
 import SectionLink from "../../../../components/SectionLink";
+import { imageSize } from "../../../../lib/imageDimensions";
 
 const SITE_URL = "https://avayaudyog.com";
 const TITLE = "Home Renovation in Kolkata | Avaya Udyog";
@@ -29,11 +30,12 @@ export const metadata = {
  * Evidenced, not invented: "Renovation" is a project type in the CRM's own
  * project registration form (components/crm/CustomerProjectPipeline.jsx).
  *
- * Image-free for the same reason as the modular kitchen page — every
- * photograph in this repository is stock, and a renovation page illustrated
- * with stock "before and after" imagery would be fabricating project evidence.
- * Before-and-after is the natural illustration here and it is exactly the thing
- * that cannot be faked, so the page carries none.
+ * The hero image is real Avaya Udyog site-work (fluted-panel-marine-plywood.jpg
+ * — construction of a fluted panel wall), not stock or a render, which is why
+ * it is the one image on this page and the one image on the site carrying
+ * ImageObject schema below. No "before and after" gallery: that is the one
+ * illustration that cannot be faked, and this repository does not have a
+ * documented before/after pair to show.
  *
  * The differentiator written here is genuine and checkable against the site's
  * own published copy: design and execution under one roof, which matters far
@@ -46,6 +48,11 @@ const service = serviceSchema({
   url: PAGE_URL,
 });
 const webPage = webPageSchema({ url: PAGE_URL, name: TITLE, description: DESCRIPTION, about: `${PAGE_URL}#service` });
+const heroImage = imageObjectSchema({
+  url: OG_IMAGE,
+  ...imageSize("/gallery/site-work/fluted-panel-marine-plywood.jpg"),
+  caption: "Construction of a fluted panel wall with marine plywood",
+});
 
 const DIFFERENCES = [
   {
@@ -103,6 +110,7 @@ export default function HomeRenovationPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(service) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(heroImage) }} />
 
       <div className="shell pt-32 md:pt-36">
         <Breadcrumbs items={[
@@ -117,6 +125,7 @@ export default function HomeRenovationPage() {
             <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
               <img
                 src="/gallery/site-work/fluted-panel-marine-plywood.jpg"
+                {...imageSize("/gallery/site-work/fluted-panel-marine-plywood.jpg")}
                 alt="Construction of a fluted panel wall with marine plywood"
                 loading="eager"
                 decoding="async"
@@ -125,7 +134,7 @@ export default function HomeRenovationPage() {
             </figure>
 
             <div className="order-1 lg:order-2">
-              <span className="eyebrow">Renovation</span>
+              <span className="eyebrow">Home Renovation in Kolkata</span>
               <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
                 Reworking a home
                 <br /><span className="accent text-sage-600">you already live in.</span>
@@ -134,8 +143,8 @@ export default function HomeRenovationPage() {
                 Renovation is not a fit-out with furniture in the way. It is a different job
                 with different risks — unknowns behind the walls, a building with its own
                 rules, and a family who has to keep living somewhere while it happens. This
-                page is about how those parts are handled, because they are what actually
-                decides whether a renovation goes well.
+                page is about how Avaya Udyog handles home renovation in Kolkata, because
+                those parts are what actually decide whether a renovation goes well.
               </p>
               <div className="mt-9">
                 <PageCTAButton triggerSource="renovation_cta">Book a Consultation</PageCTAButton>
@@ -191,7 +200,28 @@ export default function HomeRenovationPage() {
                 </span>
                 <div>
                   <h3 className="font-display text-[1.14rem] font-semibold text-ink">{label}</h3>
-                  <p className="mt-1.5 text-[0.93rem] leading-[1.8] text-ink-muted">{text}</p>
+                  <p className="mt-1.5 text-[0.93rem] leading-[1.8] text-ink-muted">
+                    {label === "Full-room" ? (
+                      <>
+                        {text} When the room in question is a kitchen, our dedicated{" "}
+                        <Link href="/services/modular-kitchen" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                          modular kitchen
+                        </Link>{" "}
+                        page goes deeper on layouts, materials and hardware.
+                      </>
+                    ) : label === "Full-home" ? (
+                      <>
+                        {text} At that point the brief is often closer to a full{" "}
+                        <Link href="/services/residential-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                          residential interior design
+                        </Link>{" "}
+                        project than a restoration of what&apos;s already there — worth reading
+                        both before deciding.
+                      </>
+                    ) : (
+                      text
+                    )}
+                  </p>
                 </div>
               </li>
             ))}
@@ -242,7 +272,20 @@ export default function HomeRenovationPage() {
                     <h3 className="font-display text-[1.1rem] font-semibold leading-snug text-ink group-hover:text-sage-700">{q}</h3>
                     <span className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-line-strong text-sage-600 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
                   </summary>
-                  <p className="max-w-2xl pb-7 pr-12 text-[0.94rem] leading-[1.85] text-ink-muted">{a}</p>
+                  <p className="max-w-2xl pb-7 pr-12 text-[0.94rem] leading-[1.85] text-ink-muted">
+                    {q === "How is renovation different from interior design?" ? (
+                      <>
+                        {a}{" "}See our{" "}
+                        <Link href="/services/residential-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                          residential interior design
+                        </Link>{" "}
+                        page for what that looks like on a project that isn&apos;t constrained
+                        by an existing home.
+                      </>
+                    ) : (
+                      a
+                    )}
+                  </p>
                 </details>
               ))}
             </div>

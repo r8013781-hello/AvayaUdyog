@@ -55,7 +55,12 @@ export default function Page() {
           The single most consequential material decision in a home is also the least
           visible: what the boxes are made of. Cabinet carcasses, wardrobe interiors and
           the substrate under every veneer live their whole lives out of sight, and they
-          are where humidity does its damage first.
+          are where humidity does its damage first — the kind of whole-home joinery
+          decision covered on our{" "}
+          <Link href="/services/residential-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            residential interior design
+          </Link>{" "}
+          page.
         </p>
         <p>
           <strong>Boiling Water Proof (BWP) or marine-grade plywood</strong> is
@@ -101,7 +106,11 @@ export default function Page() {
           water-ingress problem that paint has been asked to solve, and repainting over
           them simply resets the clock. The sequence that actually works is finding
           where water is entering, dealing with it, letting the wall dry properly, and
-          only then finishing.
+          only then finishing — exactly the kind of hidden-condition work our{" "}
+          <Link href="/services/home-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+            home renovation
+          </Link>{" "}
+          page discusses in more general terms.
         </p>
         <p>
           Where walls share a boundary with an external face or a bathroom, the

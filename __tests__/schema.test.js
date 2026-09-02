@@ -8,6 +8,7 @@ import {
   serviceSchema,
   webPageSchema,
   articleSchema,
+  imageObjectSchema,
 } from "../lib/schema";
 import { INSIGHTS } from "../lib/insights";
 
@@ -171,5 +172,24 @@ describe("articleSchema", () => {
     INSIGHTS.filter((i) => i.slug !== "interior-design-cost-kolkata").forEach((insight) => {
       expect(insight.updated, `${insight.slug} unexpectedly has an 'updated' field`).toBeUndefined();
     });
+  });
+});
+
+describe("imageObjectSchema", () => {
+  it("attributes the image to the business by @id, not a duplicated name", () => {
+    const img = imageObjectSchema({ url: "https://avayaudyog.com/gallery/site-work/x.jpg", width: 100, height: 80 });
+    expect(img.creator).toEqual({ "@id": BUSINESS_ID });
+    expect(JSON.stringify(img)).not.toMatch(/"@type":"Organization"|"name":"Avaya/);
+  });
+
+  it("carries the real width/height it was given, never a placeholder", () => {
+    const img = imageObjectSchema({ url: "https://avayaudyog.com/x.jpg", width: 1600, height: 1200 });
+    expect(img.width).toBe(1600);
+    expect(img.height).toBe(1200);
+  });
+
+  it("omits caption when none is supplied, rather than inventing one", () => {
+    const img = imageObjectSchema({ url: "https://avayaudyog.com/x.jpg", width: 100, height: 80 });
+    expect(img.caption).toBeUndefined();
   });
 });
