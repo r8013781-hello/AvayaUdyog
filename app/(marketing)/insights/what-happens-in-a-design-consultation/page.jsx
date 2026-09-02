@@ -1,7 +1,7 @@
 import Link from "next/link";
 import InsightArticle from "../../../../components/InsightArticle";
 import { getInsight } from "../../../../lib/insights";
-import { webPageSchema } from "../../../../lib/schema";
+import { webPageSchema, articleSchema } from "../../../../lib/schema";
 import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
@@ -18,6 +18,13 @@ export const metadata = {
 };
 
 const webPage = webPageSchema({ url: PAGE_URL, name: insight.title, description: insight.description });
+const article = articleSchema({
+  url: PAGE_URL,
+  headline: insight.title,
+  description: insight.description,
+  datePublished: insight.published,
+  image: OG_IMAGE,
+});
 
 /**
  * What a consultation covers. Grounded in the studio's own published copy —
@@ -33,6 +40,7 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
       <InsightArticle insight={insight}>
         <p>
           People arrive at a first consultation braced to talk about style — colours,

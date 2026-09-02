@@ -31,6 +31,7 @@ const FORM = {
   city: "Kolkata",
   address: "Salt Lake",
   message: "Three-bedroom flat, full interiors.",
+  project_type: "Residential",
 };
 
 function makeSubmitter(submit) {
@@ -221,7 +222,7 @@ describe("draft storage is the visitor's, not a server backup", () => {
     const stored = JSON.parse(window.localStorage.getItem(ENQUIRY_DRAFT_KEY));
 
     expect(Object.keys(stored.form).sort()).toEqual(
-      ["address", "city", "email", "message", "name", "phone"].sort(),
+      ["address", "city", "email", "message", "name", "phone", "project_type"].sort(),
     );
     expect(JSON.stringify(stored)).not.toMatch(/gclid|utm_source|WEB-/);
   });
@@ -327,6 +328,18 @@ describe("enquiry surfaces", () => {
     (file, source) => {
       expect(source, `${file} should warm the cold-start`).toMatch(/warmUpApi/);
       expect(source).toMatch(/onFocusCapture=\{handleFirstIntent\}/);
+    },
+  );
+
+  it.each(enquiryForms.map((f) => [f.file, f.source]))(
+    "%s offers the project-type field as optional, not required",
+    (file, source) => {
+      // Exactly one qualification field, and it must never gain a `required`
+      // attribute — that would turn an optional nice-to-have into a second
+      // gate in front of "Send", which is explicitly out of scope.
+      expect(source, `${file} is missing the project-type field`).toMatch(/name="project_type"/);
+      const selectBlock = source.slice(source.indexOf('name="project_type"') - 200, source.indexOf('name="project_type"') + 400);
+      expect(selectBlock, `${file}'s project field must not be required`).not.toMatch(/\brequired\b/);
     },
   );
 

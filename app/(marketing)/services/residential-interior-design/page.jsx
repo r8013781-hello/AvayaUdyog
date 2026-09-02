@@ -3,12 +3,12 @@ import { ArrowUpRight } from "lucide-react";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import PageCTAButton from "../../../../components/PageCTAButton";
 import StatStrip from "../../../../components/StatStrip";
-import { serviceSchema, webPageSchema } from "../../../../lib/schema";
+import { serviceSchema, webPageSchema, faqSchema } from "../../../../lib/schema";
 import { imageSize } from "../../../../lib/imageDimensions";
 import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
-const TITLE = "Residential Design & Decorationer in Kolkata | Avaya Udyog";
+const TITLE = "Residential Design & Decoration in Kolkata | Avaya Udyog";
 const DESCRIPTION =
   "Warm, personalised home interiors in Kolkata — living rooms, bedrooms, kitchens and dining spaces designed by Avaya Udyog, led by Biswanath Adhikari.";
 const OG_IMAGE = `${SITE_URL}/gallery/renders/living-room/living-room-render-01.jpg`;
@@ -73,6 +73,80 @@ const ROOMS = [
   },
 ];
 
+// The four phases of the studio's own published offer catalog
+// (lib/schema.js — Design Consultation, then Turnkey Execution, ending in
+// styling), broken out into what actually happens at each stage. Nothing
+// here fixes a timeline or a price; both genuinely depend on the flat.
+const PHASES = [
+  {
+    step: "01",
+    title: "Design Consultation",
+    text: "We walk the space with you, understand how you actually use each room, and talk through layout options, material direction and budget expectations before anything is drawn.",
+  },
+  {
+    step: "02",
+    title: "Concept & Material Selection",
+    text: "Layouts, finishes and furniture direction are worked through room by room until the whole home reads as one considered scheme rather than a set of unrelated rooms.",
+  },
+  {
+    step: "03",
+    title: "Turnkey Execution",
+    text: "Civil work, electrical and plumbing coordination, carpentry, painting and fitting are managed on your behalf, so you are dealing with one point of contact rather than a list of separate contractors.",
+  },
+  {
+    step: "04",
+    title: "Final Styling & Handover",
+    text: "Soft furnishings, art, lighting layers and the small details that make a finished room feel considered rather than merely complete.",
+  },
+];
+
+// What "residential interior design" includes and what it doesn't — the
+// single most common source of confusion at enquiry stage, and answerable
+// honestly without inventing a price list or a guarantee.
+const SCOPE = [
+  {
+    title: "One room, or the whole home",
+    text: "A full home is designed as one scheme so rooms relate to each other, but a single room — a living room refresh, one bedroom — is just as much a real project. The process is the same; only the scale changes.",
+  },
+  {
+    title: "Design and execution, under one roof",
+    text: "We do not hand you a mood board and leave you to find contractors. Design decisions and the people who build them are managed together, so nothing gets lost in translation between the drawing and the site.",
+  },
+  {
+    title: "Structural and civil work, when the layout needs it",
+    text: "Where a layout genuinely requires breaking or moving a wall, re-routing plumbing, or upgrading an electrical point, that work is coordinated as part of the project rather than left for you to arrange separately.",
+  },
+  {
+    title: "Your existing furniture, where it earns its place",
+    text: "A full re-fit is not the only starting point. Pieces worth keeping are worked into the new layout rather than replaced by default — replacing everything is a choice, not a requirement.",
+  },
+];
+
+const FAQS = [
+  {
+    q: "Do I have to redesign the whole flat, or can I start with one room?",
+    a: "Either. A full-home scheme reads better because every room relates to the next, but a single room is a complete project in its own right, priced and scheduled on its own terms.",
+  },
+  {
+    q: "Do you handle civil work like breaking a wall or moving plumbing, or only decor?",
+    a: "Where the layout genuinely calls for it, yes — civil and MEP work is coordinated as part of the project rather than something you arrange separately with a different contractor.",
+  },
+  {
+    q: "Can I keep and reuse furniture I already own?",
+    a: "Yes. Pieces worth keeping are worked into the new layout. A full replacement is one option among several, not the default.",
+  },
+  {
+    q: "Can I keep living at home while the work is happening?",
+    a: "It depends on scope and sequencing more than on the size of the home — a single room can often be done while you stay put; a full re-fit usually cannot. This is covered in more detail in our note on living at home during a renovation.",
+  },
+  {
+    q: "What actually happens at the first consultation?",
+    a: "We look at how you use each space, talk through layout and material direction, and set realistic expectations on budget — before any design work starts. The full walkthrough is in what actually happens in a design consultation.",
+  },
+];
+
+const faq = faqSchema(FAQS);
+
 const webPage = webPageSchema({
   url: PAGE_URL,
   name: TITLE,
@@ -92,6 +166,11 @@ export default function ResidentialInteriorDesignerKolkataPage() {
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(service) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }}
       />
 
       <div className="shell pt-32 md:pt-36">
@@ -122,7 +201,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
             </figure>
 
             <div className="order-1 lg:order-2">
-              <span className="eyebrow">Residential Design & Decorationer in Kolkata</span>
+              <span className="eyebrow">Residential Design & Decoration in Kolkata</span>
               <h1 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
                 Homes shaped around{" "}
                 <span className="accent text-sage-600">how you live.</span>
@@ -185,8 +264,33 @@ export default function ResidentialInteriorDesignerKolkataPage() {
         </div>
       </section>
 
-      {/* ---------- Process ---------- */}
+      {/* ---------- Scope ---------- */}
       <section className="section !py-20">
+        <div className="shell relative">
+          <div className="max-w-2xl">
+            <span className="eyebrow">Scope</span>
+            <h2 className="display mt-6 text-[2.1rem] text-ink sm:text-4xl">
+              What&apos;s included, <span className="accent text-sage-600">plainly.</span>
+            </h2>
+            <p className="mt-5 text-[0.98rem] leading-[1.8] text-ink-soft">
+              The most common question at enquiry stage isn&apos;t about style — it&apos;s
+              about scope. Here&apos;s the honest answer.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            {SCOPE.map(({ title, text }) => (
+              <div key={title} className="rounded-[1.25rem] border border-line bg-white p-7 shadow-hair">
+                <h3 className="font-display text-[1.1rem] font-semibold text-ink">{title}</h3>
+                <p className="mt-3 text-[0.93rem] leading-[1.8] text-ink-soft">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- Process ---------- */}
+      <section className="section bg-sage-50/50 !py-20">
         <div className="shell relative">
           <div className="text-center">
             <span className="eyebrow-center">How a Residential Project Runs</span>
@@ -196,30 +300,65 @@ export default function ResidentialInteriorDesignerKolkataPage() {
           </div>
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2">
-            <div className="card p-7">
-              <span className="flex h-9 items-center rounded-full border border-line-strong px-3.5 font-display text-[0.8rem] font-semibold text-sage-700">
-                01
-              </span>
-              <h3 className="mt-5 font-display text-[1.2rem] font-semibold text-ink">
-                Design Consultation
-              </h3>
-              <p className="mt-2 text-[0.92rem] leading-[1.8] text-ink-muted">
-                Concept development, material guidance, and clear design
-                direction that turn rough ideas into a refined, buildable
-                vision for your home.
-              </p>
+            {PHASES.map(({ step, title, text }) => (
+              <div key={step} className="card p-7">
+                <span className="flex h-9 items-center rounded-full border border-line-strong px-3.5 font-display text-[0.8rem] font-semibold text-sage-700">
+                  {step}
+                </span>
+                <h3 className="mt-5 font-display text-[1.2rem] font-semibold text-ink">
+                  {title}
+                </h3>
+                <p className="mt-2 text-[0.92rem] leading-[1.8] text-ink-muted">
+                  {text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- FAQ ---------- */}
+      <section className="section !py-20">
+        <div className="shell relative">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+            <div>
+              <span className="eyebrow">Questions</span>
+              <h2 className="display mt-6 text-[2.1rem] text-ink sm:text-[2.4rem]">
+                Before you <span className="accent text-sage-600">start.</span>
+              </h2>
             </div>
-            <div className="card p-7">
-              <span className="flex h-9 items-center rounded-full border border-line-strong px-3.5 font-display text-[0.8rem] font-semibold text-sage-700">
-                02
-              </span>
-              <h3 className="mt-5 font-display text-[1.2rem] font-semibold text-ink">
-                Turnkey Execution
-              </h3>
-              <p className="mt-2 text-[0.92rem] leading-[1.8] text-ink-muted">
-                From first sketch to final styling, we manage every detail so
-                your project feels effortless from start to finish.
-              </p>
+            <div className="divide-y divide-line border-y border-line">
+              {FAQS.map(({ q, a }, i) => (
+                <details key={q} className="group">
+                  <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 [&::-webkit-details-marker]:hidden">
+                    <h3 className="font-display text-[1.1rem] font-semibold leading-snug text-ink group-hover:text-sage-700">{q}</h3>
+                    <span className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-line-strong text-sage-600 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                  </summary>
+                  <p className="max-w-2xl pb-7 pr-12 text-[0.94rem] leading-[1.85] text-ink-muted">
+                    {i === 3 ? (
+                      <>
+                        It depends on scope and sequencing more than on the size of the
+                        home — a single room can often be done while you stay put; a
+                        full re-fit usually cannot. This is covered in more detail in{" "}
+                        <Link href="/insights/living-at-home-during-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                          our note on living at home during a renovation
+                        </Link>.
+                      </>
+                    ) : i === 4 ? (
+                      <>
+                        We look at how you use each space, talk through layout and
+                        material direction, and set realistic expectations on budget —
+                        before any design work starts. The full walkthrough is in{" "}
+                        <Link href="/insights/what-happens-in-a-design-consultation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
+                          what actually happens in a design consultation
+                        </Link>.
+                      </>
+                    ) : (
+                      a
+                    )}
+                  </p>
+                </details>
+              ))}
             </div>
           </div>
         </div>

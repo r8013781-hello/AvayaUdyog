@@ -13,6 +13,7 @@ import {
   MessageCircle,
   Check,
   AlertTriangle,
+  Layers,
 } from "lucide-react";
 import { loadEnquiryDraft, clearEnquiryDraft, clearLegacyInbox } from "../lib/crmIntake";
 import { createEnquirySubmitter } from "../lib/enquirySubmission";
@@ -32,6 +33,7 @@ const emptyForm = {
   email: "",
   city: "",
   message: "",
+  project_type: "",
 };
 
 const FIELD_LABELS = {
@@ -41,9 +43,15 @@ const FIELD_LABELS = {
   email: "Email address",
   city: "City",
   message: "Project description",
+  project_type: "Project type",
 };
 
 const REQUIRED_FIELDS = ["name", "phone", "message"];
+
+// One optional qualification field — a closed list, not a required question.
+// Keeps this the same shape as the rest of the form: nothing new to type,
+// one tap to answer or skip entirely.
+const PROJECT_TYPES = ["Residential", "Renovation", "Modular Kitchen", "Commercial / Office", "Not sure yet"];
 
 /**
  * One submitter for the module, not one per mount. Both the duplicate guard
@@ -380,6 +388,25 @@ export default function ContactPanel({ isOpen, onClose }) {
                     error={errors.city}
                     className={fieldClass("city")}
                   />
+
+                  <div className="relative">
+                    <Layers className="field-icon" />
+                    <label htmlFor="contact-project" className="sr-only">
+                      Project type (optional)
+                    </label>
+                    <select
+                      id="contact-project"
+                      name="project_type"
+                      value={formData.project_type}
+                      onChange={handleInputChange}
+                      className={fieldClass("project_type")}
+                    >
+                      <option value="">Project type (optional)</option>
+                      {PROJECT_TYPES.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
 
                   <div>
                     <div className="relative">

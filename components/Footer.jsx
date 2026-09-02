@@ -14,6 +14,7 @@ import {
   Building,
   Check,
   AlertTriangle,
+  Layers,
 } from "lucide-react";
 import { createEnquirySubmitter } from "../lib/enquirySubmission";
 import { api, onSlowRequest, warmUpApi } from "../lib/api";
@@ -32,6 +33,7 @@ const emptyForm = {
   city: "",
   address: "",
   message: "",
+  project_type: "",
 };
 
 const FIELD_LABELS = {
@@ -41,9 +43,14 @@ const FIELD_LABELS = {
   city: "City",
   address: "Address / locality",
   message: "Project description",
+  project_type: "Project type",
 };
 
 const REQUIRED_FIELDS = ["name", "phone", "message"];
+
+// See ContactPanel — the same optional, closed-list qualification field on
+// this form's second, independent instance.
+const PROJECT_TYPES = ["Residential", "Renovation", "Modular Kitchen", "Commercial / Office", "Not sure yet"];
 
 /**
  * Its own submitter, separate from the contact drawer's.
@@ -366,6 +373,25 @@ export default function Footer() {
                     error={errors.address}
                     className={fieldClass("address")}
                   />
+
+                  <div className="relative">
+                    <Layers className="field-icon" />
+                    <label htmlFor="footer-project" className="sr-only">
+                      Project type (optional)
+                    </label>
+                    <select
+                      id="footer-project"
+                      name="project_type"
+                      value={formData.project_type}
+                      onChange={handleInputChange}
+                      className={fieldClass("project_type")}
+                    >
+                      <option value="">Project type (optional)</option>
+                      {PROJECT_TYPES.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
 
                   <div>
                     <div className="relative">

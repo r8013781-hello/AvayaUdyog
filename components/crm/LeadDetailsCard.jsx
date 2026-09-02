@@ -47,9 +47,12 @@ export default function LeadDetailsCard({ lead, onClose, canDelete, onDelete }) 
               <div className="min-w-0">
                 <p className="text-[0.6rem] font-bold uppercase tracking-label text-sage-300">Lead</p>
                 <h2 className="mt-0.5 truncate font-display text-2xl">{lead.name}</h2>
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Badge type={lead.stage}>{lead.stage}</Badge>
                   <span className="text-xs text-sage-300">{lead.source}</span>
+                  {lead.projectType && (
+                    <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-semibold text-sage-100">{lead.projectType}</span>
+                  )}
                 </div>
               </div>
             </div>

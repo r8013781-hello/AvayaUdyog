@@ -7,7 +7,9 @@ import {
   breadcrumbSchema,
   serviceSchema,
   webPageSchema,
+  articleSchema,
 } from "../lib/schema";
+import { INSIGHTS } from "../lib/insights";
 
 const URL = "https://avayaudyog.com/services/residential-interior-design";
 
@@ -112,5 +114,62 @@ describe("claims embedded in schema", () => {
     expect(json).not.toMatch(/aggregateRating|ratingValue|reviewCount/);
     // sameAs may return once real profile URLs exist — not before.
     expect(localBusinessSchema.sameAs).toBeUndefined();
+  });
+});
+
+describe("articleSchema", () => {
+  const ARTICLE_URL = "https://avayaudyog.com/insights/materials-for-kolkata-climate";
+
+  it("attributes authorship and publishing to the business, not an invented person", () => {
+    const article = articleSchema({
+      url: ARTICLE_URL,
+      headline: "Title",
+      description: "Desc",
+      datePublished: "2026-08-23",
+    });
+    expect(article.author).toEqual({ "@id": BUSINESS_ID });
+    expect(article.publisher).toEqual({ "@id": BUSINESS_ID });
+    // No Person node, no byline string — nothing here claims a named writer.
+    expect(JSON.stringify(article)).not.toMatch(/"@type":"Person"/);
+  });
+
+  it("ties the article to its own WebPage node by @id rather than duplicating it", () => {
+    const article = articleSchema({ url: ARTICLE_URL, headline: "T", description: "D", datePublished: "2026-08-23" });
+    expect(article.mainEntityOfPage).toEqual({ "@id": `${ARTICLE_URL}#webpage` });
+    expect(article["@id"]).toBe(`${ARTICLE_URL}#article`);
+  });
+
+  it("omits dateModified when the article has no genuinely tracked edit date", () => {
+    const article = articleSchema({ url: ARTICLE_URL, headline: "T", description: "D", datePublished: "2026-08-23" });
+    expect(article.dateModified).toBeUndefined();
+  });
+
+  it("includes dateModified only when one is explicitly and truthfully supplied", () => {
+    const article = articleSchema({
+      url: ARTICLE_URL,
+      headline: "T",
+      description: "D",
+      datePublished: "2026-08-23",
+      dateModified: "2026-08-24",
+    });
+    expect(article.dateModified).toBe("2026-08-24");
+  });
+
+  it("every insight has a real, non-empty published date to build datePublished from", () => {
+    // Guards the one fact this schema depends on entirely: lib/insights.js
+    // must keep providing a truthful `published` date for every article, or
+    // the Article schema would have to fabricate one.
+    INSIGHTS.forEach((insight) => {
+      expect(insight.published, `${insight.slug} has no published date`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    });
+  });
+
+  it("never claims a dateModified for an insight that has no tracked `updated` field", () => {
+    // Only interior-design-cost-kolkata currently has a genuine `updated`
+    // date. Every other insight must keep resolving to no dateModified at
+    // all in the pages that build their own articleSchema() call.
+    INSIGHTS.filter((i) => i.slug !== "interior-design-cost-kolkata").forEach((insight) => {
+      expect(insight.updated, `${insight.slug} unexpectedly has an 'updated' field`).toBeUndefined();
+    });
   });
 });

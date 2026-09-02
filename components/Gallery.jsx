@@ -5,6 +5,7 @@ import { Heart, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
 import { imageSize } from "../lib/imageDimensions";
+import { IMAGES } from "../lib/galleryImages";
 
 const FAVORITES_KEY = "gallery-favorites";
 
@@ -14,99 +15,6 @@ const CATEGORIES = [
   { id: "commercial", label: "Commercial" },
 ];
 
-// Self-hosted under public/gallery/ — served from the site root under
-// static export, same as the Vite app (no basePath configured).
-const IMAGES = [
-  {
-    id: "r1",
-    title: "Signature Living Room",
-    alt: "A warm, curated living room interior glowing with atmosphere",
-    category: "residential",
-    src: "/gallery/renders/living-room/living-room-render-01.jpg",
-    meta: "Signature interiors · atmosphere",
-  },
-  {
-    id: "r2",
-    title: "Contemporary Bedroom Design",
-    alt: "A calm, tailored bedroom interior in deep navy tones",
-    category: "residential",
-    src: "/gallery/renders/bedroom/bedroom-render-01.jpg",
-    meta: "Calm palettes · tailored comfort",
-  },
-  {
-    id: "r3",
-    title: "Warm Modern Bedroom",
-    alt: "A modern bedroom with warm wood textures and elegant lighting",
-    category: "residential",
-    src: "/gallery/renders/bedroom/bedroom-render-02.jpg",
-    meta: "Wood textures · elegant lighting",
-  },
-  {
-    id: "r4",
-    title: "Open Plan Kitchen",
-    alt: "A minimalist modular kitchen with clean lines and premium finishes",
-    category: "residential",
-    src: "/gallery/renders/kitchen/kitchen-render-01.jpg",
-    meta: "Modular design · premium finishes",
-  },
-  {
-    id: "r5",
-    title: "Heritage Stained Glass",
-    alt: "A finished heritage stained glass installation on site",
-    category: "residential",
-    src: "/gallery/site-work/finished-heritage-stained-glass.jpg",
-    meta: "Heritage install · on-site work",
-  },
-  {
-    id: "r6",
-    title: "Heritage Stained Glass",
-    alt: "A finished heritage stained glass installation on site",
-    category: "residential",
-    src: "/gallery/site-work/finished-heritage-stained-glass.jpg",
-    tag1: "Heritage Install",
-    tag2: "On-site Work",
-  },
-  {
-    id: "t1",
-    title: "Warm Modern Living Room",
-    alt: "Warm modern living room with curated finishes and layered warm lighting",
-    category: "residential",
-    src: "/gallery/g1-1505693416388.webp",
-    meta: "Curated finishes · warm lighting",
-  },
-  {
-    id: "t2",
-    title: "Luxury Lounge Styling",
-    alt: "Luxury lounge interior styling with layered textures and a contemporary design theme",
-    category: "residential",
-    src: "/gallery/g2-1494526585095.webp",
-    meta: "Layered textures · contemporary",
-  },
-  {
-    id: "t3",
-    title: "Signature Office Workspace",
-    alt: "Modern office workspace interior with natural light and a premium build finish",
-    category: "commercial",
-    src: "/gallery/g6-1497366754035.webp",
-    meta: "Natural light · premium build",
-  },
-  {
-    id: "t4",
-    title: "Retail Showroom Experience",
-    alt: "Retail showroom interior with an elegant product display and strong brand presence",
-    category: "commercial",
-    src: "/gallery/g7-1524758631624.webp",
-    meta: "Elegant display · strong brand",
-  },
-  {
-    id: "t5",
-    title: "Modern Boutique Hotel Lounge",
-    alt: "Modern boutique hotel lounge with a bespoke hospitality interior",
-    category: "commercial",
-    src: "/gallery/g9-1560448204.webp",
-    meta: "Hospitality interiors · bespoke",
-  },
-];
 
 /* Editorial rhythm: every fourth tile runs wide. `grid-flow-dense` backfills
    the gaps a wide tile would otherwise leave at the end of a row. */

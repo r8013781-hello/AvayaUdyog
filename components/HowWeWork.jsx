@@ -5,14 +5,21 @@ import useReveal from "../hooks/useReveal";
 import { useContactModal } from "./ContactModalProvider";
 
 /**
- * The four stages of a project, told as a drafting sequence rather than a
- * photo essay.
+ * The four stages of a project, illustrated with one image per stage in an
+ * alternating editorial layout.
  *
- * Deliberately image-free. Every photograph under public/ is stock (see
- * commit 054f46d), and a process section illustrated with stock site photos
- * would be claiming to show work that isn't the studio's. Type, rules and
- * numbering carry it instead — which is also how a drawing set reads, so it
- * suits the subject.
+ * (This section was image-free at one point in this project's history — see
+ * older commits — on the reasoning that a process section illustrated with
+ * stock photos would claim work that isn't the studio's. That reasoning still
+ * matters, but the constraint it led to has since been superseded: two of the
+ * four images below (tv-panel-veneer-fitting, feature-wall-craftsmen-at-work)
+ * are real Avaya Udyog site-work photography, not stock. The other two are
+ * renders, used because no real photography exists yet for those specific
+ * stages. None of the four is presented as documentation of one specific,
+ * continuous project — the copy for every stage (tag/title/text below) stays
+ * general-process language, never "this project" or a named site, precisely
+ * so that pairing a real photo with a render two stages later cannot be read
+ * as claiming they're from the same job.)
  *
  * Every stage description is traceable to copy already published elsewhere on
  * the site (Services.jsx service descriptions, Marquee.jsx capabilities, the
@@ -20,9 +27,6 @@ import { useContactModal } from "./ContactModalProvider";
  * counts, deliverable lists or site-visit frequency is asserted, because the
  * repository does not establish any of it. Those are the details to add once
  * the business confirms them.
- *
- * When real project photography exists, each stage has a natural slot for one
- * image without changing this structure.
  */
 
 const STAGES = [

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import InsightArticle from "../../../../components/InsightArticle";
 import { getInsight } from "../../../../lib/insights";
-import { webPageSchema } from "../../../../lib/schema";
+import { webPageSchema, articleSchema } from "../../../../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
 const insight = getInsight("living-at-home-during-renovation");
@@ -17,6 +17,13 @@ export const metadata = {
 };
 
 const webPage = webPageSchema({ url: PAGE_URL, name: insight.title, description: insight.description });
+const article = articleSchema({
+  url: PAGE_URL,
+  headline: insight.title,
+  description: insight.description,
+  datePublished: insight.published,
+  image: OG_IMAGE,
+});
 
 /**
  * Renovation logistics. General practitioner knowledge — no durations claimed
@@ -26,6 +33,7 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
       <InsightArticle insight={insight}>
         <p>
           It is the first question most renovation clients ask, and the honest answer

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import InsightArticle from "../../../../components/InsightArticle";
 import { getInsight } from "../../../../lib/insights";
-import { webPageSchema } from "../../../../lib/schema";
+import { webPageSchema, articleSchema } from "../../../../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
 const insight = getInsight("false-ceiling-kolkata-humidity");
@@ -17,6 +17,13 @@ export const metadata = {
 };
 
 const webPage = webPageSchema({ url: PAGE_URL, name: insight.title, description: insight.description });
+const article = articleSchema({
+  url: PAGE_URL,
+  headline: insight.title,
+  description: insight.description,
+  datePublished: insight.published,
+  image: OG_IMAGE,
+});
 
 /**
  * False ceilings in a hot, humid, monsoon climate.
@@ -30,6 +37,7 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
       <InsightArticle insight={insight}>
         <p>
           A false ceiling is unusual among interior elements: it is expensive to open

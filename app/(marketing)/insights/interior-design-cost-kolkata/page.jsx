@@ -1,7 +1,7 @@
 import Link from "next/link";
 import InsightArticle from "../../../../components/InsightArticle";
 import { getInsight } from "../../../../lib/insights";
-import { webPageSchema } from "../../../../lib/schema";
+import { webPageSchema, articleSchema } from "../../../../lib/schema";
 
 const SITE_URL = "https://avayaudyog.com";
 const insight = getInsight("interior-design-cost-kolkata");
@@ -17,6 +17,14 @@ export const metadata = {
 };
 
 const webPage = webPageSchema({ url: PAGE_URL, name: insight.title, description: insight.description });
+const article = articleSchema({
+  url: PAGE_URL,
+  headline: insight.title,
+  description: insight.description,
+  datePublished: insight.published,
+  dateModified: insight.updated,
+  image: OG_IMAGE,
+});
 
 /**
  * Deep links for the five sections worth arriving directly at.
@@ -60,6 +68,7 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
       <InsightArticle insight={insight} contents={CONTENTS}>
         <p>
           Ask three studios what it costs to do up the same three-bedroom flat and

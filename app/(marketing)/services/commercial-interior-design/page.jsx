@@ -18,7 +18,7 @@ import { imageSize } from "../../../../lib/imageDimensions";
 import SectionLink from "../../../../components/SectionLink";
 
 const SITE_URL = "https://avayaudyog.com";
-const TITLE = "Commercial Design & Decorationer in Kolkata | Avaya Udyog";
+const TITLE = "Commercial Design & Decoration in Kolkata | Avaya Udyog";
 const DESCRIPTION =
   "Brand-first office and retail interiors in Kolkata by Avaya Udyog — designed to impress clients and keep teams inspired and productive. Book a consultation.";
 const OG_IMAGE = `${SITE_URL}/services/s2-commercial.webp`;
@@ -250,7 +250,7 @@ export default function CommercialInteriorDesignerKolkataPage() {
             </figure>
 
             <div className="order-1 lg:order-2">
-              <span className="eyebrow">Commercial Design & Decorationer in Kolkata</span>
+              <span className="eyebrow">Commercial Design & Decoration in Kolkata</span>
               <h1 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
                 Workspaces built for{" "}
                 <span className="accent text-sage-600">the brand behind them.</span>
