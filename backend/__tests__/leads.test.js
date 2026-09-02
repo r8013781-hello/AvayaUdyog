@@ -45,6 +45,65 @@ describe("POST /api/enquiries", () => {
   });
 });
 
+describe("POST /api/enquiries — project type", () => {
+  beforeEach(() => query.mockReset());
+
+  it("stores a valid project type against the lead", async () => {
+    query.mockResolvedValueOnce({ rows: [{ id: 1, name: "Priya", createdAt: "2026-09-02T00:00:00.000Z" }] });
+
+    await request(app).post("/api/enquiries").send({
+      name: "Priya",
+      phone: "9999999999",
+      project_type: "Modular Kitchen",
+    });
+
+    expect(query.mock.calls[0][1]).toContain("Modular Kitchen");
+  });
+
+  it("accepts the enquiry when project type is left blank", async () => {
+    query.mockResolvedValueOnce({ rows: [{ id: 1, name: "Priya", createdAt: "2026-09-02T00:00:00.000Z" }] });
+
+    const res = await request(app).post("/api/enquiries").send({
+      name: "Priya",
+      phone: "9999999999",
+      project_type: "",
+    });
+
+    expect(res.status).toBe(201);
+    // Blank is stored as null, not the literal empty string.
+    expect(query.mock.calls[0][1]).not.toContain("");
+  });
+
+  it("rejects a project type outside the published list", async () => {
+    // A closed list is the whole point — free text here would need moderation
+    // the CRM does not have.
+    const res = await request(app).post("/api/enquiries").send({
+      name: "Priya",
+      phone: "9999999999",
+      project_type: "Something I typed myself",
+    });
+
+    expect(res.status).toBe(400);
+    expect(query).not.toHaveBeenCalled();
+  });
+
+  it("writes the website's category selection to its own column, never to the free-text project field", async () => {
+    // leads.project is an employee-typed project name/description (see
+    // migration 013's comment); leads.project_type is the closed-list column
+    // this endpoint owns. A public submission must never touch the former.
+    query.mockResolvedValueOnce({ rows: [{ id: 1, name: "Priya" }] });
+    await request(app).post("/api/enquiries").send({
+      name: "Priya",
+      phone: "9999999999",
+      project_type: "Renovation",
+    });
+
+    const sql = query.mock.calls[0][0];
+    expect(sql).toMatch(/\bproject_type\b/);
+    expect(sql).not.toMatch(/INSERT INTO leads \([^)]*\bproject\b,/);
+  });
+});
+
 describe("GET /api/leads", () => {
   beforeEach(() => query.mockReset());
 

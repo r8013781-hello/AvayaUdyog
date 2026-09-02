@@ -7,6 +7,19 @@ const router = express.Router();
 
 const STAGES = ["New", "Qualified", "Consultation", "Proposal", "Execution", "Won", "Lost"];
 
+// The one optional qualification field on the public enquiry form. A closed
+// list, not free text.
+//
+// This is deliberately its OWN column (leads.project_type — see migration
+// 013) rather than a reuse of leads.project. Tracing every use of
+// leads.project (leadSchema below, LeadDetailsCard.jsx, and the "No project
+// description provided." fallback in EmployeeLogin.jsx's website-leads view)
+// shows it is a free-text project name/description an employee types in, not
+// a category. Writing a visitor's closed-list selection into that same
+// column would mix two incompatible kinds of data with no way to tell them
+// apart once stored.
+const PROJECT_TYPES = ["Residential", "Renovation", "Modular Kitchen", "Commercial / Office", "Not sure yet"];
+
 const enquirySchema = Joi.object({
   name: Joi.string().trim().max(100).required(),
   phone: Joi.string().trim().max(30).required(),
@@ -14,6 +27,7 @@ const enquirySchema = Joi.object({
   city: Joi.string().trim().allow("").max(100),
   address: Joi.string().trim().allow("").max(255),
   message: Joi.string().trim().allow("").max(4000),
+  project_type: Joi.string().trim().valid(...PROJECT_TYPES).allow(""),
   utm_source: Joi.string().trim().allow("", null).max(100),
   utm_medium: Joi.string().trim().allow("", null).max(100),
   utm_campaign: Joi.string().trim().allow("", null).max(200),
@@ -41,7 +55,7 @@ const leadUpdateSchema = Joi.object({
   ownerId: Joi.number().integer(),
 }).min(1);
 
-const LEAD_COLUMNS = `l.id, l.name, l.phone, l.email, l.city, l.address, l.project, l.message, l.source,
+const LEAD_COLUMNS = `l.id, l.name, l.phone, l.email, l.city, l.address, l.project, l.project_type AS "projectType", l.message, l.source,
   l.value, l.stage, l.owner_id AS "ownerId", e.name AS owner, l.next_action_date AS "nextActionDate",
   l.created_at AS "createdAt", l.utm_source AS "utmSource", l.utm_medium AS "utmMedium",
   l.utm_campaign AS "utmCampaign", l.utm_content AS "utmContent", l.utm_term AS "utmTerm",
@@ -69,13 +83,14 @@ router.post("/enquiries", async (req, res, next) => {
 
     const result = await query(
       `INSERT INTO leads (
-         name, phone, email, city, address, message, source, stage,
+         name, phone, email, city, address, message, project_type, source, stage,
          utm_source, utm_medium, utm_campaign, utm_content, utm_term, gclid, landing_page, referrer
        )
-       VALUES ($1, $2, $3, $4, $5, $6, 'Website', 'New', $7, $8, $9, $10, $11, $12, $13, $14)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'Website', 'New', $8, $9, $10, $11, $12, $13, $14, $15)
        RETURNING id, name, created_at AS "createdAt"`,
       [
         value.name, value.phone, value.email, value.city, value.address, value.message,
+        value.project_type || null,
         value.utm_source || null, value.utm_medium || null, value.utm_campaign || null,
         value.utm_content || null, value.utm_term || null, value.gclid || null,
         value.landing_page || null, value.referrer || null,
