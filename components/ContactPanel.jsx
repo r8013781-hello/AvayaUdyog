@@ -429,7 +429,12 @@ export default function ContactPanel({ isOpen, onClose }) {
                     {errors.message && <FieldError message={errors.message} />}
                   </div>
 
-                  {wakingServer && <p className="rounded-2xl border border-gold/40 bg-gold-soft/70 px-4 py-3 text-xs leading-5 text-gold-deep">Waking up the server — this can take up to a minute on the first message after a while. Hang tight, don&apos;t refresh.</p>}
+                  {wakingServer && (
+                    <p className="flex items-start gap-2.5 rounded-2xl border border-line-gold bg-gold-soft/70 px-4 py-3 text-xs leading-5 text-gold-deep">
+                      <span className="mt-0.5 h-2 w-2 flex-shrink-0 animate-pulse rounded-full bg-gold-deep" aria-hidden="true" />
+                      <span>Just a moment — connecting to our team. This can take a little longer than usual. Please don&apos;t refresh.</span>
+                    </p>
+                  )}
                   <button type="submit" disabled={submitting} className="btn-primary group w-full disabled:opacity-60">
                     {submitting ? (wakingServer ? "Waking up…" : "Sending…") : submitFailed ? "Try again" : "Send Inquiry"}
                     <Send
