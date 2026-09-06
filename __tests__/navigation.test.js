@@ -117,14 +117,16 @@ describe("navigation lists", () => {
     });
   });
 
-  it("keeps the phone number and the portal login in the header", () => {
+  it("keeps the phone number and the employee login in the header", () => {
     // Neither is in NAV_LINKS — they are rendered separately, so a change to
-    // the link list can silently take them with it.
+    // the link list can silently take them with it. Login opens a popup
+    // (see components/LoginModalProvider.jsx) rather than linking straight
+    // to /portal, so there is no login page to navigate to anymore.
     const navbar = source("components/Navbar.jsx");
     expect(navbar).toMatch(/href="tel:\+917980640714"/);
-    expect(navbar).toMatch(/const PORTAL_URL = "\/portal"/);
+    expect(navbar).toMatch(/useLoginModal/);
     // Present in both the desktop bar and the mobile sheet.
-    expect(navbar.match(/href=\{PORTAL_URL\}/g) || []).toHaveLength(2);
+    expect(navbar.match(/openLoginModal\(\)/g) || []).toHaveLength(2);
     expect(navbar.match(/href="tel:\+917980640714"/g) || []).toHaveLength(2);
   });
 

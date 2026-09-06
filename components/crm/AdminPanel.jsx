@@ -22,6 +22,7 @@ const RESOURCE_META = {
   followups: { label: "Follow-ups", hint: "Tasks & reminders" },
   quotations: { label: "Quotations", hint: "Estimates & pricing" },
   projects: { label: "Projects", hint: "Execution & payments" },
+  receipts: { label: "Money receipts", hint: "Payment acknowledgements" },
 };
 const ACTION_LABELS = { create: "Create", read: "View", update: "Edit", delete: "Delete" };
 const AVATAR_HUES = ["bg-sage-100 text-sage-700", "bg-gold-soft text-gold-deep", "bg-blue-50 text-blue-700", "bg-violet-50 text-violet-700", "bg-amber-50 text-amber-700", "bg-teal-50 text-teal-700"];

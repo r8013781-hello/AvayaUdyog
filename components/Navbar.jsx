@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import SectionLink from "./SectionLink";
 import { Menu, X, Phone, ArrowUpRight } from "lucide-react";
 import { useContactModal } from "./ContactModalProvider";
+import { useLoginModal } from "./LoginModalProvider";
 import { trackPhoneClick } from "../lib/tracking";
 
 // Every entry is a real href. Section entries point at /#id so they work from
@@ -47,10 +48,6 @@ const NAV_LINKS = [
   { href: "/#gallery", label: "Gallery" },
 ];
 
-// The CRM lives inside this same app at /portal (see app/portal/page.jsx) —
-// one domain, one deployment, a relative link.
-const PORTAL_URL = "/portal";
-
 /** The diamond monogram — a sage tile with a gold hairline inlay. */
 function Monogram({ className = "h-11 w-11" }) {
   return (
@@ -68,6 +65,7 @@ function Monogram({ className = "h-11 w-11" }) {
 
 export default function Navbar() {
   const openContactModal = useContactModal();
+  const openLoginModal = useLoginModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState("hero");
@@ -228,13 +226,17 @@ export default function Navbar() {
                 </span>
               </a>
 
-              <a href={PORTAL_URL} className="btn-primary group !px-6 !py-3">
+              <button
+                type="button"
+                onClick={() => openLoginModal()}
+                className="btn-primary group !px-6 !py-3"
+              >
                 Login
                 <ArrowUpRight
                   size={14}
                   className="transition-transform duration-300 group-hover:translate-x-0.5"
                 />
-              </a>
+              </button>
             </div>
 
             <button
@@ -305,12 +307,16 @@ export default function Navbar() {
           </a>
         </div>
 
-        <a
-          href={PORTAL_URL}
+        <button
+          type="button"
+          onClick={() => {
+            setMobileMenuOpen(false);
+            openLoginModal();
+          }}
           className="mt-5 flex w-full items-center justify-center rounded-full border border-line-strong bg-sage-50 px-4 py-3 text-[0.7rem] font-bold uppercase tracking-[0.12em] text-sage-800 transition-colors hover:border-sage-400 hover:bg-sage-100"
         >
           Login
-        </a>
+        </button>
 
         <button onClick={closeAndContact} className="btn-primary mt-5 w-full">
           Book a Consultation

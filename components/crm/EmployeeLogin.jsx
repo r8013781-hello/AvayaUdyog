@@ -2,14 +2,11 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  ArrowLeft,
   CalendarClock,
   Check,
   ChevronRight,
   CircleUserRound,
   ClipboardList,
-  Eye,
-  EyeOff,
   FileText,
   FolderOpen,
   LayoutDashboard,
@@ -17,6 +14,7 @@ import {
   Inbox,
   Menu,
   Plus,
+  ReceiptText,
   Search,
   ShieldCheck,
   Star,
@@ -24,8 +22,9 @@ import {
   UsersRound,
   X,
 } from "lucide-react";
-import { api, getToken, onSlowRequest, onUnauthorized, setToken } from "../../lib/crm/api";
+import { api, getToken, onUnauthorized, setToken } from "../../lib/crm/api";
 import QuotationWorkspace from "./QuotationWorkspace";
+import ReceiptWorkspace from "./ReceiptWorkspace";
 import AdminPanel from "./AdminPanel";
 import ProjectsPanel from "./ProjectsPanel";
 import ReviewsPanel from "./ReviewsPanel";
@@ -37,11 +36,6 @@ import { Badge, money, Stat } from "../../lib/crm/crmUi";
 export default function EmployeeLogin({ onBackToSite }) {
   const toast = useToast();
   const confirm = useConfirm();
-  const [employeeId, setEmployeeId] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [signingIn, setSigningIn] = useState(false);
   const [employee, setEmployee] = useState(null);
   const [checkingSession, setCheckingSession] = useState(true);
   // Static export still renders this component once at build time, in
@@ -61,12 +55,6 @@ export default function EmployeeLogin({ onBackToSite }) {
   const [showFollowupForm, setShowFollowupForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [wakingServer, setWakingServer] = useState(false);
-
-  // The backend spins down after inactivity on its current hosting plan — the
-  // first request after idle can take 30-60s. Surface that honestly instead
-  // of leaving the sign-in button looking frozen.
-  useEffect(() => onSlowRequest(() => setWakingServer(true)), []);
 
   useEffect(() => {
     if (!getToken()) { setCheckingSession(false); return; }
@@ -86,24 +74,6 @@ export default function EmployeeLogin({ onBackToSite }) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const login = async (event) => {
-    event.preventDefault();
-    setSigningIn(true);
-    setWakingServer(false);
-    setError("");
-    try {
-      const { token, employee: profile } = await api.login(employeeId.trim(), password);
-      setToken(token);
-      setEmployee(profile);
-      toast.success({ title: `Welcome back, ${profile.name.split(" ")[0]}`, message: profile.isSuperAdmin ? "Signed in as super admin." : "Signed in successfully." });
-    } catch (err) {
-      setError(err.message || "The employee ID or password is incorrect.");
-    } finally {
-      setSigningIn(false);
-      setWakingServer(false);
-    }
-  };
 
   const signOut = () => {
     setToken(null);
@@ -171,21 +141,22 @@ export default function EmployeeLogin({ onBackToSite }) {
   const dueTasks = followups.filter((item) => !item.done);
   const topPriorityTask = dueTasks[0];
 
-  if (checkingSession) return <div className="flex min-h-screen items-center justify-center bg-sage-950 text-sm font-semibold text-sage-100">Restoring your session…</div>;
+  // No standalone login page anymore — signing in happens from the navbar's
+  // popup (components/crm/LoginModal.jsx). Arriving here without a valid
+  // session (never signed in, or a token that expired mid-visit, which the
+  // onUnauthorized handler above clears) just bounces back to the site
+  // instead of rendering a login form of its own.
+  useEffect(() => {
+    if (!checkingSession && !employee) onBackToSite();
+  }, [checkingSession, employee, onBackToSite]);
 
-  if (!employee) return (
-    <div className="min-h-screen bg-sage-950 px-4 py-10 text-white sm:px-6">
-      <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_80px_rgba(0,0,0,.28)] lg:grid-cols-[1.05fr_.95fr]">
-        <section className="flex flex-col justify-between bg-[linear-gradient(145deg,#1f5137,#14271b)] p-8 md:p-12">
-          <div><button onClick={onBackToSite} className="inline-flex items-center gap-2 text-sm text-sage-100/80 transition hover:text-white"><ArrowLeft size={16} /> Back to website</button><p className="mt-16 text-[0.65rem] font-bold uppercase tracking-[.24em] text-gold-light">Employee workspace</p><h1 className="mt-5 max-w-md font-display text-4xl leading-tight md:text-5xl">Every client relationship, clearly in view.</h1><p className="mt-5 max-w-md text-sm leading-7 text-sage-100/75">Manage design enquiries, active customers and every important follow-up from one focused workspace.</p></div>
-          <p className="mt-12 text-xs text-sage-200/60">Avaya Udyog · Employee Portal</p>
-        </section>
-        <section className="flex items-center bg-white p-8 text-ink md:p-12"><div className="w-full"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-100 text-sage-700"><CircleUserRound size={24} /></div><p className="mt-8 text-[0.65rem] font-bold uppercase tracking-label text-sage-600">Secure sign in</p><h2 className="mt-3 font-display text-3xl">Welcome back</h2><p className="mt-2 text-sm leading-6 text-ink-muted">Sign in with your employee ID and password.</p>
-          <form className="mt-8 space-y-5" onSubmit={login}><label className="block text-sm font-semibold">Employee ID<input value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} autoComplete="username" placeholder="Enter your ID" className="mt-2 w-full rounded-xl border border-line-strong px-4 py-3 text-sm outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" /></label><label className="block text-sm font-semibold">Password<span className="relative mt-2 block"><input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="Enter your password" className="w-full rounded-xl border border-line-strong px-4 py-3 pr-11 text-sm outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-100" /><button type="button" onClick={() => setShowPassword((v) => !v)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-ink-faint transition hover:bg-sage-50 hover:text-ink-muted">{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></label>{error && <p className="rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">{error}</p>}{wakingServer && <p className="rounded-xl bg-gold-soft px-3 py-2.5 text-xs leading-5 text-gold-deep">Waking up the server — this can take up to a minute on the first sign-in after a while. Hang tight.</p>}<button disabled={signingIn} className="btn-primary w-full disabled:opacity-60">{signingIn ? (wakingServer ? "Waking up…" : "Signing in…") : "Sign in"} <ChevronRight size={16} /></button></form>
-          </div></section>
+  if (checkingSession || !employee) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-sage-950 text-sm font-semibold text-sage-100">
+        Restoring your session…
       </div>
-    </div>
-  );
+    );
+  }
 
   const navigation = [
     ["overview", "Overview", LayoutDashboard, true],
@@ -193,6 +164,7 @@ export default function EmployeeLogin({ onBackToSite }) {
     ["customers", "Customers", CircleUserRound, can("customers", "read")],
     ["projects", "Projects", FolderOpen, can("projects", "read")],
     ["quotations", "Quotations", FileText, can("quotations", "read")],
+    ["receipts", "Money receipts", ReceiptText, can("receipts", "read")],
     ["followups", "Follow-ups", CalendarClock, can("followups", "read")],
     ["inbox", "Website inbox", Inbox, can("leads", "read")],
     ["reviews", "Google reviews", Star, employee.isSuperAdmin],
@@ -305,6 +277,7 @@ export default function EmployeeLogin({ onBackToSite }) {
         {view === "inbox" && <WebsiteInbox leads={leads} onOpenLeads={() => setView("leads")} isSuperAdmin={employee.isSuperAdmin} onOpenReviews={() => setView("reviews")} />}
         {view === "projects" && <ProjectsPanel projects={projects} setProjects={setProjects} customers={customers} can={can} />}
         {view === "quotations" && <QuotationWorkspace customers={customers} projects={projects} canCreate={can("quotations", "create")} canEdit={can("quotations", "update")} canDelete={can("quotations", "delete")} />}
+        {view === "receipts" && <ReceiptWorkspace customers={customers} projects={projects} canCreate={can("receipts", "create")} canEdit={can("receipts", "update")} canDelete={can("receipts", "delete")} />}
         {view === "reviews" && employee.isSuperAdmin && <ReviewsPanel />}
         {view === "team" && employee.isSuperAdmin && <AdminPanel currentEmployee={employee} />}
         </>}

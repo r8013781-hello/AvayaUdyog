@@ -1,7 +1,9 @@
 import ContactModalProvider from "../../components/ContactModalProvider";
+import LoginModalProvider from "../../components/LoginModalProvider";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import WhatsappButton from "../../components/WhatsappButton";
+import PromoPopup from "../../components/PromoPopup";
 import Analytics from "../../components/Analytics";
 import SectionScrollHandler from "../../components/SectionScrollHandler";
 import { localBusinessSchema, websiteSchema } from "../../lib/schema";
@@ -93,12 +95,15 @@ export default function MarketingLayout({ children }) {
       <SectionScrollHandler />
 
       <ContactModalProvider>
-        <Navbar />
-        <main id="main-content" tabIndex={-1}>
-          {children}
-        </main>
-        <Footer />
-        <WhatsappButton />
+        <LoginModalProvider>
+          <Navbar />
+          <main id="main-content" tabIndex={-1}>
+            {children}
+          </main>
+          <Footer />
+          <WhatsappButton />
+          <PromoPopup />
+        </LoginModalProvider>
       </ContactModalProvider>
     </>
   );

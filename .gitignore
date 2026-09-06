@@ -10,6 +10,9 @@ lerna-debug.log*
 node_modules
 *.local
 
+# Local embedded PostgreSQL data (backend/scripts/devDb.js)
+.pgdata
+
 # Next.js build output
 .next
 out

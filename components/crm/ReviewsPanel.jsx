@@ -103,7 +103,10 @@ export default function ReviewsPanel() {
       });
       load();
     } catch (err) {
-      toast.error({ title: "Sync failed", message: err.message });
+      toast.error({
+        title: "Sync failed",
+        message: err.detail ? `${err.message} — ${err.detail}` : err.message,
+      });
     } finally {
       setSyncing(false);
     }

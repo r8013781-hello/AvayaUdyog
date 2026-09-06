@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Calculator, Download, FilePlus2, FolderPlus, Layers, Pencil, Plus, Trash2 } from "lucide-react";
+import { Calculator, Download, Eye, FilePlus2, FolderPlus, Layers, Pencil, Plus, Trash2 } from "lucide-react";
 import { api, getToken } from "../../lib/crm/api";
 import { useConfirm, useToast } from "../../lib/crm/notifications";
 import { downloadBlob } from "../../lib/crm/downloadFile";
@@ -273,6 +273,15 @@ export default function QuotationWorkspace({ customers, projects = [], canCreate
                     <td className="px-5 py-4 font-semibold">{money.format(quote.grandTotal || 0)}</td>
                     <td className="px-5 py-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); previewQuote(quote); }}
+                          disabled={previewingId === quote.id}
+                          aria-label={`Preview PDF for ${quote.quotationNo}`}
+                          title="Preview PDF"
+                          className="rounded-lg p-1.5 text-sage-700 transition hover:bg-sage-50 disabled:opacity-40"
+                        >
+                          <Eye size={15} />
+                        </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); exportQuote(quote); }}
                           disabled={exportingId === quote.id}

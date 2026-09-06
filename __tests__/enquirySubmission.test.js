@@ -303,11 +303,13 @@ describe("enquiry surfaces", () => {
   );
 
   it("finds the known enquiry forms", () => {
-    // ContactPanel (the drawer) and Footer. If this number changes, the new
-    // surface must satisfy the assertions below.
+    // ContactPanel (the drawer), Footer, and PromoPopup (the recurring
+    // marketing popup). If this list changes, the new surface must satisfy
+    // every assertion below.
     expect(enquiryForms.map((f) => f.file).sort()).toEqual([
       "components/ContactPanel.jsx",
       "components/Footer.jsx",
+      "components/PromoPopup.jsx",
     ]);
   });
 
