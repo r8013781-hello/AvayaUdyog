@@ -205,17 +205,39 @@ router.post("/sync", requireAuth, requireSuperAdmin, async (req, res, next) => {
 
     res.json({ synced: incoming.length, inserted, updated });
   } catch (err) {
-    if (err.code === "NOT_CONFIGURED") {
-      return res.status(503).json({
-        error: "Google Business Profile is not connected yet.",
-        missing: err.missing,
-      });
-    }
-    if (err.code === "ACCESS_DENIED") {
-      return res.status(502).json({
-        error:
-          "Google refused the request. Business Profile API access may not be approved for this project yet.",
-      });
+    // Each failure mode gets its own status + a message a super admin can act
+    // on without reading server logs. See lib/googleReviews.js for the codes.
+    const mapped = {
+      NOT_CONFIGURED: [
+        503,
+        "Google Business Profile is not connected yet. Add the GOOGLE_* settings (see docs/google-reviews-setup.md).",
+      ],
+      TOKEN_REVOKED: [
+        502,
+        "Google rejected the saved sign-in. Re-run `npm run google:auth` and update GOOGLE_REFRESH_TOKEN, then try again.",
+      ],
+      AUTH_FAILED: [
+        502,
+        "Google rejected the OAuth client. Check GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.",
+      ],
+      ACCESS_DENIED: [
+        502,
+        "Google refused the request — Business Profile API access is not approved for this project yet. Sync will work once Google grants it.",
+      ],
+      NOT_FOUND: [
+        502,
+        "Google could not find that business location. Check GOOGLE_BUSINESS_ACCOUNT_ID and GOOGLE_BUSINESS_LOCATION_ID (list them with `npm run google:auth -- --locations`).",
+      ],
+      RATE_LIMITED: [429, "Google is rate-limiting the sync. Wait a minute and try again."],
+      NETWORK: [502, "Could not reach Google. Check the server's internet connection and try again."],
+    };
+    const hit = mapped[err.code];
+    if (hit) {
+      const body = { error: hit[1] };
+      if (err.code === "NOT_CONFIGURED") body.missing = err.missing;
+      // The raw Google message is useful when it's an access/quota problem.
+      if (["ACCESS_DENIED", "NOT_FOUND", "AUTH_FAILED"].includes(err.code)) body.detail = err.message;
+      return res.status(hit[0]).json(body);
     }
     next(err);
   }

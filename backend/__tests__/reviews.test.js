@@ -116,16 +116,39 @@ describe("review moderation is super-admin only", () => {
 });
 
 describe("POST /api/reviews/sync without Google configured", () => {
-  beforeEach(() => query.mockReset());
+  // Hermetic: a developer's backend/.env may carry real GOOGLE_* values after
+  // the OAuth setup is done. This test asserts the "nothing configured" path,
+  // so it must guarantee nothing is configured regardless of ambient env.
+  const GOOGLE_VARS = [
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GOOGLE_REFRESH_TOKEN",
+    "GOOGLE_BUSINESS_ACCOUNT_ID",
+    "GOOGLE_BUSINESS_LOCATION_ID",
+  ];
+  const saved = {};
+
+  beforeEach(() => {
+    query.mockReset();
+    for (const key of GOOGLE_VARS) {
+      saved[key] = process.env[key];
+      delete process.env[key];
+    }
+  });
+
+  afterEach(() => {
+    for (const key of GOOGLE_VARS) {
+      if (saved[key] === undefined) delete process.env[key];
+      else process.env[key] = saved[key];
+    }
+  });
 
   it("reports which configuration is missing instead of failing obscurely", async () => {
     mockEmployee({ isSuperAdmin: true });
     const res = await request(app).post("/api/reviews/sync").set("Authorization", tokenFor(1));
 
     expect(res.status).toBe(503);
-    expect(res.body.missing).toEqual(
-      expect.arrayContaining(["GOOGLE_CLIENT_ID", "GOOGLE_BUSINESS_LOCATION_ID"]),
-    );
+    expect(res.body.missing).toEqual(expect.arrayContaining(GOOGLE_VARS));
   });
 });
 

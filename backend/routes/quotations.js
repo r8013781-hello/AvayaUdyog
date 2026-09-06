@@ -81,7 +81,7 @@ router.post("/", requireAuth, requirePermission("quotations", "create"), async (
     await client.query("COMMIT");
     res.status(201).json({ id: quoteId, quotationNo: quoteNo, customerName: value.customerName, projectName: value.projectName, status: "Draft", grandTotal });
   } catch (err) {
-    await client.query("ROLLBACK");
+    await client.query("ROLLBACK").catch(() => {});
     next(err);
   } finally {
     client.release();
@@ -98,18 +98,21 @@ router.patch("/:id", requireAuth, requirePermission("quotations", "update"), asy
   const grandTotal = taxable + taxAmount;
 
   const client = await getPool().connect();
+  let inTransaction = false;
   try {
     const existing = await client.query("SELECT status FROM quotations WHERE id = $1", [req.params.id]);
+    // These early returns must NOT release the client here — the `finally`
+    // block owns the single release. Releasing twice hands the same
+    // connection to two callers and crashes the process on the second call.
     if (!existing.rows.length) {
-      client.release();
       return res.status(404).json({ error: "Quotation not found." });
     }
     if (existing.rows[0].status !== "Draft") {
-      client.release();
       return res.status(409).json({ error: "Only draft quotations can be edited. Duplicate it into a new draft instead." });
     }
 
     await client.query("BEGIN");
+    inTransaction = true;
     await client.query(
       `UPDATE quotations SET customer_id = $1, project_id = $2, customer_name = $3, project_name = $4, project_address = $5,
          valid_until = $6, subtotal = $7, discount = $8, tax_rate = $9, tax_amount = $10, grand_total = $11, notes = $12,
@@ -129,10 +132,13 @@ router.patch("/:id", requireAuth, requirePermission("quotations", "update"), asy
     }
 
     await client.query("COMMIT");
+    inTransaction = false;
     const updated = await getPool().query(`SELECT ${QUOTATION_COLUMNS} FROM quotations WHERE id = $1`, [req.params.id]);
     res.json(updated.rows[0]);
   } catch (err) {
-    await client.query("ROLLBACK");
+    // Only roll back if a transaction was actually opened, and never let a
+    // failed ROLLBACK mask the original error.
+    if (inTransaction) await client.query("ROLLBACK").catch(() => {});
     next(err);
   } finally {
     client.release();

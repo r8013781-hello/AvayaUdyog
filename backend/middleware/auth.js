@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { query } = require("../lib/db");
 
-const RESOURCES = ["leads", "customers", "followups", "quotations", "projects"];
+const RESOURCES = ["leads", "customers", "followups", "quotations", "projects", "receipts"];
 const ACTIONS = ["create", "read", "update", "delete"];
 
 // Employee/permission state is re-read from the database on every request (not trusted
