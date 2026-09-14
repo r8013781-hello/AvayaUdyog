@@ -66,17 +66,19 @@ export default function QuotationDetailsCard({ quotation, loading, onClose, canE
                       {group.subgroups.map((sub, subIdx) => (
                         <div key={subIdx} className={subIdx > 0 ? "border-t border-line" : ""}>
                           {sub.name && <p className="bg-gold-soft/40 px-4 py-1.5 text-[0.68rem] font-bold uppercase tracking-wide text-gold-deep">{sub.name}</p>}
-                          <table className="min-w-full text-left text-sm">
-                            <tbody>
-                              {sub.items.map((item) => (
-                                <tr key={item.id} className="border-t border-line first:border-t-0">
-                                  <td className="px-4 py-2 font-medium text-ink">{item.itemName}</td>
-                                  <td className="px-2 py-2 text-right text-ink-muted">{Number(item.quantity)} {item.unit}</td>
-                                  <td className="px-4 py-2 text-right font-semibold text-ink">{money.format(item.lineTotal)}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                          <div className="overflow-x-auto">
+                            <table className="min-w-full text-left text-sm">
+                              <tbody>
+                                {sub.items.map((item) => (
+                                  <tr key={item.id} className="border-t border-line first:border-t-0">
+                                    <td className="px-4 py-2 font-medium text-ink">{item.itemName}</td>
+                                    <td className="whitespace-nowrap px-2 py-2 text-right text-ink-muted">{Number(item.quantity)} {item.unit}</td>
+                                    <td className="whitespace-nowrap px-4 py-2 text-right font-semibold text-ink">{money.format(item.lineTotal)}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       ))}
                     </div>

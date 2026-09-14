@@ -129,18 +129,18 @@ export default function AboutCompany() {
                 tiles with their own surface give each number the weight the
                 rest of the redesigned page carries. */}
             <div className="reveal mt-12" data-reveal-delay="0.18s">
-              <dl className="grid grid-cols-3 gap-3">
+              <dl className="grid grid-cols-3 gap-2 sm:gap-3">
                 {STATS.map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-2xl border border-line bg-white/70 px-3 py-5 text-center shadow-hair backdrop-blur-sm"
+                    className="rounded-2xl border border-line bg-white/70 px-2 py-4 text-center shadow-hair backdrop-blur-sm sm:px-3 sm:py-5"
                   >
                     <dt className="sr-only">{stat.label}</dt>
                     <dd>
-                      <span className="block font-display text-[2.2rem] font-semibold leading-none tracking-[-0.03em] text-sage-700">
+                      <span className="block font-display text-[1.6rem] font-semibold leading-none tracking-[-0.03em] text-sage-700 sm:text-[2.2rem]">
                         {stat.value}
                       </span>
-                      <span className="mt-2.5 block text-[0.72rem] font-bold uppercase tracking-label text-ink-muted">
+                      <span className="mt-2.5 block text-[0.62rem] font-bold uppercase tracking-label text-ink-muted sm:text-[0.72rem]">
                         {stat.label}
                       </span>
                     </dd>

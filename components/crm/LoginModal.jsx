@@ -85,7 +85,7 @@ export default function LoginModal({ isOpen, onClose }) {
         aria-hidden={!isOpen}
       >
         <div
-          className={`w-full max-w-sm rounded-[1.75rem] border border-line bg-white p-7 shadow-float transition-all duration-300 ease-smooth ${
+          className={`max-h-[90vh] w-full max-w-sm overflow-y-auto rounded-[1.75rem] border border-line bg-white p-7 shadow-float transition-all duration-300 ease-smooth ${
             isOpen ? "translate-y-0 scale-100" : "translate-y-2 scale-[0.98]"
           }`}
         >

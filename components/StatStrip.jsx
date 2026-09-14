@@ -19,15 +19,15 @@ const STATS = [
 
 export default function StatStrip({ className = "" }) {
   return (
-    <dl className={`grid grid-cols-3 gap-4 border-y border-line py-10 text-center ${className}`}>
+    <dl className={`grid grid-cols-3 gap-2 border-y border-line py-10 text-center sm:gap-4 ${className}`}>
       {STATS.map((stat) => (
         <div key={stat.label}>
           <dt className="sr-only">{stat.label}</dt>
           <dd>
-            <span className="block font-display text-[2.2rem] font-semibold leading-none tracking-[-0.03em] text-sage-700">
+            <span className="block font-display text-[1.6rem] font-semibold leading-none tracking-[-0.03em] text-sage-700 sm:text-[2.2rem]">
               {stat.value}
             </span>
-            <span className="mt-2.5 block text-[0.72rem] font-bold uppercase tracking-label text-ink-muted">
+            <span className="mt-2.5 block text-[0.62rem] font-bold uppercase tracking-label text-ink-muted sm:text-[0.72rem]">
               {stat.label}
             </span>
           </dd>

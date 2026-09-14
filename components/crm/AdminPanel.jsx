@@ -59,8 +59,8 @@ function PermissionGrid({ permissions, onChange, disabled }) {
   };
 
   return (
-    <div className={`overflow-hidden rounded-2xl border border-line ${disabled ? "pointer-events-none opacity-40" : ""}`}>
-      <table className="min-w-full text-left text-sm">
+    <div className={`overflow-x-auto rounded-2xl border border-line ${disabled ? "pointer-events-none opacity-40" : ""}`}>
+      <table className="min-w-[560px] w-full text-left text-sm">
         <thead className="bg-sage-50 text-[.62rem] uppercase tracking-label text-ink-muted">
           <tr>
             <th className="px-4 py-3 font-bold">Module</th>

@@ -279,7 +279,7 @@ export default function PromoPopup() {
           <X size={17} />
         </button>
 
-        <div className="p-8">
+        <div className="max-h-[85vh] overflow-y-auto p-8">
           {sent ? (
             <div className="py-10 text-center">
               <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-gold-light ring-1 ring-white/25 backdrop-blur">

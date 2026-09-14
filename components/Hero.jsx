@@ -83,7 +83,7 @@ export default function Hero() {
             </div>
 
             <p
-              className={`display mt-8 text-[3.2rem] text-white sm:text-[4.4rem] lg:text-[5rem] ${enterClass}`}
+              className={`display mt-8 text-[2.6rem] text-white sm:text-[4.4rem] lg:text-[5rem] ${enterClass}`}
               style={enter("90ms")}
             >
               Where every room
@@ -130,15 +130,15 @@ export default function Hero() {
               style={enter("400ms")}
             >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-light/70 to-transparent" />
-              <dl className="grid grid-cols-3 gap-4 pt-7">
+              <dl className="grid grid-cols-3 gap-3 pt-7 sm:gap-4">
                 {STATS.map((stat) => (
                   <div key={stat.label}>
                     <dt className="sr-only">{stat.label}</dt>
                     <dd>
-                      <span className="block font-display text-[2.4rem] font-semibold leading-none tracking-[-0.03em] text-white">
+                      <span className="block font-display text-[1.7rem] font-semibold leading-none tracking-[-0.03em] text-white sm:text-[2.4rem]">
                         {stat.value}
                       </span>
-                      <span className="mt-2.5 block text-[0.74rem] font-bold uppercase tracking-label text-white/55">
+                      <span className="mt-2.5 block text-[0.65rem] font-bold uppercase tracking-label text-white/55 sm:text-[0.74rem]">
                         {stat.label}
                       </span>
                     </dd>
