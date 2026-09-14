@@ -62,7 +62,7 @@ export default function InsightsPage() {
                   href={`/insights/${post.slug}`}
                   className="group flex flex-col gap-4 rounded-[1.5rem] border border-line bg-canvas p-7 transition-colors hover:border-sage-300 hover:bg-white md:p-9"
                 >
-                  <div className="flex items-center gap-3 text-[0.62rem] font-bold uppercase tracking-label text-gold-deep">
+                  <div className="flex items-center gap-3 text-[0.76rem] font-bold uppercase tracking-label text-gold-deep">
                     <BookOpen size={14} strokeWidth={1.7} aria-hidden="true" />
                     <span>{post.readingMinutes} min read</span>
                   </div>
@@ -70,7 +70,7 @@ export default function InsightsPage() {
                     {post.title}
                   </h2>
                   <p className="max-w-2xl text-[0.96rem] leading-[1.8] text-ink-muted">{post.excerpt}</p>
-                  <span className="inline-flex items-center gap-1.5 text-[0.72rem] font-bold uppercase tracking-label text-sage-700">
+                  <span className="inline-flex items-center gap-1.5 text-[0.84rem] font-bold uppercase tracking-label text-sage-700">
                     Read
                     <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
@@ -81,7 +81,7 @@ export default function InsightsPage() {
         </div>
       </section>
 
-      <section className="section !pt-0 !pb-24">
+      <section className="section !pt-0 !pb-16">
         <div className="shell relative">
           <div className="rounded-[1.75rem] border border-line-gold bg-gold-soft/45 px-7 py-10 md:px-12">
             <div className="max-w-xl">
@@ -94,7 +94,7 @@ export default function InsightsPage() {
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-5">
                 <PageCTAButton triggerSource="insights_hub_cta">Book a Consultation</PageCTAButton>
-                <SectionLink href="/#services" className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
+                <SectionLink href="/#services" className="text-[0.9rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900">
                   See what we do
                 </SectionLink>
               </div>

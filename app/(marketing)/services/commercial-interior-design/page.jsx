@@ -222,55 +222,65 @@ export default function CommercialInteriorDesignerKolkataPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(service) }}
       />
 
-      <div className="shell pt-32 md:pt-36">
-        <Breadcrumbs
-          items={[
-            { name: "Home", path: "/" },
-            {
-              name: "Commercial Design & Decoration",
-              path: "/services/commercial-interior-design",
-            },
-          ]}
-        />
-      </div>
-
       {/* ---------- Intro ---------- */}
-      <section className="section !pt-10">
-        <div className="shell relative">
-          <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
-            <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
-              <img
-                src="/services/s2-commercial.webp"
-                {...imageSize("/services/s2-commercial.webp")}
-                alt="Glass-walled modern office corridor — commercial interior design"
-                loading="eager"
-                decoding="async"
-                className="h-[24rem] w-full object-cover sm:h-[28rem]"
-              />
-            </figure>
+      {/* Same full-bleed "photo behind a scrim" treatment as the residential
+          page and the homepage sections: the room is the background, and
+          the breadcrumb sits overlaid on it instead of its own white band
+          above (which left a visible seam under the navbar). */}
+      <section className="section relative overflow-hidden !pt-0">
+        <div className="absolute inset-0" aria-hidden="true">
+          <img
+            src="/services/s2-commercial.webp"
+            {...imageSize("/services/s2-commercial.webp")}
+            alt=""
+            loading="eager"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-sage-950 via-sage-950/85 to-sage-950/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sage-950/70 via-transparent to-sage-950/20" />
+        </div>
 
-            <div className="order-1 lg:order-2">
-              <span className="eyebrow">Commercial Design & Decoration in Kolkata</span>
-              <h1 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
-                Workspaces built for{" "}
-                <span className="accent text-sage-600">the brand behind them.</span>
-              </h1>
-              <p className="mt-6 max-w-prose2 text-[1.02rem] leading-[1.85] text-ink-soft">
-                Avaya Udyog designs brand-first offices and retail
-                environments across Kolkata — spaces built to impress clients
-                and keep teams inspired, productive, and proud of where they
-                work.
-              </p>
+        <div className="shell relative pt-32 md:pt-36">
+          <Breadcrumbs
+            light
+            items={[
+              { name: "Home", path: "/" },
+              {
+                name: "Commercial Design & Decoration",
+                path: "/services/commercial-interior-design",
+              },
+            ]}
+          />
 
-              <div className="mt-9">
-                <PageCTAButton triggerSource="commercial_page_cta">
-                  Discuss Your Commercial Project
-                </PageCTAButton>
-              </div>
+          <div className="mt-10 max-w-2xl">
+            <span className="eyebrow [&::before]:bg-gold-light/70 text-gold-light">
+              Commercial Design & Decoration in Kolkata
+            </span>
+            <h1 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
+              Workspaces built for{" "}
+              <span className="accent text-gold-light">the brand behind them.</span>
+            </h1>
+            <p className="mt-6 max-w-prose2 text-[1.02rem] leading-[1.85] text-white/80">
+              Avaya Udyog designs brand-first offices and retail
+              environments across Kolkata — spaces built to impress clients
+              and keep teams inspired, productive, and proud of where they
+              work.
+            </p>
 
-              {/* Confirmed figures, on a page that otherwise asks for an
-                  enquiry without offering any reason to trust it. */}
-              <StatStrip className="mt-10" />
+            <div className="mt-9">
+              <PageCTAButton triggerSource="commercial_page_cta">
+                Discuss Your Commercial Project
+              </PageCTAButton>
+            </div>
+
+            {/* Confirmed figures, on a page that otherwise asks for an
+                enquiry without offering any reason to trust it. Wrapped in
+                its own surface rather than reworking the shared component's
+                colors, since StatStrip is also used on a light background
+                elsewhere (the residential page's "What we design" flow). */}
+            <div className="mt-10 inline-block rounded-[1.5rem] bg-white/95 p-6 shadow-lift backdrop-blur-sm">
+              <StatStrip className="!border-none !py-0" />
             </div>
           </div>
         </div>
@@ -286,7 +296,7 @@ export default function CommercialInteriorDesignerKolkataPage() {
             </h2>
           </div>
 
-          <div className="mt-14 grid gap-6 sm:grid-cols-2">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {SPACES.map((space) => (
               <div key={space.title} className="card card-hover overflow-hidden">
                 <img
@@ -330,7 +340,7 @@ export default function CommercialInteriorDesignerKolkataPage() {
             </p>
           </div>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
             {COMMERCIAL_CONSTRAINTS.map(({ icon: Icon, title, text }) => (
               <div key={title} className="card p-7">
                 <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line-strong bg-sage-50 text-sage-600">
@@ -363,7 +373,7 @@ export default function CommercialInteriorDesignerKolkataPage() {
             </p>
           </div>
 
-          <ol className="mt-14 grid gap-6 md:grid-cols-2">
+          <ol className="mt-10 grid gap-6 md:grid-cols-2">
             {WORKFLOW.map(({ step, title, text, output }) => (
               <li key={step} className="flex flex-col rounded-[1.5rem] border border-line bg-white p-7 shadow-hair">
                 <span className="flex h-9 w-fit items-center rounded-full border border-line-strong px-3.5 font-display text-[0.8rem] font-semibold text-sage-700">
@@ -384,7 +394,7 @@ export default function CommercialInteriorDesignerKolkataPage() {
       {/* ---------- Phasing ---------- */}
       <section className="section !py-20" id="phasing">
         <div className="shell relative">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
             <div>
               <span className="eyebrow">Phasing</span>
               <h2 className="display mt-6 text-[2.2rem] text-ink sm:text-[2.5rem]">
@@ -430,7 +440,7 @@ export default function CommercialInteriorDesignerKolkataPage() {
             </p>
           </div>
 
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {DELIVERY.map(({ icon: Icon, title, text, points }) => (
               <div key={title} className="flex flex-col rounded-[1.5rem] border border-line bg-white p-7 shadow-hair">
                 <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line-strong bg-sage-50 text-sage-600">
@@ -479,9 +489,9 @@ export default function CommercialInteriorDesignerKolkataPage() {
       </section>
 
       {/* ---------- CTA ---------- */}
-      <section className="section !pt-0 !pb-24">
+      <section className="section !pt-0 !pb-16">
         <div className="shell relative">
-          <div className="relative overflow-hidden rounded-[2rem] bg-sage-900 px-8 py-12 text-center shadow-lift md:px-14">
+          <div className="relative overflow-hidden rounded-[2rem] bg-sage-900 px-8 py-12 text-center shadow-lift md:px-10">
             <h2 className="display text-[2rem] text-white sm:text-[2.4rem]">
               Have a workspace in mind?
             </h2>

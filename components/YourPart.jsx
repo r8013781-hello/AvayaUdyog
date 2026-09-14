@@ -56,14 +56,33 @@ const YOUR_DECISIONS = [
 
 export default function YourPart() {
   return (
-    <section id="your-part" className="section scroll-mt-24 bg-canvas !py-20 md:scroll-mt-28">
+    <section
+      id="your-part"
+      className="section relative scroll-mt-16 overflow-hidden !py-20 md:scroll-mt-20"
+    >
+      {/* A finished dining room — the layout, material and finish decisions
+          this section is literally about — as the section's background.
+          Same device as About/Services/HowWeWork/ServicesMore: full-bleed
+          photo, sage scrim, white text, glass cards. */}
+      <div className="absolute inset-0" aria-hidden="true">
+        <img
+          src="/gallery/renders/dining-room/dining-room-render-01.jpg"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-sage-950/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sage-950/40 via-transparent to-sage-950/60" />
+      </div>
+
       <div className="shell relative">
         <div className="max-w-2xl">
-          <span className="eyebrow">Your Part</span>
-          <h2 className="display mt-6 text-[2.1rem] text-ink sm:text-[2.4rem]">
-            What you decide, <span className="accent text-sage-600">and when.</span>
+          <span className="eyebrow [&::before]:bg-gold-light/70 text-gold-light">Your Part</span>
+          <h2 className="display mt-6 text-[2.1rem] text-white sm:text-[2.4rem]">
+            What you decide, <span className="accent text-gold-light">and when.</span>
           </h2>
-          <p className="mt-6 text-[1rem] leading-[1.85] text-ink-soft">
+          <p className="mt-6 text-[1rem] leading-[1.85] text-white/75">
             The four stages above are what we do. This is what is asked of you — worth
             knowing before you start, because the cost of a decision depends almost
             entirely on which stage it is made in. Nearly every interiors project that
@@ -76,19 +95,19 @@ export default function YourPart() {
           {YOUR_DECISIONS.map(({ stage, yours, cost }) => (
             <div
               key={stage}
-              className="flex flex-col rounded-[1.5rem] border border-line bg-white p-7 shadow-hair"
+              className="flex flex-col rounded-[1.5rem] border border-white/25 bg-white/10 p-7 shadow-lift backdrop-blur-xl transition-all hover:border-white/40 hover:bg-white/[0.15]"
             >
-              <h3 className="font-display text-[1.15rem] font-semibold text-ink">{stage}</h3>
+              <h3 className="font-display text-[1.15rem] font-semibold text-white">{stage}</h3>
               <ul className="mt-4 space-y-2.5">
                 {yours.map((item) => (
-                  <li key={item} className="flex gap-2.5 text-[0.92rem] leading-[1.75] text-ink-muted">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-sage-400" aria-hidden="true" />
+                  <li key={item} className="flex gap-2.5 text-[0.92rem] leading-[1.75] text-white/75">
+                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold-light" aria-hidden="true" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-auto border-t border-line pt-4 text-[0.84rem] leading-[1.7] text-ink-soft">
-                <span className="font-semibold text-sage-700">Cost of changing it here:</span>{" "}
+              <p className="mt-auto border-t border-white/20 pt-4 text-[0.84rem] leading-[1.7] text-white/75">
+                <span className="font-semibold text-gold-light">Cost of changing it here:</span>{" "}
                 {cost}
               </p>
             </div>

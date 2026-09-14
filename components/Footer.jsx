@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import SectionLink from "./SectionLink";
 import {
@@ -152,33 +153,30 @@ export default function Footer() {
     `field ${errors[name] ? "!border-red-300 !bg-red-50/40 focus:!ring-red-500/10" : ""}`;
 
   return (
-    <footer className="relative overflow-hidden bg-canvas">
+    <footer className="relative overflow-hidden bg-gradient-to-b from-sage-50 via-canvas to-sage-100/70">
+      {/* Was flat bg-canvas — the one dull beat closing an otherwise rich
+          page. A full dark takeover (matching the hero/CTA bands) was tried
+          and read as too heavy for a closing section that's mostly a form —
+          this keeps the white surfaces the form and contact cards need, and
+          gets its life from a soft green wash and the same blurred-blob
+          device used elsewhere instead of an inverted color scheme. */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="grid-paper absolute inset-0 [mask-image:radial-gradient(ellipse_at_50%_100%,#000_20%,transparent_70%)]" />
-        <div className="absolute -left-32 top-10 h-[26rem] w-[26rem] rounded-full bg-sage-100/60 blur-[130px]" />
+        <div className="grid-paper absolute inset-0 [mask-image:radial-gradient(ellipse_at_50%_0%,#000_20%,transparent_75%)]" />
+        <div className="absolute -left-32 top-10 h-[28rem] w-[28rem] rounded-full bg-sage-300/30 blur-[140px]" />
+        <div className="absolute -right-24 bottom-0 h-[24rem] w-[24rem] rounded-full bg-gold/20 blur-[130px]" />
       </div>
 
-      <div className="shell relative pt-24 md:pt-28">
-        <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+      <div className="shell relative pt-16 md:pt-20">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           {/* ---------- Brand + channels ---------- */}
           <div>
-            <div className="flex items-center gap-3.5">
-              <span className="relative inline-flex h-12 w-12 items-center justify-center">
-                <span className="absolute inset-0 rotate-45 rounded-[30%] bg-sage-800" />
-                <span className="absolute inset-[3px] rotate-45 rounded-[28%] border border-gold/50" />
-                <span className="relative font-display text-xl font-semibold text-white">
-                  A
-                </span>
-              </span>
-              <span>
-                <span className="block font-display text-2xl font-semibold tracking-[0.01em] text-ink">
-                  Avaya <span className="text-sage-600">Udyog</span>
-                </span>
-                <span className="mt-1 block text-[0.58rem] font-semibold uppercase tracking-wider2 text-ink-muted">
-                  Interior Design &amp; Decoration
-                </span>
-              </span>
-            </div>
+            <Image
+              src="/logo-lockup-dark-text.png"
+              alt="Avaya Udyog — Furniture & Interior Design & Decoration"
+              height={80}
+              width={364}
+              className="h-11 w-auto object-contain"
+            />
 
             <p className="mt-8 max-w-sm text-[0.98rem] leading-[1.85] text-ink-soft">
               Transforming spaces into timeless masterpieces for over 35 years —
@@ -195,7 +193,7 @@ export default function Footer() {
                   <Mail size={18} strokeWidth={1.6} />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[0.56rem] font-bold uppercase tracking-label text-ink-muted">
+                  <span className="block text-[0.7rem] font-bold uppercase tracking-label text-ink-muted">
                     Email us
                   </span>
                   <span className="mt-0.5 block truncate text-[0.9rem] font-semibold text-ink">
@@ -217,7 +215,7 @@ export default function Footer() {
                   <Phone size={18} strokeWidth={1.6} />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[0.56rem] font-bold uppercase tracking-label text-ink-muted">
+                  <span className="block text-[0.7rem] font-bold uppercase tracking-label text-ink-muted">
                     Call us
                   </span>
                   <span className="mt-0.5 block text-[0.9rem] font-semibold text-ink">
@@ -235,7 +233,7 @@ export default function Footer() {
                   <MapPin size={18} strokeWidth={1.6} />
                 </span>
                 <span>
-                  <span className="block text-[0.56rem] font-bold uppercase tracking-label text-ink-muted">
+                  <span className="block text-[0.7rem] font-bold uppercase tracking-label text-ink-muted">
                     Location
                   </span>
                   <span className="mt-0.5 block text-[0.9rem] font-semibold text-ink">
@@ -446,7 +444,7 @@ export default function Footer() {
                 aria-hidden="true"
               >
                 <span className="leading-none">
-                  <span className="block font-display text-[0.68rem] font-bold text-gold-deep">
+                  <span className="block font-display text-[0.8rem] font-bold text-gold-deep">
                     35
                   </span>
                   <span className="block text-[0.3rem] font-bold uppercase tracking-[0.08em] text-ink-muted">
@@ -535,7 +533,7 @@ function FooterColumn({ heading, children }) {
 
 function FooterNav() {
   return (
-    <div className="mt-20 border-t border-line pt-14">
+    <div className="mt-14 border-t border-line pt-10">
       <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 sm:gap-x-10">
         <FooterColumn heading="Studio">
           <ul className="space-y-3">
@@ -605,7 +603,7 @@ function FooterNav() {
 }
 
 function FieldError({ message }) {
-  return <p className="mt-1.5 pl-1 text-[0.72rem] font-medium text-red-600">{message}</p>;
+  return <p className="mt-1.5 pl-1 text-[0.84rem] font-medium text-red-600">{message}</p>;
 }
 
 function Field({ icon: Icon, error, className, name, id, label, ...props }) {

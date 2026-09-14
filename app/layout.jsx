@@ -1,5 +1,5 @@
 import "./globals.css";
-import { fraunces, plusJakarta } from "./fonts";
+import { syne, manrope } from "./fonts";
 
 const SITE_URL = "https://avayaudyog.com";
 
@@ -14,7 +14,6 @@ export const metadata = {
   metadataBase: new URL(SITE_URL),
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
     ],
@@ -34,10 +33,8 @@ export default function RootLayout({ children }) {
     // marketing site and /portal share the same self-hosted faces, exactly
     // as they shared the old Google Fonts stylesheet — but with no
     // render-blocking request to a third-party origin.
-    <html lang="en-IN" className={`${fraunces.variable} ${plusJakarta.variable}`}>
-      <head>
-        <link rel="mask-icon" href="/favicon.svg" color="#2b4f36" />
-      </head>
+    <html lang="en-IN" className={`${syne.variable} ${manrope.variable}`}>
+      <head />
       {/* Marketing chrome (Navbar/Footer/WhatsappButton/ContactModalProvider)
           lives in app/(marketing)/layout.jsx, not here — this root layout
           is shared by both the marketing site and /portal (the CRM), and

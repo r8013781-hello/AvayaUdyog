@@ -14,12 +14,12 @@ export default function FAQ() {
   const ref = useReveal();
 
   return (
-    <section id="faq" className="section scroll-mt-24 md:scroll-mt-28">
+    <section id="faq" className="section scroll-mt-16 md:scroll-mt-20">
       <div ref={ref} className="shell relative">
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
           <div className="reveal lg:sticky lg:top-32 lg:self-start">
             <span className="eyebrow">Questions</span>
-            <h2 className="display mt-6 text-[2.6rem] text-ink sm:text-[3rem]">
+            <h2 className="display mt-6 text-[3rem] text-ink sm:text-[3.5rem]">
               Before you
               <br />
               <span className="accent text-sage-600">get in touch.</span>

@@ -179,7 +179,7 @@ export default function PrivacyPolicyPage() {
           </Section>
         </div>
 
-        <div className="mt-16 border-t border-line pt-8">
+        <div className="mt-12 border-t border-line pt-8">
           <Link
             href="/"
             className="text-[0.86rem] font-semibold text-sage-700 underline underline-offset-2 transition-colors hover:text-sage-900"

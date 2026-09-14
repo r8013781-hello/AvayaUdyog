@@ -27,7 +27,7 @@ export default function StatStrip({ className = "" }) {
             <span className="block font-display text-[2.2rem] font-semibold leading-none tracking-[-0.03em] text-sage-700">
               {stat.value}
             </span>
-            <span className="mt-2.5 block text-[0.58rem] font-bold uppercase tracking-label text-ink-muted">
+            <span className="mt-2.5 block text-[0.72rem] font-bold uppercase tracking-label text-ink-muted">
               {stat.label}
             </span>
           </dd>

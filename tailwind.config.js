@@ -60,13 +60,18 @@ export default {
       fontFamily: {
         // The var() names come from next/font (see app/fonts.js), which
         // self-hosts both faces. Fallbacks stay in place for the moment
-        // before the font files finish loading.
-        display: ["var(--font-display)", "ui-serif", "Georgia", "serif"],
+        // before the font files finish loading. display is Syne — a
+        // geometric sans, not a serif — so its fallback stack is sans-serif
+        // now too, unlike the Fraunces era.
+        display: ["var(--font-display)", "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
 
       fontSize: {
-        micro: ["0.6875rem", { lineHeight: "1.2", letterSpacing: "0.18em" }],
+        // Was 0.6875rem (11px) — the eyebrow label above every section
+        // heading, so its size compounds across the whole site. Bumped
+        // alongside the rest of the small uppercase tag/label text.
+        micro: ["0.8125rem", { lineHeight: "1.25", letterSpacing: "0.16em" }],
       },
 
       letterSpacing: {

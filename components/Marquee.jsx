@@ -19,7 +19,7 @@ function Track() {
     <div className="animate-marquee flex shrink-0 items-center gap-10 pr-10">
       {ITEMS.map((item) => (
         <span key={item} className="flex shrink-0 items-center gap-10">
-          <span className="whitespace-nowrap font-display text-lg font-medium italic text-sage-700/85">
+          <span className="whitespace-nowrap font-display text-lg font-semibold text-sage-700/85">
             {item}
           </span>
           <span className="h-1 w-1 shrink-0 rotate-45 bg-gold/60" />

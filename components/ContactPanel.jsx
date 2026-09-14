@@ -321,7 +321,7 @@ export default function ContactPanel({ isOpen, onClose }) {
                               setFormData(emptyForm);
                               setErrors({});
                             }}
-                            className="mt-2 text-[0.78rem] font-semibold text-red-700 underline underline-offset-2 hover:text-red-900"
+                            className="mt-2 text-[0.9rem] font-semibold text-red-700 underline underline-offset-2 hover:text-red-900"
                           >
                             Start a new message instead
                           </button>
@@ -458,7 +458,7 @@ export default function ContactPanel({ isOpen, onClose }) {
                 <Phone size={17} strokeWidth={1.6} />
               </span>
               <span className="min-w-0">
-                <span className="block text-[0.56rem] font-bold uppercase tracking-label text-ink-muted">
+                <span className="block text-[0.7rem] font-bold uppercase tracking-label text-ink-muted">
                   Call us
                 </span>
                 <span className="mt-0.5 block text-[0.9rem] font-semibold text-ink">
@@ -478,7 +478,7 @@ export default function ContactPanel({ isOpen, onClose }) {
                 <MessageCircle size={17} strokeWidth={1.6} />
               </span>
               <span className="min-w-0">
-                <span className="block text-[0.56rem] font-bold uppercase tracking-label text-ink-muted">
+                <span className="block text-[0.7rem] font-bold uppercase tracking-label text-ink-muted">
                   WhatsApp
                 </span>
                 <span className="mt-0.5 block text-[0.9rem] font-semibold text-ink">
@@ -496,7 +496,7 @@ export default function ContactPanel({ isOpen, onClose }) {
                 <Mail size={17} strokeWidth={1.6} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-[0.56rem] font-bold uppercase tracking-label text-ink-muted">
+                <span className="block text-[0.7rem] font-bold uppercase tracking-label text-ink-muted">
                   Email
                 </span>
                 <span className="mt-0.5 block truncate text-[0.9rem] font-semibold text-ink">
@@ -510,7 +510,7 @@ export default function ContactPanel({ isOpen, onClose }) {
             <div className="flex items-start gap-3.5">
               <MapPin size={17} className="mt-0.5 flex-shrink-0 text-gold-deep" />
               <div>
-                <p className="text-[0.56rem] font-bold uppercase tracking-label text-ink-muted">
+                <p className="text-[0.7rem] font-bold uppercase tracking-label text-ink-muted">
                   Our location
                 </p>
                 <p className="mt-1 text-[0.9rem] font-semibold text-ink">
@@ -529,7 +529,7 @@ export default function ContactPanel({ isOpen, onClose }) {
 }
 
 function FieldError({ message }) {
-  return <p className="mt-1.5 pl-1 text-[0.72rem] font-medium text-red-600">{message}</p>;
+  return <p className="mt-1.5 pl-1 text-[0.84rem] font-medium text-red-600">{message}</p>;
 }
 
 function Field({ icon: Icon, error, className, id, label, ...props }) {

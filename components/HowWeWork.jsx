@@ -69,16 +69,21 @@ export default function HowWeWork() {
   const openContactModal = useContactModal();
 
   return (
-    <section id="how-we-work" className="section bg-sage-50/50">
+    <section
+      ref={ref}
+      id="how-we-work"
+      className="section bg-gradient-to-br from-gold-soft/50 via-sage-50/50 to-canvas"
+    >
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="grid-paper absolute inset-0 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_70%)]" />
-        <div className="absolute -right-32 top-1/3 h-[26rem] w-[26rem] rounded-full bg-gold/[0.06] blur-[130px]" />
+        <div className="absolute -right-32 top-1/3 h-[26rem] w-[26rem] rounded-full bg-gold/[0.1] blur-[130px]" />
+        <div className="absolute -left-24 bottom-0 h-[22rem] w-[22rem] rounded-full bg-sage-300/25 blur-[120px]" />
       </div>
 
-      <div ref={ref} className="shell relative">
+      <div className="shell relative">
         <div className="reveal max-w-2xl">
           <span className="eyebrow">How We Work</span>
-          <h2 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
+          <h2 className="display mt-6 text-[3.1rem] text-ink sm:text-6xl lg:text-[4.25rem]">
             From first conversation
             <br />
             <span className="accent text-sage-600">to final handover.</span>
@@ -89,63 +94,71 @@ export default function HowWeWork() {
             separate contractor midway.
           </p>
         </div>
+      </div>
 
-        {/* Editorial, alternating staggered layout for maximum image impact */}
-        <div className="mt-20 space-y-20 md:mt-28 md:space-y-32">
-          {STAGES.map(({ icon: Icon, tag, title, text, src, alt }, index) => {
-            const isEven = index % 2 === 1;
-            return (
+      {/* ---------- Full-bleed photo rows, alternating sides ----------
+          Same device as About/Services: the stage photo is the row's actual
+          background, edge-to-edge outside the `shell` max-width, with a
+          scrim gradient on whichever side holds the copy. */}
+      <div className="reveal mt-14 md:mt-20">
+        {STAGES.map(({ icon: Icon, tag, title, text, src, alt }, index) => {
+          const reversed = index % 2 === 1;
+          return (
+            <div
+              key={tag}
+              className="relative isolate flex min-h-[32rem] items-center overflow-hidden sm:min-h-[38rem] lg:min-h-[44rem]"
+            >
+              <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 -z-10 h-full w-full object-cover"
+              />
               <div
-                key={tag}
-                className="reveal flex flex-col gap-10 md:flex-row md:items-center md:gap-16 lg:gap-24"
-              >
-                <figure
-                  className={`w-full overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift md:w-1/2 ${
-                    isEven ? "md:order-2" : "md:order-1"
-                  }`}
-                >
-                  <img
-                    src={src}
-                    alt={alt}
-                    loading="lazy"
-                    decoding="async"
-                    className="aspect-[4/3] w-full object-cover sm:aspect-[4/3] md:aspect-[5/4] transition-transform duration-700 hover:scale-105"
-                  />
-                </figure>
+                className={`pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r ${
+                  reversed
+                    ? "from-transparent via-sage-950/70 to-sage-950/95"
+                    : "from-sage-950/95 via-sage-950/70 to-transparent"
+                }`}
+              />
 
+              <div className="shell relative w-full py-14 lg:py-16">
                 <div
-                  className={`w-full md:w-1/2 ${
-                    isEven ? "md:order-1" : "md:order-2"
+                  className={`flex w-full max-w-lg flex-col items-start text-left ${
+                    reversed ? "ml-auto" : ""
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line-strong bg-canvas font-display text-[0.85rem] font-semibold text-sage-700 shadow-hair">
+                    <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 font-display text-[1.2rem] font-semibold text-white backdrop-blur-sm">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <div className="flex items-center gap-2.5">
-                      <Icon size={16} strokeWidth={1.7} className="text-gold-deep" aria-hidden="true" />
-                      <span className="text-[0.65rem] font-bold uppercase tracking-label text-gold-deep">
+                    <div className="flex items-center gap-3">
+                      <Icon size={22} strokeWidth={1.7} className="text-gold-light" aria-hidden="true" />
+                      <span className="text-[0.9rem] font-bold uppercase tracking-label text-gold-light">
                         {tag}
                       </span>
                     </div>
                   </div>
 
-                  <h3 className="mt-6 font-display text-[1.8rem] font-semibold leading-tight text-ink sm:text-[2.2rem]">
+                  <h3 className="mt-6 font-display text-[1.8rem] font-semibold leading-tight text-white sm:text-[2.2rem]">
                     {title}
                   </h3>
-                  <p className="mt-5 max-w-lg text-[1.05rem] leading-[1.8] text-ink-muted">
+                  <p className="mt-5 max-w-lg text-[1.05rem] leading-[1.8] text-white/80">
                     {text}
                   </p>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
+      </div>
 
+      <div className="shell relative mt-12 md:mt-14">
         {/* Closing band — restates the one genuinely verifiable differentiator
             (single team, end to end) and routes to the consultation. */}
         <div
-          className="reveal mt-16 flex flex-col gap-6 rounded-[1.75rem] border border-line-gold bg-gold-soft/45 px-7 py-8 md:mt-20 md:flex-row md:items-center md:justify-between md:px-10"
+          className="reveal flex flex-col gap-6 rounded-[1.75rem] border border-line-gold bg-gold-soft/45 px-7 py-8 md:flex-row md:items-center md:justify-between md:px-10"
           data-reveal-delay="0.4s"
         >
           <div>

@@ -66,16 +66,28 @@ export default function Services() {
   const openContactModal = useContactModal();
 
   return (
-    <section id="services" className="section scroll-mt-24 bg-canvas md:scroll-mt-28">
+    <section
+      ref={ref}
+      id="services"
+      className="section scroll-mt-16 bg-gradient-to-br from-sage-50 via-canvas to-gold-soft/60 md:scroll-mt-20"
+    >
+      {/* Sandwiched between two full-bleed photo bands, this header block
+          used to sit on flat bg-canvas — the one dull beat in an otherwise
+          rich stretch of page. A soft diagonal wash plus the same blurred
+          color-blob device used elsewhere on the site (About, the CTA band
+          below) ties it back into the surrounding sage/gold palette instead
+          of reading as a plain gap between two photos. */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="dot-paper absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_65%)]" />
+        <div className="absolute -left-24 top-0 h-[26rem] w-[26rem] rounded-full bg-sage-300/35 blur-[120px]" />
+        <div className="absolute -right-16 bottom-0 h-[22rem] w-[22rem] rounded-full bg-gold/25 blur-[110px]" />
       </div>
 
-      <div ref={ref} className="shell relative">
+      <div className="shell relative">
         <div className="reveal flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="eyebrow">Our Services</span>
-            <h2 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
+            <h2 className="display mt-6 text-[3.1rem] text-ink sm:text-6xl lg:text-[4.25rem]">
               Designed for living.
               <br />
               <span className="accent text-sage-600">Decorated for life.</span>
@@ -92,53 +104,63 @@ export default function Services() {
             </SectionLink>
           </p>
         </div>
+      </div>
 
-        {/* ---------- Alternating editorial blocks ---------- */}
-        <div className="mt-6">
-          {SERVICES.map(({ id, title, tag, text, src, alt, href, linkLabel }, index) => {
-            const reversed = index % 2 === 1;
-            return (
+      {/* ---------- Full-bleed photo rows, alternating sides ----------
+          Each service used to pair a small inset thumbnail with copy on a
+          plain canvas background. The photo is now the row's actual
+          background — edge-to-edge, outside the `shell` max-width, the same
+          device as the About section above — with a scrim gradient on
+          whichever side holds the copy, so the room itself does the selling
+          instead of a cropped rectangle next to it. */}
+      <div className="mt-10">
+        {SERVICES.map(({ id, title, tag, text, src, alt, href, linkLabel }, index) => {
+          const reversed = index % 2 === 1;
+          return (
+            <div
+              key={title}
+              id={id}
+              className="reveal relative isolate flex min-h-[32rem] scroll-mt-16 items-center overflow-hidden sm:min-h-[38rem] md:scroll-mt-20 lg:min-h-[44rem]"
+              data-reveal-delay={`${index * 0.08}s`}
+            >
+              <img
+                src={src}
+                {...imageSize(src)}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                onError={handleImageError}
+                className="absolute inset-0 -z-10 h-full w-full object-cover"
+              />
+              {/* Scrim: opaque on the copy's side, sheer toward the photo's
+                  open side — flipped left/right to match the alternation. */}
               <div
-                key={title}
-                id={id}
-                className="reveal grid scroll-mt-24 items-center gap-10 border-t border-line py-14 first:border-t-0 md:scroll-mt-28 lg:grid-cols-2 lg:gap-16 lg:py-16"
-                data-reveal-delay={`${index * 0.08}s`}
-              >
-                {/* Image — always first on mobile, alternates sides on desktop. */}
-                <figure
-                  className={`group relative order-1 overflow-hidden rounded-[1.25rem] bg-sage-100 shadow-soft ${
-                    reversed ? "lg:order-2" : "lg:order-1"
+                className={`pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r ${
+                  reversed
+                    ? "from-transparent via-sage-950/70 to-sage-950/95"
+                    : "from-sage-950/95 via-sage-950/70 to-transparent"
+                }`}
+              />
+
+              <div className="shell relative w-full py-14 lg:py-16">
+                <div
+                  className={`flex w-full max-w-lg flex-col ${
+                    reversed ? "ml-auto items-start text-left" : "items-start text-left"
                   }`}
                 >
-                  <img
-                    src={src}
-                    {...imageSize(src)}
-                    alt={alt}
-                    loading="lazy"
-                    decoding="async"
-                    onError={handleImageError}
-                    className="h-[20rem] w-full object-cover transition-transform duration-[1200ms] ease-smooth group-hover:scale-105 sm:h-[24rem] lg:h-[26rem]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-sage-950/20 via-transparent to-transparent" />
-                </figure>
-
-                {/* Copy */}
-                <div
-                  className={`order-2 ${reversed ? "lg:order-1 lg:pr-6" : "lg:order-2 lg:pl-6"}`}
-                >
-                  <div className="flex items-center gap-3.5">
-                    <span className="flex h-9 items-center rounded-full border border-line-strong px-3.5 font-display text-[0.8rem] font-semibold text-sage-700">
+                  <div className="flex items-center gap-4">
+                    <span className="flex h-12 items-center rounded-full border border-white/30 bg-white/10 px-5 font-display text-[1.05rem] font-semibold text-white backdrop-blur-sm">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-[0.62rem] font-bold uppercase tracking-label text-gold-deep">
+                    <span className="text-[0.85rem] font-bold uppercase tracking-label text-gold-light">
                       {tag}
                     </span>
                   </div>
 
-                  <h3 className="display mt-6 text-[2rem] leading-[1.1] text-ink sm:text-[2.35rem]">
+                  <h3 className="display mt-6 text-[2rem] leading-[1.1] text-white sm:text-[2.35rem]">
                     {title}
                   </h3>
-                  <p className="mt-4 max-w-md text-[0.98rem] leading-[1.85] text-ink-muted">
+                  <p className="mt-4 max-w-md text-[0.98rem] leading-[1.85] text-white/80">
                     {text}
                   </p>
 
@@ -159,11 +181,11 @@ export default function Services() {
                   {href ? (
                     <SectionLink
                       href={href}
-                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
+                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.84rem] font-bold uppercase tracking-label text-white transition-colors hover:text-gold-light"
                     >
                       <span className="relative">
                         {linkLabel}
-                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
+                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-gold-light transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
                       </span>
                       <ArrowUpRight
                         size={14}
@@ -174,11 +196,11 @@ export default function Services() {
                     <button
                       type="button"
                       onClick={() => openContactModal(`services_${id}`)}
-                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 transition-colors hover:text-sage-900"
+                      className="group/link mt-7 inline-flex items-center gap-2 text-[0.84rem] font-bold uppercase tracking-label text-white transition-colors hover:text-gold-light"
                     >
                       <span className="relative">
                         Talk to us about this
-                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-sage-700 transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
+                        <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-gold-light transition-transform duration-300 ease-smooth group-hover/link:scale-x-100" />
                       </span>
                       <ArrowUpRight
                         size={14}
@@ -188,12 +210,14 @@ export default function Services() {
                   )}
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
+      </div>
 
+      <div className="shell relative mt-10">
         {/* ---------- CTA band: the one deep-green moment in this section ---------- */}
-        <div className="reveal relative mt-4 overflow-hidden rounded-[2rem] bg-sage-900 px-8 py-12 shadow-lift md:px-14">
+        <div className="reveal relative overflow-hidden rounded-[2rem] bg-sage-900 px-8 py-12 shadow-lift md:px-10">
           <div className="pointer-events-none absolute inset-0" aria-hidden="true">
             <div className="absolute inset-0 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.10)_1px,transparent_0)] [background-size:26px_26px]" />
             <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-sage-500/25 blur-[100px]" />

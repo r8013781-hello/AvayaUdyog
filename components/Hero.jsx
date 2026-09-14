@@ -70,14 +70,14 @@ export default function Hero() {
 
       <div className="min-h-hero shell relative flex flex-col">
         {/* ---------- Copy, overlaid directly on the photograph ---------- */}
-        <div className="flex flex-1 flex-col justify-center pb-14 pt-32 md:pt-36">
+        <div className="flex flex-1 flex-col justify-center pb-10 pt-32 md:pt-36">
           <div className="max-w-2xl">
             <div className={enterClass} style={enter("0ms")}>
               <span
                 className="block h-px w-12 bg-gradient-to-r from-gold-light to-transparent"
                 aria-hidden="true"
               />
-              <h1 className="mt-4 font-display text-[1.15rem] italic font-semibold leading-snug tracking-[0.01em] text-gold-light [text-shadow:0_2px_18px_rgba(0,0,0,0.5)] sm:text-[1.5rem] lg:text-[1.75rem]">
+              <h1 className="mt-4 font-display text-[1.15rem] font-semibold leading-snug tracking-[0.02em] text-gold-light [text-shadow:0_2px_18px_rgba(0,0,0,0.5)] sm:text-[1.5rem] lg:text-[1.75rem]">
                 Luxury Interior Design &amp; Decoration
               </h1>
             </div>
@@ -138,7 +138,7 @@ export default function Hero() {
                       <span className="block font-display text-[2.4rem] font-semibold leading-none tracking-[-0.03em] text-white">
                         {stat.value}
                       </span>
-                      <span className="mt-2.5 block text-[0.6rem] font-bold uppercase tracking-label text-white/55">
+                      <span className="mt-2.5 block text-[0.74rem] font-bold uppercase tracking-label text-white/55">
                         {stat.label}
                       </span>
                     </dd>
@@ -156,7 +156,7 @@ export default function Hero() {
               key={slide.id}
               style={{ animation: "fade-in-soft 600ms ease-smooth both" }}
             >
-              <p className="text-[0.58rem] font-bold uppercase tracking-label text-gold-light">
+              <p className="text-[0.72rem] font-bold uppercase tracking-label text-gold-light">
                 {slide.eyebrow}
               </p>
               <p className="mt-1.5 font-display text-[1.1rem] font-medium text-white/90">
@@ -203,7 +203,7 @@ export default function Hero() {
             className="group mx-auto hidden flex-col items-center gap-2.5 lg:flex"
             aria-label="Scroll to gallery"
           >
-            <span className="text-[0.56rem] font-bold uppercase tracking-wider2 text-white/50 transition-colors group-hover:text-white">
+            <span className="text-[0.7rem] font-bold uppercase tracking-wider2 text-white/50 transition-colors group-hover:text-white">
               Explore
             </span>
             <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 text-white/70 transition-all duration-300 group-hover:border-white group-hover:text-white">

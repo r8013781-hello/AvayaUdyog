@@ -1,4 +1,4 @@
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Syne, Manrope } from "next/font/google";
 
 // Self-hosted at build time by next/font instead of the render-blocking
 // <link rel="stylesheet"> to fonts.googleapis.com that used to sit in
@@ -9,21 +9,24 @@ import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 // Both faces expose CSS variables consumed by tailwind.config.js
 // (fontFamily.display / fontFamily.sans), so every existing `font-display`
 // and `font-sans` utility keeps working untouched.
+//
+// Syne + Manrope replaced Fraunces + Plus Jakarta Sans — chosen to echo the
+// sharp, geometric character of the real logo mark (see public/logo-lockup-
+// dark-text.png) instead of the softer serif/humanist pairing that shipped
+// before. Neither face has an italic cut, unlike Fraunces, so the accent
+// treatment in globals.css (`.accent`) switched from an italic weight to a
+// bold + gold-tinted one — see the comment there.
 
-export const fraunces = Fraunces({
+export const syne = Syne({
   subsets: ["latin"],
   display: "swap",
-  style: ["normal", "italic"],
-  // SOFT and WONK are not loaded by default, but globals.css relies on both
-  // (`font-variation-settings: "SOFT" 20, "WONK" 1` on headings, "SOFT" 60 on
-  // .accent). Omitting them here would silently flatten the display face.
-  axes: ["SOFT", "WONK", "opsz"],
+  weight: ["500", "600", "700", "800"],
   variable: "--font-display",
 });
 
-export const plusJakarta = Plus_Jakarta_Sans({
+export const manrope = Manrope({
   subsets: ["latin"],
   display: "swap",
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
 });

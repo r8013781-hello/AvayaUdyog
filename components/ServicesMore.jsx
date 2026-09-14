@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, CookingPot, Hammer } from "lucide-react";
+import { ArrowUpRight, CookingPot, Hammer, Plus } from "lucide-react";
 
 /**
  * The rest of the service range, plus routing by situation — merged onto the
@@ -103,13 +103,32 @@ const DECISION_PATHS = [
 
 export default function ServicesMore() {
   return (
-    <section id="which-service" className="section scroll-mt-24 bg-sage-50/50 !py-20 md:scroll-mt-28">
+    <section
+      id="which-service"
+      className="section relative scroll-mt-16 overflow-hidden !py-20 md:scroll-mt-20"
+    >
+      {/* A real living-room render as the section's actual background — the
+          same device as About/Services/HowWeWork above: full-bleed photo,
+          a sage scrim for legibility, white text and floating white cards,
+          instead of the barely-there tint this section had before. */}
+      <div className="absolute inset-0" aria-hidden="true">
+        <img
+          src="/services/s1-residential.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-sage-950/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sage-950/40 via-transparent to-sage-950/60" />
+      </div>
+
       <div className="shell relative">
         <div className="max-w-2xl">
-          <span className="eyebrow">Also In Scope</span>
-          <h2 className="display mt-6 text-[2.2rem] text-ink sm:text-4xl">
+          <span className="eyebrow [&::before]:bg-gold-light/70 text-gold-light">Also In Scope</span>
+          <h2 className="display mt-6 text-[2.2rem] text-white sm:text-4xl">
             Two more ways a project{" "}
-            <span className="accent text-sage-600">takes shape.</span>
+            <span className="accent text-gold-light">takes shape.</span>
           </h2>
         </div>
 
@@ -118,24 +137,24 @@ export default function ServicesMore() {
             <Link
               key={title}
               href={href}
-              className="group flex flex-col rounded-[1.5rem] border border-line bg-canvas p-7 transition-colors hover:border-sage-300 hover:bg-white"
+              className="group flex flex-col rounded-[1.5rem] border border-white/25 bg-white/10 p-7 shadow-lift backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-white/40 hover:bg-white/[0.15]"
             >
               <div className="flex items-center gap-3">
-                <Icon size={17} strokeWidth={1.7} className="text-gold-deep" aria-hidden="true" />
-                <h3 className="font-display text-[1.3rem] font-semibold text-ink">{title}</h3>
+                <Icon size={17} strokeWidth={1.7} className="text-gold-light" aria-hidden="true" />
+                <h3 className="font-display text-[1.3rem] font-semibold text-white">{title}</h3>
               </div>
-              <p className="mt-3.5 text-[0.94rem] leading-[1.8] text-ink-muted">{text}</p>
+              <p className="mt-3.5 text-[0.94rem] leading-[1.8] text-white/75">{text}</p>
               <ul className="mt-5 flex flex-wrap gap-2">
                 {scope.map((item) => (
                   <li
                     key={item}
-                    className="rounded-full border border-line-strong px-3 py-1 text-[0.68rem] font-semibold text-ink-soft"
+                    className="rounded-full border border-white/25 bg-white/5 px-3 py-1 text-[0.8rem] font-semibold text-white/85"
                   >
                     {item}
                   </li>
                 ))}
               </ul>
-              <span className="mt-6 inline-flex items-center gap-1.5 text-[0.72rem] font-bold uppercase tracking-label text-sage-700">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-[0.84rem] font-bold uppercase tracking-label text-gold-light">
                 Read more
                 <ArrowUpRight size={14} />
               </span>
@@ -144,13 +163,13 @@ export default function ServicesMore() {
         </div>
 
         {/* ---------- Routing by situation ---------- */}
-        <div className="mt-20 max-w-2xl">
-          <span className="eyebrow">Choosing</span>
-          <h2 className="display mt-6 text-[2.2rem] text-ink sm:text-4xl">
+        <div className="mt-14 max-w-2xl">
+          <span className="eyebrow [&::before]:bg-gold-light/70 text-gold-light">Choosing</span>
+          <h2 className="display mt-6 text-[2.2rem] text-white sm:text-4xl">
             Start from the problem,{" "}
-            <span className="accent text-sage-600">not the service name.</span>
+            <span className="accent text-gold-light">not the service name.</span>
           </h2>
-          <p className="mt-6 text-[1rem] leading-[1.85] text-ink-soft">
+          <p className="mt-6 text-[1rem] leading-[1.85] text-white/75">
             Most people arrive knowing what is wrong with their space and not which
             service fixes it. These are the situations we are asked about most, and
             where each one leads. If yours is not here, it is a conversation rather than
@@ -158,25 +177,40 @@ export default function ServicesMore() {
           </p>
         </div>
 
-        <ul className="mt-12 divide-y divide-line border-y border-line">
+        {/* Was a flat list with every answer expanded at once — seven full
+            paragraphs stacked back to back read as a wall of text. Same
+            <details>/<summary> device as FAQ below: collapsed by default, so
+            the page shows seven short questions and a visitor opens only the
+            one that matches their situation. No accordion state to write —
+            open/closed, keyboard behaviour and screen-reader semantics all
+            come from the browser. */}
+        <div className="mt-12 divide-y divide-white/15 border-y border-white/15">
           {DECISION_PATHS.map(({ situation, answer, href, linkLabel }) => (
-            <li key={situation} className="grid gap-3 py-6 md:grid-cols-[0.85fr_1.15fr] md:gap-10">
-              <p className="font-display text-[1.05rem] font-semibold leading-snug text-ink">
-                {situation}
-              </p>
-              <div>
-                <p className="text-[0.94rem] leading-[1.8] text-ink-muted">{answer}</p>
+            <details key={situation} className="group">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 text-left [&::-webkit-details-marker]:hidden">
+                <h3 className="font-display text-[1.05rem] font-semibold leading-snug text-white transition-colors group-hover:text-gold-light">
+                  {situation}
+                </h3>
+                <span
+                  className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-all duration-300 group-open:rotate-45 group-open:border-gold-light/60 group-open:bg-white/20"
+                  aria-hidden="true"
+                >
+                  <Plus size={14} />
+                </span>
+              </summary>
+              <div className="max-w-2xl pb-7 pr-12">
+                <p className="text-[0.94rem] leading-[1.8] text-white/75">{answer}</p>
                 <Link
                   href={href}
-                  className="mt-3 inline-flex items-center gap-1.5 text-[0.72rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900"
+                  className="mt-3 inline-flex items-center gap-1.5 text-[0.84rem] font-bold uppercase tracking-label text-gold-light underline underline-offset-4 hover:text-white"
                 >
                   {linkLabel}
                   <ArrowUpRight size={13} />
                 </Link>
               </div>
-            </li>
+            </details>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );

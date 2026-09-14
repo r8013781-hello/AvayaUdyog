@@ -112,43 +112,46 @@ export default function HomeRenovationPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(heroImage) }} />
 
-      <div className="shell pt-32 md:pt-36">
-        <Breadcrumbs items={[
-          { name: "Home", path: "/" },
-          { name: "Home Renovation", path: "/services/home-renovation" },
-        ]} />
-      </div>
+      {/* Same full-bleed "photo behind a scrim" treatment as the other
+          service pages: the room is the background, breadcrumb overlaid on
+          it, no white seam under the navbar. */}
+      <section className="section relative overflow-hidden !pt-0">
+        <div className="absolute inset-0" aria-hidden="true">
+          <img
+            src="/gallery/site-work/fluted-panel-marine-plywood.jpg"
+            {...imageSize("/gallery/site-work/fluted-panel-marine-plywood.jpg")}
+            alt=""
+            loading="eager"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-sage-950 via-sage-950/85 to-sage-950/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sage-950/70 via-transparent to-sage-950/20" />
+        </div>
 
-      <section className="section !pt-10">
-        <div className="shell relative">
-          <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
-            <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
-              <img
-                src="/gallery/site-work/fluted-panel-marine-plywood.jpg"
-                {...imageSize("/gallery/site-work/fluted-panel-marine-plywood.jpg")}
-                alt="Construction of a fluted panel wall with marine plywood"
-                loading="eager"
-                decoding="async"
-                className="h-[24rem] w-full object-cover sm:h-[28rem]"
-              />
-            </figure>
+        <div className="shell relative pt-32 md:pt-36">
+          <Breadcrumbs light items={[
+            { name: "Home", path: "/" },
+            { name: "Home Renovation", path: "/services/home-renovation" },
+          ]} />
 
-            <div className="order-1 lg:order-2">
-              <span className="eyebrow">Home Renovation in Kolkata</span>
-              <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
-                Reworking a home
-                <br /><span className="accent text-sage-600">you already live in.</span>
-              </h1>
-              <p className="mt-7 text-[1.04rem] leading-[1.85] text-ink-soft">
-                Renovation is not a fit-out with furniture in the way. It is a different job
-                with different risks — unknowns behind the walls, a building with its own
-                rules, and a family who has to keep living somewhere while it happens. This
-                page is about how Avaya Udyog handles home renovation in Kolkata, because
-                those parts are what actually decide whether a renovation goes well.
-              </p>
-              <div className="mt-9">
-                <PageCTAButton triggerSource="renovation_cta">Book a Consultation</PageCTAButton>
-              </div>
+          <div className="mt-10 max-w-2xl">
+            <span className="eyebrow [&::before]:bg-gold-light/70 text-gold-light">
+              Home Renovation in Kolkata
+            </span>
+            <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-white sm:text-5xl">
+              Reworking a home
+              <br /><span className="accent text-gold-light">you already live in.</span>
+            </h1>
+            <p className="mt-7 text-[1.04rem] leading-[1.85] text-white/80">
+              Renovation is not a fit-out with furniture in the way. It is a different job
+              with different risks — unknowns behind the walls, a building with its own
+              rules, and a family who has to keep living somewhere while it happens. This
+              page is about how Avaya Udyog handles home renovation in Kolkata, because
+              those parts are what actually decide whether a renovation goes well.
+            </p>
+            <div className="mt-9">
+              <PageCTAButton triggerSource="renovation_cta">Book a Consultation</PageCTAButton>
             </div>
           </div>
         </div>
@@ -258,7 +261,7 @@ export default function HomeRenovationPage() {
 
       <section className="section !py-20">
         <div className="shell relative">
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
             <div>
               <span className="eyebrow">Questions</span>
               <h2 className="display mt-6 text-[2.1rem] text-ink sm:text-[2.4rem]">
@@ -293,13 +296,13 @@ export default function HomeRenovationPage() {
         </div>
       </section>
 
-      <section className="section !pt-0 !pb-24">
+      <section className="section !pt-0 !pb-16">
         <div className="shell relative">
           <div className="rounded-[1.75rem] border border-line-gold bg-gold-soft/45 px-7 py-10 md:px-12">
             <div className="max-w-xl">
               <div className="flex items-center gap-3">
                 <ShieldCheck size={17} className="text-gold-deep" aria-hidden="true" />
-                <span className="text-[0.62rem] font-bold uppercase tracking-label text-gold-deep">Design and execution, one team</span>
+                <span className="text-[0.76rem] font-bold uppercase tracking-label text-gold-deep">Design and execution, one team</span>
               </div>
               <h2 className="mt-4 font-display text-[1.6rem] font-semibold text-ink sm:text-[1.9rem]">
                 Start with a walk through the space.

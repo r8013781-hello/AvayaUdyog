@@ -292,7 +292,7 @@ export default function PromoPopup() {
             </div>
           ) : (
             <>
-              <span className="inline-flex items-center gap-2 text-[0.6rem] font-bold uppercase tracking-[0.16em] text-gold-light">
+              <span className="inline-flex items-center gap-2 text-[0.74rem] font-bold uppercase tracking-[0.16em] text-gold-light">
                 <Sparkles size={12} /> Avaya Udyog — Interior Design &amp; Décor
               </span>
               <div className="mt-3 h-px w-full bg-gold-hair opacity-80" aria-hidden="true" />
@@ -309,7 +309,7 @@ export default function PromoPopup() {
                 noValidate
                 className="mt-6 space-y-2.5 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/15 backdrop-blur-md"
               >
-                <p className="text-[0.78rem] font-semibold text-white/90">
+                <p className="text-[0.9rem] font-semibold text-white/90">
                   Book a free consultation — no obligation.
                 </p>
 
@@ -369,7 +369,7 @@ export default function PromoPopup() {
                 </div>
 
                 {wakingServer && (
-                  <p className="flex items-start gap-2 rounded-xl bg-gold/15 px-3.5 py-2.5 text-[0.72rem] leading-5 text-gold-light ring-1 ring-gold/25">
+                  <p className="flex items-start gap-2 rounded-xl bg-gold/15 px-3.5 py-2.5 text-[0.84rem] leading-5 text-gold-light ring-1 ring-gold/25">
                     <span className="mt-1 h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-gold-light" aria-hidden="true" />
                     Connecting to our team — this can take a few seconds. Please don&apos;t close this.
                   </p>
@@ -378,14 +378,14 @@ export default function PromoPopup() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold-fill px-6 py-3.5 text-[0.72rem] font-bold uppercase tracking-[0.1em] text-sage-950 shadow-gold transition-all duration-300 ease-smooth hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-60"
+                  className="group mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold-fill px-6 py-3.5 text-[0.84rem] font-bold uppercase tracking-[0.1em] text-sage-950 shadow-gold transition-all duration-300 ease-smooth hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-60"
                 >
                   {submitting ? (wakingServer ? "Waking up…" : "Sending…") : failed ? "Try again" : "Request a callback"}
                   <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
                 </button>
               </form>
 
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[0.66rem] font-semibold uppercase tracking-[0.09em] text-white/55">
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[0.78rem] font-semibold uppercase tracking-[0.09em] text-white/55">
                 <span>35+ years</span>
                 <span className="text-white/25">•</span>
                 <span>700+ projects</span>
@@ -396,7 +396,7 @@ export default function PromoPopup() {
               <button
                 type="button"
                 onClick={() => dismiss("maybe_later")}
-                className="mt-2 w-full text-center text-[0.74rem] font-semibold text-white/45 transition hover:text-white/70"
+                className="mt-2 w-full text-center text-[0.86rem] font-semibold text-white/45 transition hover:text-white/70"
               >
                 Maybe later
               </button>
@@ -422,7 +422,7 @@ const PromoField = forwardRef(function PromoField({ icon: Icon, error, ...props 
           {...props}
         />
       </div>
-      {error && <p className="mt-1 pl-1 text-[0.72rem] font-medium text-red-200">{error}</p>}
+      {error && <p className="mt-1 pl-1 text-[0.84rem] font-medium text-red-200">{error}</p>}
     </div>
   );
 });

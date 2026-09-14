@@ -27,11 +27,17 @@ export default function Analytics() {
 
   return (
     <>
+      {/* lazyOnload, not afterInteractive: the latter makes next/script emit
+          a <link rel="preload"> for the gtag.js request, but the script
+          itself still doesn't run until hydration finishes — the gap between
+          the two is exactly what trips Chrome's "preloaded but not used
+          within a few seconds" warning. lazyOnload skips the preload hint,
+          which is fine here since analytics has no first-paint deadline. */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="gtag-init" strategy="afterInteractive">
+      <Script id="gtag-init" strategy="lazyOnload">
         {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');${adsConfigLine}`}
       </Script>
     </>

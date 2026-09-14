@@ -159,56 +159,60 @@ export default function ModularKitchenPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(service) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }} />
 
-      <div className="shell pt-32 md:pt-36">
-        <Breadcrumbs
-          items={[
-            { name: "Home", path: "/" },
-            { name: "Modular Kitchen Design", path: "/services/modular-kitchen" },
-          ]}
-        />
-      </div>
+      {/* Same full-bleed "photo behind a scrim" treatment as the other
+          service pages: the room is the background, breadcrumb overlaid on
+          it, no white seam under the navbar. */}
+      <section className="section relative overflow-hidden !pt-0">
+        <div className="absolute inset-0" aria-hidden="true">
+          <img
+            src="/gallery/renders/kitchen/kitchen-render-01.jpg"
+            {...imageSize("/gallery/renders/kitchen/kitchen-render-01.jpg")}
+            alt=""
+            loading="eager"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-sage-950 via-sage-950/85 to-sage-950/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sage-950/70 via-transparent to-sage-950/20" />
+        </div>
 
-      <section className="section !pt-10">
-        <div className="shell relative">
-          <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
-            <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
-              <img
-                src="/gallery/renders/kitchen/kitchen-render-01.jpg"
-                {...imageSize("/gallery/renders/kitchen/kitchen-render-01.jpg")}
-                alt="A minimalist modular kitchen with clean lines and premium finishes"
-                loading="eager"
-                decoding="async"
-                className="h-[24rem] w-full object-cover sm:h-[28rem]"
-              />
-            </figure>
+        <div className="shell relative pt-32 md:pt-36">
+          <Breadcrumbs
+            light
+            items={[
+              { name: "Home", path: "/" },
+              { name: "Modular Kitchen Design", path: "/services/modular-kitchen" },
+            ]}
+          />
 
-            <div className="order-1 lg:order-2">
-              <span className="eyebrow">Modular Kitchen Design in Kolkata</span>
-              <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-ink sm:text-5xl">
-                A kitchen is planned
-                <br />
-                <span className="accent text-sage-600">around how you cook.</span>
-              </h1>
-              <p className="mt-7 text-[1.04rem] leading-[1.85] text-ink-soft">
-                Most kitchen disappointments are layout decisions, not finish decisions.
-                A beautiful kitchen with the sink in the wrong place is a daily irritation;
-                a plain one that is properly planned disappears into your routine. This page
-                covers how Avaya Udyog plans a modular kitchen in Kolkata — layouts, the
-                materials that matter, and what genuinely moves the cost.
-              </p>
-              <p className="mt-4 text-[0.92rem] leading-[1.8] text-ink-muted">
-                A kitchen on its own, this page. As one room inside a larger new-build
-                home, see{" "}
-                <Link href="/services/residential-interior-design" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
-                  residential interior design
-                </Link>. As part of reworking a kitchen you already use every day, see{" "}
-                <Link href="/services/home-renovation" className="font-semibold text-sage-700 underline underline-offset-2 hover:text-sage-900">
-                  home renovation
-                </Link>.
-              </p>
-              <div className="mt-9">
-                <PageCTAButton triggerSource="modular_kitchen_cta">Book a Consultation</PageCTAButton>
-              </div>
+          <div className="mt-10 max-w-2xl">
+            <span className="eyebrow [&::before]:bg-gold-light/70 text-gold-light">
+              Modular Kitchen Design in Kolkata
+            </span>
+            <h1 className="display mt-6 text-[2.5rem] leading-[1.06] text-white sm:text-5xl">
+              A kitchen is planned
+              <br />
+              <span className="accent text-gold-light">around how you cook.</span>
+            </h1>
+            <p className="mt-7 text-[1.04rem] leading-[1.85] text-white/80">
+              Most kitchen disappointments are layout decisions, not finish decisions.
+              A beautiful kitchen with the sink in the wrong place is a daily irritation;
+              a plain one that is properly planned disappears into your routine. This page
+              covers how Avaya Udyog plans a modular kitchen in Kolkata — layouts, the
+              materials that matter, and what genuinely moves the cost.
+            </p>
+            <p className="mt-4 text-[0.92rem] leading-[1.8] text-white/65">
+              A kitchen on its own, this page. As one room inside a larger new-build
+              home, see{" "}
+              <Link href="/services/residential-interior-design" className="font-semibold text-gold-light underline underline-offset-2 hover:text-white">
+                residential interior design
+              </Link>. As part of reworking a kitchen you already use every day, see{" "}
+              <Link href="/services/home-renovation" className="font-semibold text-gold-light underline underline-offset-2 hover:text-white">
+                home renovation
+              </Link>.
+            </p>
+            <div className="mt-9">
+              <PageCTAButton triggerSource="modular_kitchen_cta">Book a Consultation</PageCTAButton>
             </div>
           </div>
         </div>
@@ -261,7 +265,7 @@ export default function ModularKitchenPage() {
                   <Layers size={15} strokeWidth={1.7} className="text-gold-deep" aria-hidden="true" />
                   <h3 className="font-display text-[1.16rem] font-semibold text-ink">{part}</h3>
                 </div>
-                <p className="mt-3 font-mono text-[0.76rem] uppercase tracking-wide text-ink-muted">{options}</p>
+                <p className="mt-3 font-mono text-[0.88rem] uppercase tracking-wide text-ink-muted">{options}</p>
                 <p className="mt-3.5 text-[0.93rem] leading-[1.8] text-ink-soft">{reality}</p>
               </div>
             ))}
@@ -286,7 +290,7 @@ export default function ModularKitchenPage() {
           <ol className="mt-12 grid gap-x-10 gap-y-4 md:grid-cols-2">
             {COST_DRIVERS.map((driver, i) => (
               <li key={driver} className="flex gap-4 border-t border-white/10 pt-4">
-                <span className="font-mono text-[0.72rem] font-semibold text-gold-light">
+                <span className="font-mono text-[0.84rem] font-semibold text-gold-light">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="text-[0.94rem] leading-[1.75] text-white/80">{driver}</span>
@@ -298,7 +302,7 @@ export default function ModularKitchenPage() {
 
       <section className="section !py-20">
         <div className="shell relative">
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
             <div>
               <span className="eyebrow">Questions</span>
               <h2 className="display mt-6 text-[2.1rem] text-ink sm:text-[2.4rem]">
@@ -320,13 +324,13 @@ export default function ModularKitchenPage() {
         </div>
       </section>
 
-      <section className="section !pt-0 !pb-24">
+      <section className="section !pt-0 !pb-16">
         <div className="shell relative">
           <div className="rounded-[1.75rem] border border-line-gold bg-gold-soft/45 px-7 py-10 md:px-12">
             <div className="max-w-xl">
               <div className="flex items-center gap-3">
                 <ShieldCheck size={17} className="text-gold-deep" aria-hidden="true" />
-                <span className="text-[0.62rem] font-bold uppercase tracking-label text-gold-deep">35+ years in Kolkata interiors</span>
+                <span className="text-[0.76rem] font-bold uppercase tracking-label text-gold-deep">35+ years in Kolkata interiors</span>
               </div>
               <h2 className="mt-4 font-display text-[1.6rem] font-semibold text-ink sm:text-[1.9rem]">
                 Bring us the room, not a brief.

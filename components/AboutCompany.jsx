@@ -35,22 +35,27 @@ export default function AboutCompany() {
   const openContactModal = useContactModal();
 
   return (
-    <section id="founder" className="section scroll-mt-24 bg-sage-50/50 md:scroll-mt-28">
+    <section
+      id="founder"
+      className="section scroll-mt-16 bg-gradient-to-br from-sage-50 via-canvas to-gold-soft/40 md:scroll-mt-20"
+    >
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -left-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-gold/[0.07] blur-[130px]" />
+        <div className="dot-paper absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_70%)]" />
+        <div className="absolute -left-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-gold/[0.12] blur-[130px]" />
+        <div className="absolute -right-24 top-10 h-[22rem] w-[22rem] rounded-full bg-sage-300/25 blur-[120px]" />
       </div>
 
       <div ref={ref} className="shell relative">
         <div className="reveal text-center">
           <span className="eyebrow-center">The Founder</span>
-          <h2 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
+          <h2 className="display mt-6 text-[3.1rem] text-ink sm:text-6xl lg:text-[4.25rem]">
             The hand behind
             <br />
             <span className="accent text-sage-600">every signature space.</span>
           </h2>
         </div>
 
-        <div className="mt-16 grid items-start gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+        <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
           {/* ---------- Portrait: same framed-photograph language as the
               About section above — rounded frame, gold corner brackets,
               caption baked into the gradient. Consistency, not novelty. ---------- */}
@@ -73,18 +78,35 @@ export default function AboutCompany() {
                   Mr. Biswanath Adhikari
                 </p>
                 <div className="mt-2.5 h-px w-12 bg-gold-hair" />
-                <p className="mt-2.5 text-[0.58rem] font-bold uppercase tracking-label text-gold-light">
+                <p className="mt-2.5 text-[0.72rem] font-bold uppercase tracking-label text-gold-light">
                   Founder &amp; Director · Avaya Udyog
                 </p>
               </figcaption>
             </figure>
+
+            {/* The CTA used to sit at the very bottom of the copy column,
+                after three cards — easy to scroll past, and it left the
+                shorter portrait column trailing off into empty space while
+                the copy column ran on below it. Anchoring it here fills that
+                gap with something that earns the space instead of padding. */}
+            <button
+              onClick={() => openContactModal("founder_cta")}
+              className="btn-primary reveal group mt-6 w-full justify-center"
+              data-reveal-delay="0.3s"
+            >
+              Book a Design Consultation
+              <ArrowUpRight
+                size={16}
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </button>
           </div>
 
           {/* ---------- Copy ---------- */}
           <div>
             <blockquote className="reveal relative">
               <div className="absolute -left-4 top-0 h-full w-1 rounded-full bg-gold/40" aria-hidden="true" />
-              <p className="relative pl-6 font-serif text-[1.35rem] font-medium italic leading-[1.6] text-ink-dark sm:text-[1.6rem]">
+              <p className="relative pl-6 font-serif text-[1.35rem] font-medium italic leading-[1.6] text-ink sm:text-[1.6rem]">
                 Every space we design carries a simple promise — it should feel
                 like home the moment you step in, and feel like heirloom for
                 years to come.
@@ -102,17 +124,23 @@ export default function AboutCompany() {
               warm, beautifully styled, and luxurious in equal measure.
             </p>
 
-            {/* Stats */}
-            <div className="reveal mt-12 border-t border-sage-200/60 pt-8" data-reveal-delay="0.18s">
-              <dl className="grid grid-cols-3 divide-x divide-sage-200/60 text-center">
+            {/* Stats — was a plain divide-x text row, easy to mistake for a
+                caption rather than the proof points they are. Individual
+                tiles with their own surface give each number the weight the
+                rest of the redesigned page carries. */}
+            <div className="reveal mt-12" data-reveal-delay="0.18s">
+              <dl className="grid grid-cols-3 gap-3">
                 {STATS.map((stat) => (
-                  <div key={stat.label} className="px-2">
+                  <div
+                    key={stat.label}
+                    className="rounded-2xl border border-line bg-white/70 px-3 py-5 text-center shadow-hair backdrop-blur-sm"
+                  >
                     <dt className="sr-only">{stat.label}</dt>
                     <dd>
                       <span className="block font-display text-[2.2rem] font-semibold leading-none tracking-[-0.03em] text-sage-700">
                         {stat.value}
                       </span>
-                      <span className="mt-2.5 block text-[0.58rem] font-bold uppercase tracking-label text-ink-muted">
+                      <span className="mt-2.5 block text-[0.72rem] font-bold uppercase tracking-label text-ink-muted">
                         {stat.label}
                       </span>
                     </dd>
@@ -142,18 +170,6 @@ export default function AboutCompany() {
                 </li>
               ))}
             </ul>
-
-            <button
-              onClick={() => openContactModal("founder_cta")}
-              className="btn-primary reveal group mt-10"
-              data-reveal-delay="0.4s"
-            >
-              Book a Design Consultation
-              <ArrowUpRight
-                size={16}
-                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </button>
           </div>
         </div>
       </div>

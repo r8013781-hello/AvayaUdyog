@@ -33,7 +33,7 @@ const PRINCIPLES = [
 
 export default function Principles() {
   return (
-    <section id="principles" className="section scroll-mt-24 bg-canvas md:scroll-mt-28">
+    <section id="principles" className="section scroll-mt-16 bg-canvas md:scroll-mt-20">
       <div className="shell relative">
         <div className="max-w-2xl">
           <span className="eyebrow">How We Think</span>
@@ -43,7 +43,7 @@ export default function Principles() {
           </h2>
         </div>
 
-        <ul className="mt-14 grid gap-6 sm:grid-cols-3">
+        <ul className="mt-10 grid gap-6 sm:grid-cols-3">
           {PRINCIPLES.map(({ icon: Icon, title, text }) => (
             <li key={title} className="rounded-[1.5rem] border border-line bg-white p-7 shadow-hair">
               <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line-strong bg-sage-50 text-sage-600">

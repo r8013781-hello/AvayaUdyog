@@ -173,57 +173,68 @@ export default function ResidentialInteriorDesignerKolkataPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }}
       />
 
-      <div className="shell pt-32 md:pt-36">
-        <Breadcrumbs
-          items={[
-            { name: "Home", path: "/" },
-            {
-              name: "Residential Design & Decoration",
-              path: "/services/residential-interior-design",
-            },
-          ]}
-        />
-      </div>
-
       {/* ---------- Intro ---------- */}
-      <section className="section !pt-10">
-        <div className="shell relative">
-          <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
-            <figure className="order-2 overflow-hidden rounded-[2rem] bg-sage-100 shadow-lift lg:order-1">
-              <img
-                src="/gallery/renders/living-room/living-room-render-01.jpg"
-                {...imageSize("/gallery/renders/living-room/living-room-render-01.jpg")}
-                alt="Bright, gallery-walled modern living room — residential interior design"
-                loading="eager"
-                decoding="async"
-                className="h-[24rem] w-full object-cover sm:h-[28rem]"
-              />
-            </figure>
+      {/* Was a small inset image card beside the copy, with the breadcrumb
+          sitting above it on plain white — leaving a visible seam between
+          the navbar and the photo. The photo now runs full-bleed from right
+          under the navbar, same as the homepage Hero, with the breadcrumb
+          overlaid on it instead of occupying its own white band. */}
+      <section className="section relative overflow-hidden !pt-0">
+        <div className="absolute inset-0" aria-hidden="true">
+          <img
+            src="/gallery/renders/living-room/living-room-render-01.jpg"
+            {...imageSize("/gallery/renders/living-room/living-room-render-01.jpg")}
+            alt=""
+            loading="eager"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-sage-950 via-sage-950/85 to-sage-950/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sage-950/70 via-transparent to-sage-950/20" />
+        </div>
 
-            <div className="order-1 lg:order-2">
-              <span className="eyebrow">Residential Design & Decoration in Kolkata</span>
-              <h1 className="display mt-6 text-[2.6rem] text-ink sm:text-5xl">
-                Homes shaped around{" "}
-                <span className="accent text-sage-600">how you live.</span>
-              </h1>
-              <p className="mt-6 max-w-prose2 text-[1.02rem] leading-[1.85] text-ink-soft">
-                Avaya Udyog designs warm, modern homes across Kolkata — thoughtful
-                layouts, curated finishes, and elevated details that make every
-                day feel special. Every residential project is guided by the
-                same three principles that shape our studio&apos;s work
-                overall: timeless aesthetics, a personalised approach, and
-                uncompromising quality.
-              </p>
+        <div className="shell relative pt-32 md:pt-36">
+          <Breadcrumbs
+            light
+            items={[
+              { name: "Home", path: "/" },
+              {
+                name: "Residential Design & Decoration",
+                path: "/services/residential-interior-design",
+              },
+            ]}
+          />
 
-              <div className="mt-9">
-                <PageCTAButton triggerSource="residential_page_cta">
-                  Book a Consultation
-                </PageCTAButton>
-              </div>
+          <div className="mt-10 max-w-2xl">
+            <span className="eyebrow [&::before]:bg-gold-light/70 text-gold-light">
+              Residential Design & Decoration in Kolkata
+            </span>
+            <h1 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
+              Homes shaped around{" "}
+              <span className="accent text-gold-light">how you live.</span>
+            </h1>
+            <p className="mt-6 max-w-prose2 text-[1.02rem] leading-[1.85] text-white/80">
+              Avaya Udyog designs warm, modern homes across Kolkata — thoughtful
+              layouts, curated finishes, and elevated details that make every
+              day feel special. Every residential project is guided by the
+              same three principles that shape our studio&apos;s work
+              overall: timeless aesthetics, a personalised approach, and
+              uncompromising quality.
+            </p>
 
-              {/* Confirmed figures, on a page that otherwise asks for an
-                  enquiry without offering any reason to trust it. */}
-              <StatStrip className="mt-10" />
+            <div className="mt-9">
+              <PageCTAButton triggerSource="residential_page_cta">
+                Book a Consultation
+              </PageCTAButton>
+            </div>
+
+            {/* Confirmed figures, on a page that otherwise asks for an
+                enquiry without offering any reason to trust it. Wrapped in
+                its own surface rather than reworking the shared component's
+                colors, since StatStrip is also used on a light background
+                elsewhere (the commercial page). */}
+            <div className="mt-10 inline-block rounded-[1.5rem] bg-white/95 p-6 shadow-lift backdrop-blur-sm">
+              <StatStrip className="!border-none !py-0" />
             </div>
           </div>
         </div>
@@ -239,7 +250,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
             </h2>
           </div>
 
-          <div className="mt-14 grid gap-6 sm:grid-cols-2">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {ROOMS.map((room) => (
               <div key={room.title} className="card card-hover overflow-hidden">
                 <img
@@ -324,7 +335,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
             </h2>
           </div>
 
-          <div className="mt-14 grid gap-6 sm:grid-cols-2">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {PHASES.map(({ step, title, text }) => (
               <div key={step} className="card p-7">
                 <span className="flex h-9 items-center rounded-full border border-line-strong px-3.5 font-display text-[0.8rem] font-semibold text-sage-700">
@@ -345,7 +356,7 @@ export default function ResidentialInteriorDesignerKolkataPage() {
       {/* ---------- FAQ ---------- */}
       <section className="section !py-20">
         <div className="shell relative">
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
             <div>
               <span className="eyebrow">Questions</span>
               <h2 className="display mt-6 text-[2.1rem] text-ink sm:text-[2.4rem]">
@@ -427,9 +438,9 @@ export default function ResidentialInteriorDesignerKolkataPage() {
       </section>
 
       {/* ---------- CTA ---------- */}
-      <section className="section !pt-0 !pb-24">
+      <section className="section !pt-0 !pb-16">
         <div className="shell relative">
-          <div className="relative overflow-hidden rounded-[2rem] bg-sage-900 px-8 py-12 text-center shadow-lift md:px-14">
+          <div className="relative overflow-hidden rounded-[2rem] bg-sage-900 px-8 py-12 text-center shadow-lift md:px-10">
             <h2 className="display text-[2rem] text-white sm:text-[2.4rem]">
               Have a home in mind?
             </h2>

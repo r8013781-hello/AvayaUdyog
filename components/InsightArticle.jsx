@@ -41,7 +41,7 @@ export default function InsightArticle({ insight, contents, children }) {
       <article className="section !pt-10">
         <div className="shell relative">
           <header className="max-w-3xl">
-            <div className="flex items-center gap-3 text-[0.62rem] font-bold uppercase tracking-label text-gold-deep">
+            <div className="flex items-center gap-3 text-[0.76rem] font-bold uppercase tracking-label text-gold-deep">
               <BookOpen size={14} strokeWidth={1.7} aria-hidden="true" />
               <span>{insight.readingMinutes} min read</span>
             </div>
@@ -63,13 +63,13 @@ export default function InsightArticle({ insight, contents, children }) {
               the ids on the headings below are the same list by construction. */}
           {contents?.length > 0 && (
             <nav aria-label="On this page" className="mb-12 max-w-[42rem] rounded-[1.25rem] border border-line bg-white p-6 shadow-hair">
-              <p className="text-[0.62rem] font-bold uppercase tracking-label text-sage-600">
+              <p className="text-[0.76rem] font-bold uppercase tracking-label text-sage-600">
                 On this page
               </p>
               <ol className="mt-4 space-y-2.5">
                 {contents.map(({ id, label }, index) => (
                   <li key={id} className="flex gap-3 text-[0.93rem] leading-[1.6]">
-                    <span className="mt-0.5 shrink-0 font-display text-[0.78rem] font-semibold text-sage-400">
+                    <span className="mt-0.5 shrink-0 font-display text-[0.9rem] font-semibold text-sage-400">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <a
@@ -87,15 +87,15 @@ export default function InsightArticle({ insight, contents, children }) {
           {/* Article body. The prose styling lives here rather than in each
               article so every one reads identically.
 
-              scroll-mt-28 on the headings: the navbar is fixed, so without it
+              scroll-mt-20 on the headings: the navbar is fixed, so without it
               an anchor lands the heading underneath the nav and the reader
               arrives looking at the paragraph after the one they wanted. */}
-          <div className="max-w-[42rem] space-y-6 text-[1rem] leading-[1.9] text-ink-soft [&>h2]:mt-14 [&>h2]:scroll-mt-28 [&>h2]:font-display [&>h2]:text-[1.55rem] [&>h2]:font-semibold [&>h2]:leading-snug [&>h2]:text-ink [&>h3]:mt-10 [&>h3]:scroll-mt-28 [&>h3]:font-display [&>h3]:text-[1.2rem] [&>h3]:font-semibold [&>h3]:text-ink [&>ul]:space-y-2.5 [&>ul]:pl-5 [&_li]:list-disc [&_strong]:font-semibold [&_strong]:text-ink">
+          <div className="max-w-[42rem] space-y-6 text-[1rem] leading-[1.9] text-ink-soft [&>h2]:mt-10 [&>h2]:scroll-mt-20 [&>h2]:font-display [&>h2]:text-[1.55rem] [&>h2]:font-semibold [&>h2]:leading-snug [&>h2]:text-ink [&>h3]:mt-10 [&>h3]:scroll-mt-20 [&>h3]:font-display [&>h3]:text-[1.2rem] [&>h3]:font-semibold [&>h3]:text-ink [&>ul]:space-y-2.5 [&>ul]:pl-5 [&_li]:list-disc [&_strong]:font-semibold [&_strong]:text-ink">
             {children}
           </div>
 
-          <div className="mt-16 max-w-[42rem] rounded-[1.5rem] border border-line bg-white p-7 shadow-hair">
-            <p className="text-[0.62rem] font-bold uppercase tracking-label text-sage-600">
+          <div className="mt-12 max-w-[42rem] rounded-[1.5rem] border border-line bg-white p-7 shadow-hair">
+            <p className="text-[0.76rem] font-bold uppercase tracking-label text-sage-600">
               Related service
             </p>
             <Link
@@ -116,7 +116,7 @@ export default function InsightArticle({ insight, contents, children }) {
         <section className="section !pt-4 !pb-0">
           <div className="shell relative">
             <div className="max-w-[42rem]">
-              <p className="text-[0.62rem] font-bold uppercase tracking-label text-sage-600">
+              <p className="text-[0.76rem] font-bold uppercase tracking-label text-sage-600">
                 More insights
               </p>
               <ul className="mt-5 divide-y divide-line border-y border-line">
@@ -142,7 +142,7 @@ export default function InsightArticle({ insight, contents, children }) {
         </section>
       )}
 
-      <section className="section !pt-4 !pb-24">
+      <section className="section !pt-4 !pb-16">
         <div className="shell relative">
           <div className="max-w-[42rem] rounded-[1.75rem] border border-line-gold bg-gold-soft/45 px-7 py-9 md:px-10">
             <h2 className="font-display text-[1.45rem] font-semibold text-ink">
@@ -158,7 +158,7 @@ export default function InsightArticle({ insight, contents, children }) {
               </PageCTAButton>
               <Link
                 href="/insights"
-                className="text-[0.78rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900"
+                className="text-[0.9rem] font-bold uppercase tracking-label text-sage-700 underline underline-offset-4 hover:text-sage-900"
               >
                 More insights
               </Link>

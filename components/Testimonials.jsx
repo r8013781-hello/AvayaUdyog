@@ -113,13 +113,13 @@ export default function Testimonials() {
           <div className={hasReviews ? "" : "mx-auto max-w-2xl text-center"}>
             <span className="eyebrow !text-gold-light">Client Stories</span>
             {hasReviews ? (
-              <h2 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
+              <h2 className="display mt-6 text-[3.1rem] text-white sm:text-6xl lg:text-[4.25rem]">
                 Trusted by the people
                 <br />
                 <span className="accent text-gold-light">who live in our work.</span>
               </h2>
             ) : (
-              <h2 className="display mt-6 text-[2.6rem] text-white sm:text-5xl">
+              <h2 className="display mt-6 text-[3.1rem] text-white sm:text-6xl lg:text-[4.25rem]">
                 The next review here
                 <br />
                 <span className="accent text-gold-light">could be yours.</span>
@@ -162,7 +162,7 @@ export default function Testimonials() {
           tabIndex={0}
           role="group"
           aria-label="Client reviews"
-          className="no-scrollbar mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 focus:outline-none"
+          className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 focus:outline-none"
         >
           {reviews.map((review) => (
             <figure
@@ -217,7 +217,7 @@ export default function Testimonials() {
                   {/* Never label a transcribed testimonial a Google review.
                       "Google review" means Google verified it; these did not
                       come from there, so they say what they actually are. */}
-                  <p className="mt-0.5 text-[0.58rem] font-bold uppercase tracking-label text-sage-600">
+                  <p className="mt-0.5 text-[0.72rem] font-bold uppercase tracking-label text-sage-600">
                     {review.source === "google"
                       ? "Google review"
                       : review.authorRole || "Client testimonial"}

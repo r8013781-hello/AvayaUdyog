@@ -24,7 +24,7 @@ export default function WhatsappButton() {
 
         {/* Tooltip */}
         <span className="pointer-events-none absolute right-full top-1/2 mr-3.5 -translate-y-1/2 translate-x-1 whitespace-nowrap opacity-0 transition-all duration-300 ease-smooth group-hover:translate-x-0 group-hover:opacity-100">
-          <span className="relative block rounded-xl2 border border-line bg-white px-4 py-2.5 text-[0.78rem] font-semibold text-ink shadow-lift">
+          <span className="relative block rounded-xl2 border border-line bg-white px-4 py-2.5 text-[0.9rem] font-semibold text-ink shadow-lift">
             Chat with our design team
             <span
               className="absolute right-0 top-1/2 h-2.5 w-2.5 translate-x-1/2 -translate-y-1/2 rotate-45 border-r border-t border-line bg-white"

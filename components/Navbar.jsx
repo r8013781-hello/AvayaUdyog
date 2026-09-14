@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SectionLink from "./SectionLink";
@@ -48,18 +49,37 @@ const NAV_LINKS = [
   { href: "/#gallery", label: "Gallery" },
 ];
 
-/** The diamond monogram — a sage tile with a gold hairline inlay. */
-function Monogram({ className = "h-11 w-11" }) {
+// A hairline outline traced around the logo's own shapes, built from four
+// zero-blur drop-shadows fired N/S/E/W of it — not a blurred glow. Progressively
+// thinned from a full pixel down to this: any smaller and sub-pixel rounding
+// in the browser's filter rasterizer starts dropping the stroke entirely
+// rather than thinning it further.
+const OUTLINE_FILTER = [
+  [0.15, 0],
+  [-0.15, 0],
+  [0, 0.15],
+  [0, -0.15],
+]
+  .map(([x, y]) => `drop-shadow(${x}px ${y}px 0 rgba(255,255,255,0.85))`)
+  .join(" ");
+
+/**
+ * The full Avaya Udyog logo — roundel + wordmark in one image, not a
+ * separately-typed name next to an icon. There is only one legible render of
+ * it (dark ink on transparent), outlined in white over the hero photo and
+ * plain once the header goes solid on scroll.
+ */
+function Logo({ scrolled }) {
   return (
-    <span
-      className={`relative inline-flex items-center justify-center ${className}`}
-    >
-      <span className="absolute inset-0 rotate-45 rounded-[30%] bg-sage-800 shadow-[0_4px_14px_rgba(0,0,0,0.25)] transition-transform duration-700 ease-smooth group-hover:rotate-[135deg]" />
-      <span className="absolute inset-[3px] rotate-45 rounded-[28%] border border-gold/50" />
-      <span className="relative font-display text-lg font-semibold text-white">
-        A
-      </span>
-    </span>
+    <Image
+      src="/logo-lockup-dark-text.png"
+      alt="Avaya Udyog — Furniture & Interior Design & Decoration"
+      height={80}
+      width={364}
+      priority
+      className="h-9 w-auto object-contain transition-[filter] duration-500 ease-smooth md:h-10"
+      style={{ filter: scrolled ? "none" : OUTLINE_FILTER }}
+    />
   );
 }
 
@@ -140,38 +160,17 @@ export default function Navbar() {
           >
             <Link
               href="/"
-              className="group flex items-center gap-3"
+              className="group flex items-center"
               aria-label="Avaya Udyog — home"
             >
-              <Monogram className="h-10 w-10 md:h-11 md:w-11" />
-              <span className="text-left">
-                <span
-                  className={`block font-display text-[1.05rem] font-semibold leading-none tracking-[0.01em] transition-colors duration-500 md:text-lg ${
-                    scrolled ? "text-ink" : "text-white"
-                  }`}
-                >
-                  Avaya{" "}
-                  <span
-                    className={scrolled ? "text-sage-600" : "text-gold-light"}
-                  >
-                    Udyog
-                  </span>
-                </span>
-                <span
-                  className={`mt-1.5 block text-[0.54rem] font-semibold uppercase tracking-wider2 transition-colors duration-500 ${
-                    scrolled ? "text-ink-muted" : "text-white/70"
-                  }`}
-                >
-                  Interior Design &amp; Decoration
-                </span>
-              </span>
+              <Logo scrolled={scrolled} />
             </Link>
 
             {/* Desktop links — small caps, thin underline. */}
             <nav className="hidden items-center gap-1 lg:flex">
               {NAV_LINKS.map((link) => {
                 const isActive = isCurrent(link.href);
-                const className = `group relative px-3.5 py-2 text-[0.66rem] font-bold uppercase tracking-label transition-colors duration-300 ${
+                const className = `group relative px-3.5 py-2 text-[0.78rem] font-bold uppercase tracking-label transition-colors duration-300 ${
                   scrolled
                     ? isActive
                       ? "text-sage-700"
@@ -221,7 +220,7 @@ export default function Navbar() {
                 >
                   <Phone size={13} />
                 </span>
-                <span className="text-[0.78rem] font-semibold tracking-tight">
+                <span className="text-[0.9rem] font-semibold tracking-tight">
                   +91 79806 40714
                 </span>
               </a>
@@ -264,9 +263,13 @@ export default function Navbar() {
         }`}
       >
         <div className="flex items-center justify-between">
-          <span className="font-display text-xl font-semibold text-ink">
-            Avaya <span className="text-sage-600">Udyog</span>
-          </span>
+          <Image
+            src="/logo-lockup-dark-text.png"
+            alt="Avaya Udyog"
+            height={80}
+            width={364}
+            className="h-8 w-auto object-contain"
+          />
           <button
             onClick={() => setMobileMenuOpen(false)}
             className="flex h-9 w-9 items-center justify-center rounded-full border border-line-strong text-sage-800"
@@ -313,7 +316,7 @@ export default function Navbar() {
             setMobileMenuOpen(false);
             openLoginModal();
           }}
-          className="mt-5 flex w-full items-center justify-center rounded-full border border-line-strong bg-sage-50 px-4 py-3 text-[0.7rem] font-bold uppercase tracking-[0.12em] text-sage-800 transition-colors hover:border-sage-400 hover:bg-sage-100"
+          className="mt-5 flex w-full items-center justify-center rounded-full border border-line-strong bg-sage-50 px-4 py-3 text-[0.82rem] font-bold uppercase tracking-[0.12em] text-sage-800 transition-colors hover:border-sage-400 hover:bg-sage-100"
         >
           Login
         </button>

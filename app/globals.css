@@ -21,13 +21,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Fraunces reads best with a touch of optical sizing at display sizes. */
   h1,
   h2,
   h3,
   h4 {
     @apply font-display;
-    font-variation-settings: "SOFT" 20, "WONK" 1;
     text-wrap: balance;
   }
 
@@ -108,8 +106,12 @@
     @apply mx-auto w-full max-w-shell px-5 sm:px-8 lg:px-12;
   }
 
+  /* Was py-24/32/36 (96–144px). Most pages already fought this down with a
+     !py-20 override on every section (see the service pages), which was the
+     tell that the default itself ran too generous — tightened here instead
+     of leaving every call site to keep overriding it individually. */
   .section {
-    @apply relative overflow-hidden py-24 md:py-32 lg:py-36;
+    @apply relative overflow-hidden py-16 md:py-20 lg:py-24;
   }
 
   /* ---- Type ---- */
@@ -117,10 +119,12 @@
     @apply font-display font-semibold leading-[1.04] tracking-[-0.02em];
   }
 
-  /* The single italic accent word carried through every section heading. */
+  /* The single accent word carried through every section heading. Syne has
+     no italic cut (unlike Fraunces, which this replaced), so the accent
+     reads through weight alone — every call site already pairs this with
+     its own text-sage-600 / text-gold-light utility for color. */
   .accent {
-    @apply font-display italic font-medium tracking-[-0.01em];
-    font-variation-settings: "SOFT" 60, "WONK" 1;
+    @apply font-display font-extrabold not-italic tracking-[-0.01em];
   }
 
   /* ---- Eyebrow: small caps with a gold hairline ---- */
