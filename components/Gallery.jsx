@@ -106,7 +106,7 @@ export default function Gallery() {
       <div ref={ref} className="shell relative">
         <div className="reveal text-center">
           <span className="eyebrow-center">Design Gallery</span>
-          <h2 className="display mt-6 text-[2.5rem] text-ink sm:text-6xl lg:text-[4.25rem]">
+          <h2 className="display mt-6 text-[2rem] text-ink sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
             The interiors{" "}
             <span className="accent text-sage-600">we design.</span>
           </h2>
@@ -120,10 +120,10 @@ export default function Gallery() {
 
         {/* Filters — a segmented pill rail. */}
         <div
-          className="reveal mt-11 flex justify-center"
+          className="reveal mt-11 flex justify-center overflow-x-auto px-1 pb-1"
           data-reveal-delay="0.1s"
         >
-          <div className="inline-flex gap-1 rounded-full border border-line bg-white/80 p-1.5 shadow-soft backdrop-blur-sm">
+          <div className="inline-flex shrink-0 gap-1 rounded-full border border-line bg-white/80 p-1.5 shadow-soft backdrop-blur-sm">
             {CATEGORIES.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
@@ -132,7 +132,7 @@ export default function Gallery() {
                   type="button"
                   aria-pressed={isActive}
                   onClick={() => { setActiveCategory(cat.id); setVisibleLimit(PAGE_SIZE); }}
-                  className={`rounded-full px-6 py-2.5 text-[0.84rem] font-bold uppercase tracking-label transition-all duration-300 ease-smooth ${
+                  className={`rounded-full px-4 py-2.5 text-[0.8rem] font-bold uppercase tracking-label transition-all duration-300 ease-smooth sm:px-6 sm:text-[0.84rem] ${
                     isActive
                       ? "bg-sage-800 text-white shadow-soft"
                       : "text-ink-muted hover:bg-sage-50 hover:text-sage-700"

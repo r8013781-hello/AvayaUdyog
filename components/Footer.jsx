@@ -178,7 +178,7 @@ export default function Footer() {
               className="h-11 w-auto object-contain"
             />
 
-            <p className="mt-8 max-w-sm text-[0.98rem] leading-[1.85] text-ink-soft">
+            <p className="mt-8 text-[0.98rem] leading-[1.85] text-ink-soft">
               Transforming spaces into timeless masterpieces for over 35 years —
               where luxury meets functionality, and your vision becomes reality.
             </p>

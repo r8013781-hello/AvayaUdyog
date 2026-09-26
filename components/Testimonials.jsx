@@ -113,13 +113,13 @@ export default function Testimonials() {
           <div className={hasReviews ? "" : "mx-auto max-w-2xl text-center"}>
             <span className="eyebrow !text-gold-light">Client Stories</span>
             {hasReviews ? (
-              <h2 className="display mt-6 text-[2.5rem] text-white sm:text-6xl lg:text-[4.25rem]">
+              <h2 className="display mt-6 text-[2rem] text-white sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
                 Trusted by the people
                 <br />
                 <span className="accent text-gold-light">who live in our work.</span>
               </h2>
             ) : (
-              <h2 className="display mt-6 text-[2.5rem] text-white sm:text-6xl lg:text-[4.25rem]">
+              <h2 className="display mt-6 text-[2rem] text-white sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
                 The next review here
                 <br />
                 <span className="accent text-gold-light">could be yours.</span>
