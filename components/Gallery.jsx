@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { Heart, X, ChevronLeft, ChevronRight, Maximize2, Plus } from "lucide-react";
+import { Heart, X, ChevronLeft, ChevronRight, Maximize2, Plus, Instagram, ArrowUpRight } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import { handleImageError } from "../lib/imageFallback";
 import { imageSize } from "../lib/imageDimensions";
 import { IMAGES } from "../lib/galleryImages";
+import { trackInstagramClick } from "../lib/tracking";
 
 const FAVORITES_KEY = "gallery-favorites";
 const PAGE_SIZE = 6;
@@ -106,7 +107,7 @@ export default function Gallery() {
       <div ref={ref} className="shell relative">
         <div className="reveal text-center">
           <span className="eyebrow-center">Design Gallery</span>
-          <h2 className="display mt-6 text-[2rem] text-ink sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
+          <h2 className="display display-fluid mt-6 text-ink">
             The interiors{" "}
             <span className="accent text-sage-600">we design.</span>
           </h2>
@@ -239,6 +240,22 @@ export default function Gallery() {
             <span className="text-sage-600">custom-tailored</span> to our
             clients&apos; unique vision and lifestyle.
           </p>
+          <a
+            href="https://www.instagram.com/avayaudyog/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackInstagramClick("gallery")}
+            className="group mt-2 flex w-full max-w-xl items-center gap-4 rounded-[1.5rem] border border-line-strong bg-white p-4 text-left shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-sage-400 hover:shadow-lift sm:p-5"
+          >
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white shadow-soft">
+              <Instagram size={20} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.7rem] font-bold uppercase tracking-label text-sage-600">Follow our latest work</span>
+              <span className="mt-1 block font-display text-[1.1rem] font-semibold text-ink">@avayaudyog on Instagram</span>
+            </span>
+            <ArrowUpRight size={18} className="shrink-0 text-sage-400 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
         </div>
       </div>
 
@@ -255,12 +272,12 @@ export default function Gallery() {
             className="relative w-full max-w-5xl"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mb-4 flex items-start justify-between gap-6">
+            <div className="mb-4 flex items-start justify-between gap-3 sm:gap-6">
               <div>
                 <span className="block text-[0.72rem] font-bold uppercase tracking-label text-gold-light">
                   {active.meta}
                 </span>
-                <h3 className="mt-1.5 font-display text-2xl font-semibold text-white">
+                <h3 className="mt-1.5 font-display text-xl font-semibold text-white sm:text-2xl">
                   {active.title}
                 </h3>
               </div>
@@ -286,7 +303,7 @@ export default function Gallery() {
               <button
                 type="button"
                 onClick={() => stepLightbox(-1)}
-                className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-sage-950/60 text-white backdrop-blur-md transition-colors hover:border-gold/60 hover:text-gold-light"
+                className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-sage-950/60 text-white backdrop-blur-md transition-colors hover:border-gold/60 hover:text-gold-light sm:left-4 sm:h-11 sm:w-11"
                 aria-label="Previous image"
               >
                 <ChevronLeft size={19} />
@@ -294,7 +311,7 @@ export default function Gallery() {
               <button
                 type="button"
                 onClick={() => stepLightbox(1)}
-                className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-sage-950/60 text-white backdrop-blur-md transition-colors hover:border-gold/60 hover:text-gold-light"
+                className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-sage-950/60 text-white backdrop-blur-md transition-colors hover:border-gold/60 hover:text-gold-light sm:right-4 sm:h-11 sm:w-11"
                 aria-label="Next image"
               >
                 <ChevronRight size={19} />

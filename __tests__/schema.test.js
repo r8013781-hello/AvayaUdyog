@@ -110,11 +110,10 @@ describe("claims embedded in schema", () => {
     expect(svc.areaServed).toBeUndefined();
   });
 
-  it("declares no rating, review count or sameAs it cannot support", () => {
+  it("declares no invented rating data and links the official Instagram profile", () => {
     const json = JSON.stringify(localBusinessSchema);
     expect(json).not.toMatch(/aggregateRating|ratingValue|reviewCount/);
-    // sameAs may return once real profile URLs exist — not before.
-    expect(localBusinessSchema.sameAs).toBeUndefined();
+    expect(localBusinessSchema.sameAs).toEqual(["https://www.instagram.com/avayaudyog/"]);
   });
 });
 

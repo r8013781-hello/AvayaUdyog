@@ -16,6 +16,7 @@ import {
   Check,
   AlertTriangle,
   Layers,
+  Instagram,
 } from "lucide-react";
 import { createEnquirySubmitter } from "../lib/enquirySubmission";
 import { api, onSlowRequest, warmUpApi } from "../lib/api";
@@ -23,6 +24,7 @@ import {
   trackPhoneClick,
   trackEmailClick,
   trackWhatsAppClick,
+  trackInstagramClick,
   trackConsultationSubmit,
   trackConsultationError,
 } from "../lib/tracking";
@@ -245,7 +247,7 @@ export default function Footer() {
           </div>
 
           {/* ---------- Consultation form ---------- */}
-          <div className="relative overflow-hidden rounded-[2rem] border border-line bg-white p-8 shadow-lift sm:p-10">
+          <div className="relative overflow-hidden rounded-[2rem] border border-line bg-white p-5 shadow-lift sm:p-10">
             <div
               className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gold/[0.09] blur-3xl"
               aria-hidden="true"
@@ -457,7 +459,7 @@ export default function Footer() {
                 Kolkata.
               </p>
             </div>
-            <div className="flex items-center gap-5">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:flex-nowrap sm:justify-start sm:gap-5">
               <Link href="/privacy-policy" className="text-[0.8rem] font-medium text-ink-muted transition-colors hover:text-sage-700">
                 Privacy Policy
               </Link>
@@ -510,13 +512,11 @@ const SERVICE_LINKS = [
 // links that looked like a social presence and did nothing when clicked. A
 // dead link is worse than an absent one: it spends a visitor's intent and
 // returns nothing, and search engines read it as a broken outbound link.
-// No profile URL exists anywhere in this repository (there is no `sameAs`
-// in the JSON-LD either), so there was nothing to point them at.
-//
-// To restore them, add the real profile URLs here and mirror them into
-// `sameAs` on localBusinessSchema in lib/schema.js so Google can connect the
-// profiles to the business.
+// Instagram is the studio's official profile. Its canonical URL is used
+// rather than a share-link with tracking parameters, so this footer and the
+// JSON-LD business profile always point to one stable destination.
 const CONNECT_LINKS = [
+  { label: "Instagram", href: "https://www.instagram.com/avayaudyog/" },
   { label: "WhatsApp", href: "https://wa.me/917980640714" },
   { label: "Call us", href: "tel:+917980640714" },
   { label: "Email us", href: "mailto:info.avayaudyog@gmail.com" },
@@ -575,6 +575,8 @@ function FooterNav() {
               const onClick =
                 link.label === "WhatsApp"
                   ? () => trackWhatsAppClick("footer")
+                  : link.label === "Instagram"
+                    ? () => trackInstagramClick("footer")
                   : link.href.startsWith("tel:")
                     ? () => trackPhoneClick("footer_connect")
                     : link.href.startsWith("mailto:")
@@ -588,8 +590,9 @@ function FooterNav() {
                     target={isHttp ? "_blank" : undefined}
                     rel={isHttp ? "noopener noreferrer" : undefined}
                     onClick={onClick}
-                    className="text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
+                    className="inline-flex items-center gap-2 text-[0.86rem] text-ink-soft transition-colors hover:text-sage-700"
                   >
+                    {link.label === "Instagram" && <Instagram size={15} aria-hidden="true" />}
                     {link.label}
                   </a>
                 </li>

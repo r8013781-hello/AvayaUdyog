@@ -48,7 +48,7 @@ export default function AboutCompany() {
       <div ref={ref} className="shell relative">
         <div className="reveal text-center">
           <span className="eyebrow-center">The Founder</span>
-          <h2 className="display mt-6 text-[2rem] text-ink sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
+          <h2 className="display display-fluid mt-6 text-ink">
             The hand behind
             <br />
             <span className="accent text-sage-600">every signature space.</span>
@@ -129,7 +129,7 @@ export default function AboutCompany() {
                 tiles with their own surface give each number the weight the
                 rest of the redesigned page carries. */}
             <div className="reveal mt-12" data-reveal-delay="0.18s">
-              <dl className="grid grid-cols-3 gap-2 sm:gap-3">
+              <dl className="compact-stats grid grid-cols-3 gap-2 sm:gap-3">
                 {STATS.map((stat) => (
                   <div
                     key={stat.label}

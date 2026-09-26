@@ -83,7 +83,7 @@ export default function HowWeWork() {
       <div className="shell relative">
         <div className="reveal max-w-2xl">
           <span className="eyebrow">How We Work</span>
-          <h2 className="display mt-6 text-[2rem] text-ink sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
+          <h2 className="display display-fluid mt-6 text-ink">
             From first conversation
             <br />
             <span className="accent text-sage-600">to final handover.</span>

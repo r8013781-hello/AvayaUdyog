@@ -103,12 +103,12 @@ export default function Hero() {
             </p>
 
             <div
-              className={`mt-10 flex flex-wrap items-center gap-3.5 ${enterClass}`}
+              className={`mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3.5 ${enterClass}`}
               style={enter("270ms")}
             >
               <button
                 onClick={() => openContactModal("hero_cta")}
-                className="btn group bg-white px-7 py-3.5 text-sage-900 shadow-float hover:-translate-y-0.5 hover:bg-gold-soft"
+                className="btn group w-full bg-white px-7 py-3.5 text-sage-900 shadow-float hover:-translate-y-0.5 hover:bg-gold-soft sm:w-auto"
               >
                 Book a Consultation
                 <ArrowUpRight
@@ -118,7 +118,7 @@ export default function Hero() {
               </button>
               <button
                 onClick={scrollToGallery}
-                className="btn border border-white/35 bg-white/5 px-7 py-3.5 text-white backdrop-blur-md hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/10"
+                className="btn w-full border border-white/35 bg-white/5 px-7 py-3.5 text-white backdrop-blur-md hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/10 sm:w-auto"
               >
                 View Gallery
               </button>
@@ -130,7 +130,7 @@ export default function Hero() {
               style={enter("400ms")}
             >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-light/70 to-transparent" />
-              <dl className="grid grid-cols-3 gap-3 pt-7 sm:gap-4">
+              <dl className="compact-stats grid grid-cols-3 gap-3 pt-7 sm:gap-4">
                 {STATS.map((stat) => (
                   <div key={stat.label}>
                     <dt className="sr-only">{stat.label}</dt>

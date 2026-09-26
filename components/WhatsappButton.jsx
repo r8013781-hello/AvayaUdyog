@@ -10,7 +10,7 @@ export default function WhatsappButton() {
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => trackWhatsAppClick("floating_button")}
-      className="group fixed bottom-6 right-6 z-[75]"
+      className="group fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-[75] sm:bottom-6 sm:right-6"
       aria-label="Chat with us on WhatsApp"
     >
       <span className="relative flex">

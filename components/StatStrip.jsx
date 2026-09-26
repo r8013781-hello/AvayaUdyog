@@ -19,7 +19,7 @@ const STATS = [
 
 export default function StatStrip({ className = "" }) {
   return (
-    <dl className={`grid grid-cols-3 gap-2 border-y border-line py-10 text-center sm:gap-4 ${className}`}>
+    <dl className={`compact-stats grid grid-cols-3 gap-2 border-y border-line py-10 text-center sm:gap-4 ${className}`}>
       {STATS.map((stat) => (
         <div key={stat.label}>
           <dt className="sr-only">{stat.label}</dt>

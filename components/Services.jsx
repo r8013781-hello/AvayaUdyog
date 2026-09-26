@@ -87,7 +87,7 @@ export default function Services() {
         <div className="reveal flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="eyebrow">Our Services</span>
-            <h2 className="display mt-6 text-[2.5rem] text-ink sm:text-6xl lg:text-[4.25rem]">
+            <h2 className="display display-fluid mt-6 text-ink">
               Designed for living.
               <br />
               <span className="accent text-sage-600">Decorated for life.</span>

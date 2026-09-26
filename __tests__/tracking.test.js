@@ -3,6 +3,7 @@ import {
   trackEvent,
   trackPhoneClick,
   trackWhatsAppClick,
+  trackInstagramClick,
   trackConsultationSubmit,
   trackConsultationError,
   trackGoogleReviewClick,
@@ -33,6 +34,7 @@ describe("tracking events", () => {
     expect(() => trackEvent("test_event", { a: 1 })).not.toThrow();
     expect(() => trackPhoneClick("navbar")).not.toThrow();
     expect(() => trackWhatsAppClick("footer")).not.toThrow();
+    expect(() => trackInstagramClick("footer")).not.toThrow();
     expect(() => trackConsultationSubmit("footer")).not.toThrow();
     expect(() => trackConsultationError("footer", "submit_failed")).not.toThrow();
   });

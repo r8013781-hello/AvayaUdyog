@@ -113,13 +113,13 @@ export default function Testimonials() {
           <div className={hasReviews ? "" : "mx-auto max-w-2xl text-center"}>
             <span className="eyebrow !text-gold-light">Client Stories</span>
             {hasReviews ? (
-              <h2 className="display mt-6 text-[2rem] text-white sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
+              <h2 className="display display-fluid mt-6 text-white">
                 Trusted by the people
                 <br />
                 <span className="accent text-gold-light">who live in our work.</span>
               </h2>
             ) : (
-              <h2 className="display mt-6 text-[2rem] text-white sm:text-[2.5rem] md:text-6xl lg:text-[4.25rem]">
+              <h2 className="display display-fluid mt-6 text-white">
                 The next review here
                 <br />
                 <span className="accent text-gold-light">could be yours.</span>
@@ -168,7 +168,7 @@ export default function Testimonials() {
             <figure
               key={review.id}
               data-card
-              className="group relative flex w-[85%] shrink-0 snap-start flex-col rounded-[1.75rem] bg-white p-8 shadow-float sm:w-[47%] lg:w-[31.5%]"
+              className="group relative flex w-[85%] shrink-0 snap-start flex-col rounded-[1.75rem] bg-white p-5 shadow-float sm:w-[47%] sm:p-8 lg:w-[31.5%]"
             >
               <span
                 className="absolute right-7 top-4 font-display text-[4rem] leading-none text-sage-900/[0.07]"
@@ -263,7 +263,7 @@ export default function Testimonials() {
         </div>
 
         <div
-          className="reveal mx-auto mt-12 flex max-w-2xl items-center justify-center gap-3.5 rounded-full border border-white/15 bg-white/[0.06] px-7 py-4 backdrop-blur-sm"
+          className="reveal mx-auto mt-12 flex max-w-2xl items-center justify-center gap-3.5 rounded-[1.5rem] border border-white/15 bg-white/[0.06] px-5 py-4 backdrop-blur-sm sm:rounded-full sm:px-7"
           data-reveal-delay="0.2s"
         >
           <ShieldCheck size={18} className="flex-shrink-0 text-gold-light" />

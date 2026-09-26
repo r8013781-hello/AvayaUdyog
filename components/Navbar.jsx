@@ -256,7 +256,7 @@ export default function Navbar() {
 
       {/* Mobile sheet */}
       <div
-        className={`fixed inset-x-3 top-3 z-[60] origin-top rounded-3xl2 border border-line bg-white p-6 shadow-float transition-all duration-500 ease-smooth lg:hidden ${
+        className={`fixed inset-x-3 top-3 z-[60] max-h-[calc(100dvh-1.5rem)] origin-top overflow-y-auto rounded-3xl2 border border-line bg-white p-4 shadow-float transition-all duration-500 ease-smooth sm:p-6 lg:hidden ${
           mobileMenuOpen
             ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
             : "pointer-events-none -translate-y-2 scale-[0.98] opacity-0"
