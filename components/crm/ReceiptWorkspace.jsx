@@ -64,7 +64,8 @@ export default function ReceiptWorkspace({ customers = [], projects = [], canCre
   const withPdf = async (receipt, action) => {
     const full = receipt.amountInWords ? receipt : await api.getReceipt(receipt.id);
     const { generateReceiptPdf, buildReceiptFilename } = await import("../../lib/crm/generateReceiptPdf");
-    return action(generateReceiptPdf(full), buildReceiptFilename(full), full);
+    const doc = await generateReceiptPdf(full);
+    return action(doc, buildReceiptFilename(full), full);
   };
 
   const previewReceipt = async (receipt) => {

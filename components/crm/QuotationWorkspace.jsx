@@ -79,7 +79,7 @@ export default function QuotationWorkspace({ customers, projects = [], canCreate
         api.getQuotation(quote.id),
         import("../../lib/crm/generateQuotationPdf"),
       ]);
-      const doc = generateQuotationPdf(full);
+      const doc = await generateQuotationPdf(full);
       const saved = await downloadBlob(doc.output("blob"), buildQuotationFilename(full));
       if (saved) toast.success({ title: "PDF ready", message: buildQuotationFilename(full) });
     } catch (err) {
@@ -96,7 +96,7 @@ export default function QuotationWorkspace({ customers, projects = [], canCreate
         api.getQuotation(quote.id),
         import("../../lib/crm/generateQuotationPdf"),
       ]);
-      const doc = generateQuotationPdf(full);
+      const doc = await generateQuotationPdf(full);
       window.open(doc.output("bloburl"), "_blank");
     } catch (err) {
       toast.error(err.message || "Could not preview the PDF.");
