@@ -20,7 +20,7 @@ const ADMIN_COLUMNS = `r.id, r.source, r.external_id AS "externalId", r.author_n
  * moderator's identity are deliberately not exposed. No auth, because the
  * marketing site is a static export with no session of its own.
  * ---------------------------------------------------------------------- */
-router.get("/public", async (req, res, next) => {
+router.get("/public", async (req, res) => {
   try {
     const result = await query(
       `SELECT id, author_name AS "authorName", author_role AS "authorRole",
@@ -34,8 +34,13 @@ router.get("/public", async (req, res, next) => {
     // changes should show up quickly, but every visitor need not hit the DB.
     res.set("Cache-Control", "public, max-age=300");
     res.json(result.rows);
-  } catch (err) {
-    next(err);
+  } catch {
+    // DB unavailable or misconfigured — return empty list so the marketing
+    // site's Testimonials section renders its "no reviews yet" state instead
+    // of a visible error. The server stays running; nothing is logged to the
+    // visitor's console.
+    res.set("Cache-Control", "no-store");
+    res.json([]);
   }
 });
 
