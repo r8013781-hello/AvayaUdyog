@@ -93,7 +93,7 @@ export default function Testimonials() {
 
   return (
     <section id="testimonials" className="section bg-sage-900">
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="absolute inset-0 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.07)_1px,transparent_0)] [background-size:28px_28px]" />
         <div className="absolute left-1/4 -top-20 h-96 w-96 rounded-full bg-sage-500/25 blur-[130px]" />
         <div className="absolute -bottom-24 right-0 h-80 w-80 rounded-full bg-gold/[0.12] blur-[120px]" />
@@ -113,13 +113,13 @@ export default function Testimonials() {
           <div className={hasReviews ? "" : "mx-auto max-w-2xl text-center"}>
             <span className="eyebrow !text-gold-light">Client Stories</span>
             {hasReviews ? (
-              <h2 className="display mt-6 text-[3.1rem] text-white sm:text-6xl lg:text-[4.25rem]">
+              <h2 className="display mt-6 text-[2.5rem] text-white sm:text-6xl lg:text-[4.25rem]">
                 Trusted by the people
                 <br />
                 <span className="accent text-gold-light">who live in our work.</span>
               </h2>
             ) : (
-              <h2 className="display mt-6 text-[3.1rem] text-white sm:text-6xl lg:text-[4.25rem]">
+              <h2 className="display mt-6 text-[2.5rem] text-white sm:text-6xl lg:text-[4.25rem]">
                 The next review here
                 <br />
                 <span className="accent text-gold-light">could be yours.</span>

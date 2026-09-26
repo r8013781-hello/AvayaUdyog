@@ -160,7 +160,7 @@ export default function Footer() {
           this keeps the white surfaces the form and contact cards need, and
           gets its life from a soft green wash and the same blurred-blob
           device used elsewhere instead of an inverted color scheme. */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="grid-paper absolute inset-0 [mask-image:radial-gradient(ellipse_at_50%_0%,#000_20%,transparent_75%)]" />
         <div className="absolute -left-32 top-10 h-[28rem] w-[28rem] rounded-full bg-sage-300/30 blur-[140px]" />
         <div className="absolute -right-24 bottom-0 h-[24rem] w-[24rem] rounded-full bg-gold/20 blur-[130px]" />

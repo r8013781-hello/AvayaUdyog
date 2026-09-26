@@ -55,7 +55,7 @@ export default function About() {
           </span>
 
           <h2
-            className="display reveal mt-6 text-[3.1rem] text-white sm:text-6xl lg:text-[4.25rem]"
+            className="display reveal mt-6 text-[2.5rem] text-white sm:text-6xl lg:text-[4.25rem]"
             data-reveal-delay="0.08s"
           >
             Where vision meets

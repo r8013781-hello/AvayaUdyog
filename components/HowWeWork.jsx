@@ -74,7 +74,7 @@ export default function HowWeWork() {
       id="how-we-work"
       className="section bg-gradient-to-br from-gold-soft/50 via-sage-50/50 to-canvas"
     >
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="grid-paper absolute inset-0 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_70%)]" />
         <div className="absolute -right-32 top-1/3 h-[26rem] w-[26rem] rounded-full bg-gold/[0.1] blur-[130px]" />
         <div className="absolute -left-24 bottom-0 h-[22rem] w-[22rem] rounded-full bg-sage-300/25 blur-[120px]" />
@@ -83,7 +83,7 @@ export default function HowWeWork() {
       <div className="shell relative">
         <div className="reveal max-w-2xl">
           <span className="eyebrow">How We Work</span>
-          <h2 className="display mt-6 text-[3.1rem] text-ink sm:text-6xl lg:text-[4.25rem]">
+          <h2 className="display mt-6 text-[2.5rem] text-ink sm:text-6xl lg:text-[4.25rem]">
             From first conversation
             <br />
             <span className="accent text-sage-600">to final handover.</span>
@@ -106,7 +106,7 @@ export default function HowWeWork() {
           return (
             <div
               key={tag}
-              className="relative isolate flex min-h-[32rem] items-center overflow-hidden sm:min-h-[38rem] lg:min-h-[44rem]"
+              className="relative isolate flex min-h-[24rem] items-center overflow-hidden sm:min-h-[32rem] lg:min-h-[44rem]"
             >
               <img
                 src={src}
@@ -126,7 +126,7 @@ export default function HowWeWork() {
               <div className="shell relative w-full py-14 lg:py-16">
                 <div
                   className={`flex w-full max-w-lg flex-col items-start text-left ${
-                    reversed ? "ml-auto" : ""
+                    reversed ? "sm:ml-auto" : ""
                   }`}
                 >
                   <div className="flex items-center gap-4">

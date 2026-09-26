@@ -97,7 +97,7 @@ export default function Gallery() {
           "quiet" sections (Services header, How We Work) instead, since a
           full photo background here would compete with the gallery's own
           images rather than support them. */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="dot-paper absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_70%)]" />
         <div className="absolute -right-40 top-1/4 h-[30rem] w-[30rem] rounded-full bg-sage-200/40 blur-[140px]" />
         <div className="absolute -left-32 bottom-0 h-[24rem] w-[24rem] rounded-full bg-gold/[0.14] blur-[130px]" />
@@ -106,7 +106,7 @@ export default function Gallery() {
       <div ref={ref} className="shell relative">
         <div className="reveal text-center">
           <span className="eyebrow-center">Design Gallery</span>
-          <h2 className="display mt-6 text-[3.1rem] text-ink sm:text-6xl lg:text-[4.25rem]">
+          <h2 className="display mt-6 text-[2.5rem] text-ink sm:text-6xl lg:text-[4.25rem]">
             The interiors{" "}
             <span className="accent text-sage-600">we design.</span>
           </h2>

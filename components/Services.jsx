@@ -77,7 +77,7 @@ export default function Services() {
           color-blob device used elsewhere on the site (About, the CTA band
           below) ties it back into the surrounding sage/gold palette instead
           of reading as a plain gap between two photos. */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="dot-paper absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_65%)]" />
         <div className="absolute -left-24 top-0 h-[26rem] w-[26rem] rounded-full bg-sage-300/35 blur-[120px]" />
         <div className="absolute -right-16 bottom-0 h-[22rem] w-[22rem] rounded-full bg-gold/25 blur-[110px]" />
@@ -87,7 +87,7 @@ export default function Services() {
         <div className="reveal flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="eyebrow">Our Services</span>
-            <h2 className="display mt-6 text-[3.1rem] text-ink sm:text-6xl lg:text-[4.25rem]">
+            <h2 className="display mt-6 text-[2.5rem] text-ink sm:text-6xl lg:text-[4.25rem]">
               Designed for living.
               <br />
               <span className="accent text-sage-600">Decorated for life.</span>
@@ -120,7 +120,7 @@ export default function Services() {
             <div
               key={title}
               id={id}
-              className="reveal relative isolate flex min-h-[32rem] scroll-mt-16 items-center overflow-hidden sm:min-h-[38rem] md:scroll-mt-20 lg:min-h-[44rem]"
+              className="reveal relative isolate flex min-h-[24rem] scroll-mt-16 items-center overflow-hidden sm:min-h-[32rem] md:scroll-mt-20 lg:min-h-[44rem]"
               data-reveal-delay={`${index * 0.08}s`}
             >
               <img
@@ -145,7 +145,7 @@ export default function Services() {
               <div className="shell relative w-full py-14 lg:py-16">
                 <div
                   className={`flex w-full max-w-lg flex-col ${
-                    reversed ? "ml-auto items-start text-left" : "items-start text-left"
+                    reversed ? "sm:ml-auto items-start text-left" : "items-start text-left"
                   }`}
                 >
                   <div className="flex items-center gap-4">
@@ -218,7 +218,7 @@ export default function Services() {
       <div className="shell relative mt-10">
         {/* ---------- CTA band: the one deep-green moment in this section ---------- */}
         <div className="reveal relative overflow-hidden rounded-[2rem] bg-sage-900 px-8 py-12 shadow-lift md:px-10">
-          <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
             <div className="absolute inset-0 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.10)_1px,transparent_0)] [background-size:26px_26px]" />
             <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-sage-500/25 blur-[100px]" />
             <div className="absolute -bottom-24 right-1/4 h-56 w-56 rounded-full bg-gold/[0.14] blur-[90px]" />
@@ -226,7 +226,7 @@ export default function Services() {
 
           <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
             <div>
-              <h3 className="display text-[2rem] text-white sm:text-[2.4rem]">
+              <h3 className="display text-[1.7rem] text-white sm:text-[2rem] md:text-[2.4rem]">
                 Have a space in mind?{" "}
                 <span className="accent text-gold-light">Let&apos;s design it.</span>
               </h3>

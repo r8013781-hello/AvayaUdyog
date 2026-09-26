@@ -39,7 +39,7 @@ export default function AboutCompany() {
       id="founder"
       className="section scroll-mt-16 bg-gradient-to-br from-sage-50 via-canvas to-gold-soft/40 md:scroll-mt-20"
     >
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="dot-paper absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_70%)]" />
         <div className="absolute -left-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-gold/[0.12] blur-[130px]" />
         <div className="absolute -right-24 top-10 h-[22rem] w-[22rem] rounded-full bg-sage-300/25 blur-[120px]" />
@@ -48,14 +48,14 @@ export default function AboutCompany() {
       <div ref={ref} className="shell relative">
         <div className="reveal text-center">
           <span className="eyebrow-center">The Founder</span>
-          <h2 className="display mt-6 text-[3.1rem] text-ink sm:text-6xl lg:text-[4.25rem]">
+          <h2 className="display mt-6 text-[2.5rem] text-ink sm:text-6xl lg:text-[4.25rem]">
             The hand behind
             <br />
             <span className="accent text-sage-600">every signature space.</span>
           </h2>
         </div>
 
-        <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+        <div className="mt-12 grid items-start gap-10 md:grid-cols-2 md:gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
           {/* ---------- Portrait: same framed-photograph language as the
               About section above — rounded frame, gold corner brackets,
               caption baked into the gradient. Consistency, not novelty. ---------- */}
